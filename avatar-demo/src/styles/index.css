@@ -1,0 +1,42 @@
+@import './tokens.css';
+
+:root {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-primary);
+  background: var(--page-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  display: flex;
+  place-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: radial-gradient(circle at top, #f3ecff 0%, var(--page-bg) 55%);
+}
+
+#root {
+  width: 100%;
+  max-width: 960px;
+  padding: 2rem 1rem;
+  overflow: visible;
+}
+
+button,
+select,
+input[type='range'] {
+  font: inherit;
+}

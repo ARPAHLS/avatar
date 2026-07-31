@@ -1,0 +1,110 @@
+html.vox-desktop,
+html.vox-desktop body {
+  background: transparent !important;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+html.vox-desktop body {
+  display: block;
+  place-items: unset;
+  justify-content: unset;
+}
+
+html.vox-desktop #root {
+  max-width: none;
+  padding: 0;
+  overflow: visible;
+}
+
+html.vox-desktop .avatar-stage {
+  margin: 0 auto;
+  padding-top: 8px;
+}
+
+html.vox-desktop .avatar-hover-area {
+  margin: 0 auto;
+  -webkit-app-region: drag;
+  app-region: drag;
+  cursor: grab;
+}
+
+html.vox-desktop.vox-desktop-windowed,
+html.vox-desktop.vox-desktop-windowed body {
+  background: #ebe3fa !important;
+}
+
+html.vox-desktop .avatar-glass-bar__gear,
+html.vox-desktop .avatar-glass-bar__scale,
+html.vox-desktop .avatar-glass-bar__live-dot,
+html.vox-desktop .avatar-window-scale-menu,
+html.vox-desktop .avatar-window-scale-menu__btn,
+html.vox-desktop .avatar-command-menu,
+html.vox-desktop .avatar-command-menu__btn,
+html.vox-desktop .avatar-command-menu__anim,
+html.vox-desktop .glass-drawer,
+html.vox-desktop .glass-drawer__close,
+html.vox-desktop .glass-drawer__body,
+html.vox-desktop .glass-drawer__body * {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+  cursor: default;
+}
+
+html.vox-desktop .avatar-glass-bar__gear,
+html.vox-desktop .avatar-glass-bar__scale,
+html.vox-desktop .avatar-command-menu__btn,
+html.vox-desktop .avatar-command-menu__anim,
+html.vox-desktop .avatar-window-scale-menu__btn,
+html.vox-desktop .glass-drawer__close {
+  cursor: pointer;
+}
+
+html.vox-desktop .desktop-snap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+html.vox-desktop .desktop-snap-grid .panel-button {
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  padding: 8px 6px;
+}
+
+html.vox-desktop .desktop-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 0;
+  font-size: 13px;
+}
+
+html.vox-desktop .desktop-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: rgba(214, 200, 247, 0.35);
+  margin-bottom: 8px;
+}
+
+html.vox-desktop .avatar-command-menu--animations {
+  max-height: min(320px, 50vh);
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+html.vox-desktop .avatar-holo-field__fade {
+  opacity: 1;
+}
+
+html.vox-desktop .avatar-stage-canvas,
+html.vox-desktop .avatar-canvas {
+  pointer-events: none;
+}

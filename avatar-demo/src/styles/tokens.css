@@ -1,0 +1,13 @@
+:root {
+  --page-bg: #ebe3fb;
+  --surface: rgba(43, 43, 43, 0.72);
+  --surface-border: #444;
+  --text-primary: #2f2640;
+  --text-panel: #e9e1fa;
+  --accent: #a18ad6;
+  --accent-soft: #d6c8f7;
+  --accent-border: #bca6e9;
+  --frame-border: #d6c8f7;
+  --success: #7bc9a4;
+  --error: #f0a4a4;
+}
