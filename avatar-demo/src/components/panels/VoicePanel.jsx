@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getAudioSourceOptions } from '../../config/audioSources';
 import { getDesktopApi } from '../../lib/desktopMode';
+import { PanelSelect } from '../ui/PanelPrimitives';
 
 export function VoicePanel({
   audioSourceId,
@@ -22,6 +23,16 @@ export function VoicePanel({
     void desktopApi.getDesktopSources(['window', 'screen']).then(setWindowSources);
   }, [audioSourceId, desktopApi]);
 
+  const sourceOptions = audioSourceOptions.map((option) => ({
+    value: option.id,
+    label: option.label,
+  }));
+
+  const windowOptions = [
+    { value: '', label: 'Select a window…' },
+    ...windowSources.map((source) => ({ value: source.id, label: source.name })),
+  ];
+
   return (
     <>
       <p className="panel-note">
@@ -33,18 +44,12 @@ export function VoicePanel({
       <label className="field-label" htmlFor="audio-source-select">
         Audio source
       </label>
-      <select
+      <PanelSelect
         id="audio-source-select"
-        className="panel-select"
         value={audioSourceId}
-        onChange={(event) => setAudioSourceId(event.target.value)}
-      >
-        {audioSourceOptions.map((option) => (
-          <option key={option.id} value={option.id}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+        onChange={setAudioSourceId}
+        options={sourceOptions}
+      />
       <p className="panel-hint">
         {audioSourceOptions.find((option) => option.id === audioSourceId)?.description}
       </p>
@@ -54,19 +59,13 @@ export function VoicePanel({
           <label className="field-label" htmlFor="window-source-select">
             Window or screen
           </label>
-          <select
+          <PanelSelect
             id="window-source-select"
-            className="panel-select"
             value={windowSourceId ?? ''}
-            onChange={(event) => setWindowSourceId(event.target.value || null)}
-          >
-            <option value="">Select a window…</option>
-            {windowSources.map((source) => (
-              <option key={source.id} value={source.id}>
-                {source.name}
-              </option>
-            ))}
-          </select>
+            onChange={(next) => setWindowSourceId(next || null)}
+            options={windowOptions}
+            placeholder="Select a window…"
+          />
         </>
       )}
 

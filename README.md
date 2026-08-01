@@ -26,6 +26,10 @@
 </p>
 
 <p align="center">
+  <img src="docs/screenshots/91-multi-avatar-strip.png" alt="Avatar 1, 2, and 3" height="260" />
+</p>
+
+<p align="center">
   <a href="#quick-start">Quick Start</a> ·
   <a href="docs/using-the-app.md">User guide</a> ·
   <a href="docs/README.md">Documentation</a> ·
@@ -44,14 +48,28 @@
 
 It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from live audio — including system / device output on desktop.
 
+<p align="center">
+  <img src="docs/screenshots/01-hero-overlay-dark-ide.png" alt="AVATAR overlay on a dark IDE" width="100%" />
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/02-hero-overlay-light-page.png" alt="AVATAR overlay on a light page" width="100%" />
+</p>
+
 ## What this is
 
 - **Electron desktop overlay** — main product surface (pin, snap, window scale, device loopback audio)
 - **VRM avatars & skins** — `avatar1.vrm` … drop-in naming; skins as `avatar1B.vrm`, etc.
-- **Environments** — built-in GIFs, Custom folder, color fade, or none
+- **Environments** — built-in GIFs, local **Custom** folder, color fade, or none
 - **Persistent settings** — `config.yaml` remembers avatar, skin, camera, lighting, environment, and more
 - **VRMA animations** — Default greeting + loop, plus individual clips
 - **Browser / localhost** — optional for UI development (`npm run dev`)
+
+<p align="center">
+  <img src="docs/screenshots/03-window-avatar1-default.png" alt="Avatar 1" height="240" />
+  <img src="docs/screenshots/04-window-avatar2.png" alt="Avatar 2" height="240" />
+  <img src="docs/screenshots/05-window-avatar3.png" alt="Avatar 3" height="240" />
+</p>
 
 ## Quick start
 
@@ -77,6 +95,11 @@ Gear menu: Appearance (Avatars · Skins · Environments) · Voice · Camera · A
 
 **First launch behavior:** Greeting once, then a looping motion set; desktop audio defaults to device output; preferences restore from `config.yaml` on later launches. Full walkthrough: [Using the app](docs/using-the-app.md).
 
+<p align="center">
+  <img src="docs/screenshots/20-gear-main.png" alt="Gear menu" height="220" />
+  <img src="docs/screenshots/12-scale-menu.png" alt="Window scale menu" height="220" />
+</p>
+
 ### Browser (dev / contributors)
 
 ```bash
@@ -91,13 +114,26 @@ Open [http://localhost:5173](http://localhost:5173). Prefer Electron when testin
 1. Gear → **Voice** → Device output (desktop) or Microphone / Tab (browser)
 2. Green pulsating dot next to the gear = active
 
+<p align="center">
+  <img src="docs/screenshots/50-voice-panel.png" alt="Voice panel" height="220" />
+  <img src="docs/screenshots/11-bar-live-dot.png" alt="Lip sync live dot on the bar" height="220" />
+</p>
+
 ### Try animations
 
 Gear → **Animations** → **Default** (greeting, then motion loop).
 
+<p align="center">
+  <img src="docs/screenshots/21-gear-animations.png" alt="Animations submenu" height="260" />
+</p>
+
 ### Swap avatars
 
 Drop `avatar4.vrm` (or `avatar1B.vrm` for a skin) into `avatar-demo/src/assets/avatars/`, restart desktop, pick it under Appearance. See [Avatars & skins](docs/avatars-and-skins.md).
+
+### Custom environments (local)
+
+Drop trial GIFs into `avatar-demo/src/assets/environments/custom/` (gitignored — local only). Restart, open Appearance → Environments → **Custom**. Details: [Environments](docs/environments.md).
 
 ## Documentation
 
@@ -118,6 +154,7 @@ Drop `avatar4.vrm` (or `avatar1B.vrm` for a skin) into `avatar-demo/src/assets/a
 avatar/
 ├── docs/
 │   ├── using-the-app.md
+│   ├── screenshots/          # product media for README & guides
 │   └── …
 ├── avatar-demo/
 │   ├── electron/
@@ -125,6 +162,8 @@ avatar/
 │   └── src/
 │       ├── assets/avatars/
 │       └── assets/environments/
+│           ├── stars.gif / code.gif / bloom.gif
+│           └── custom/         # local trials only (gitignored media)
 ├── CHANGELOG.md
 ├── CITATION.cff
 └── README.md

@@ -8,12 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Product screenshots under `docs/screenshots/` embedded in README and feature guides (full-width for desktop heroes; fixed height for window/drawer rows). Animation stills (H) deferred.
+- `custom/` environment media is local-only (gitignored); folder kept with `.gitkeep`. Docs explain drop-in workflow.
 - Electron desktop companion as the primary product surface (transparent overlay, always-on-top).
 - Window scale presets (×0.5 / ×1 / ×2) via bar control; pin / windowed mode.
 - Gear command menu with Appearance, Voice, Camera, Animations, Settings, and Close.
 - Appearance → **Avatars** and **Skins** (separate sections); drop-in `avatarN.vrm` / `avatarNB.vrm` catalog via Vite glob.
 - Bundled characters as `avatar1.vrm`, `avatar2.vrm`, `avatar3.vrm`.
-- Environments: Stars / Code / Bloom, None, color fade, and expandable **Custom** GIF library (`src/assets/environments/custom/`).
+- Environments: Stars / Code / Bloom, None, color fade, and local **Custom** trial folder (`src/assets/environments/custom/` — media not in git).
 - Persistent **`config.yaml`** preferences (Electron `userData`; browser localStorage fallback) with **Reset all settings**.
 - Default animation sequence (Greeting once, then model pose → full body → peace → squat → shoot loop).
 - Voice panel with browser capture and Electron device/window loopback lip sync; live indicator as pulsating bar dot.
@@ -32,9 +34,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Animations menu expands fully (no scrollbar); back control is circular like other gear buttons.
 - Environment GIFs sourced only from `src/assets/environments/` (duplicates removed from `public/`).
 - Five text snap buttons replaced by a **smaller 3×3 pad** so Settings (including Reset all + config path) fits without losing footer content.
+- Appearance → Environments: Custom scrolls in the upper block; Color fade row keeps **Use color** + **Reset** on one visible line under it (no clipped second button).
+- Voice audio source uses a small portaled lilac popup (scroll stays inside the menu; drawer width/text no longer jump).
 - Glass **bar** contrast kept as whitish-on-dark / grey-on-light (readable on both desktops). **Buttons only** use the inverted pairing: darker glass + white icons on dark backdrops, lighter glass + dark icons on light backdrops—so controls stay visible without fighting the bar look.
 - Continuous desktop luma polling removed after it made window dragging laggy (repeated `desktopCapturer` thumbnails). Same chrome goal kept via settle/focus sampling + existing color-variable transitions.
-- Docs expanded into a complete guide; public README/docs no longer link an internal screenshot checklist (media to be embedded when assets land).
+- Docs expanded into a complete illustrated guide; README embeds hero / feature screenshots.
 
 ## [0.1.0] — 2026-07-31
 

@@ -19,6 +19,15 @@ This guide walks through every control in the **Electron desktop companion**. Br
 
 Glass **bar** at the bottom: drag handle (line), **window scale**, optional green **live** dot, **gear** menu.
 
+<p align="center">
+  <img src="screenshots/01-hero-overlay-dark-ide.png" alt="Overlay on a dark IDE" width="100%" />
+</p>
+
+<p align="center">
+  <img src="screenshots/10-bar-idle.png" alt="Glass bar idle" height="100" />
+  <img src="screenshots/11-bar-live-dot.png" alt="Glass bar with live lip-sync dot" height="100" />
+</p>
+
 ---
 
 ## 2. Glass bar
@@ -40,6 +49,22 @@ Tap the **Scaling** control (left of the live dot / gear). Choose:
 
 Scale is remembered in `config.yaml`.
 
+<p align="center">
+  <img src="screenshots/12-scale-menu.png" alt="Scale menu" height="200" />
+</p>
+
+<p align="center">
+  <img src="screenshots/13-scale-x0.5.png" alt="Companion at half scale" width="100%" />
+</p>
+
+<p align="center">
+  <img src="screenshots/14-scale-x1.png" alt="Companion at default scale" width="100%" />
+</p>
+
+<p align="center">
+  <img src="screenshots/15-scale-x2.png" alt="Companion at double scale" width="100%" />
+</p>
+
 ### Live lip-sync dot
 
 A **green pulsing dot** appears when lip sync is actively capturing (`Audio source` not Off, status `active`). Hover title: *Lip sync active*.
@@ -56,6 +81,11 @@ A **green pulsing dot** appears when lip sync is actively capturing (`Audio sour
 | **Settings** | Overlay, snap pad, reset all, config path |
 | **Close** | Quit the companion window (desktop) |
 
+<p align="center">
+  <img src="screenshots/20-gear-main.png" alt="Main gear menu" height="240" />
+  <img src="screenshots/21-gear-animations.png" alt="Animations submenu" height="240" />
+</p>
+
 ---
 
 ## 3. Appearance
@@ -66,6 +96,11 @@ Gear → **Appearance**.
 
 Pick **Avatar 1 / 2 / 3** (files `avatar1.vrm`, `avatar2.vrm`, `avatar3.vrm`).  
 Drop more models named `avatar4.vrm`, … — they appear automatically. Details: [Avatars & skins](avatars-and-skins.md).
+
+<p align="center">
+  <img src="screenshots/30-appearance-avatars.png" alt="Appearance Avatars section" height="240" />
+  <img src="screenshots/31-appearance-skins.png" alt="Appearance Skins section" height="240" />
+</p>
 
 ### Skins
 
@@ -80,9 +115,14 @@ Add `avatar1B.vrm`, `avatar1C.vrm`, … for Skin B / C on Avatar 1.
 | **Code** | Code-rain GIF |
 | **Bloom** | Bright pastel GIF (bar often switches to “light” chrome) |
 | **None** | No stage backdrop — desktop shows through (overlay) |
-| **Custom** | GIFs/images you drop in `src/assets/environments/custom/` |
+| **Custom** | Local GIFs/images in `src/assets/environments/custom/` (not in git). Opening Custom hides built-ins until closed; Color fade stays pinned under the list |
 | **Color fade** | Soft glow from a color you pick → **Use color** |
-| **Reset to Default** | Back to lavender `#e9e1fa` |
+| **Reset** | Back to lavender `#e9e1fa` |
+
+<p align="center">
+  <img src="screenshots/32-appearance-env-builtin.png" alt="Built-in environments" height="220" />
+  <img src="screenshots/33-appearance-env-custom.png" alt="Custom environments open" height="220" />
+</p>
 
 Full detail: [Environments](environments.md).
 
@@ -96,6 +136,11 @@ The bar and circular controls adapt to what sits **behind** the bar:
 | **Light** | Grey | Lighter grey glass + **dark** icons |
 
 In overlay mode the app samples the desktop near the window **after you finish moving** (and on focus), then crossfades bar/button colors. Environment GIFs themselves never change. In browser / windowed mode chrome follows the chosen environment.
+
+<p align="center">
+  <img src="screenshots/40-chrome-dark-backdrop.png" alt="Bar on dark backdrop" height="110" />
+  <img src="screenshots/41-chrome-light-backdrop.png" alt="Bar on light backdrop" height="110" />
+</p>
 
 ---
 
@@ -122,6 +167,20 @@ Gear → **Voice**.
 - Status line shows `idle` / `starting` / `active` / `error` / …
 - Use **Restart audio capture** if OS permissions or devices change.
 - Mouth shapes are **amplitude-based** (not phoneme ASR). See [Lip sync](voice/lip-sync.md) and [Audio sources](voice/audio-sources.md).
+
+<p align="center">
+  <img src="screenshots/50-voice-panel.png" alt="Voice panel" height="200" />
+  <img src="screenshots/51-voice-window-pick.png" alt="Pick app window" height="200" />
+</p>
+
+<p align="center">
+  <img src="screenshots/52-voice-microphone.png" alt="Microphone selected" height="200" />
+  <img src="screenshots/53-voice-file.png" alt="Audio file source" height="200" />
+</p>
+
+<p align="center">
+  <img src="screenshots/54-voice-active-lipsync.png" alt="Active lip sync on desktop" width="100%" />
+</p>
 
 ---
 
@@ -160,6 +219,17 @@ Position **X / Y / Z** (default `0, -1.03, -1.48`).
 
 See [Camera & lighting](camera-and-lighting.md).
 
+<p align="center">
+  <img src="screenshots/60-camera-panel.png" alt="Camera panel" height="200" />
+  <img src="screenshots/61-lighting-panel.png" alt="Lighting panel" height="200" />
+  <img src="screenshots/62-avatar-transform-panel.png" alt="Avatar transform panel" height="200" />
+</p>
+
+<p align="center">
+  <img src="screenshots/63-camera-framed-bust.png" alt="Default camera framing" height="220" />
+  <img src="screenshots/64-camera-full-body-hint.png" alt="Fuller body framing" height="220" />
+</p>
+
 ---
 
 ## 6. Animations
@@ -179,6 +249,10 @@ Pick any listed VRMA clip to play that motion only. Choosing **Default** again r
 
 Catalog: [VRMA](animations/vrma.md).
 
+<p align="center">
+  <img src="screenshots/21-gear-animations.png" alt="Animations menu" height="260" />
+</p>
+
 ---
 
 ## 7. Settings
@@ -192,6 +266,11 @@ Gear → **Settings**.
 
 Also toggle from the gear **Pinned / Windowed** item.
 
+<p align="center">
+  <img src="screenshots/80-settings-panel.png" alt="Settings panel" height="240" />
+  <img src="screenshots/85-windowed-mode.png" alt="Windowed mode" height="240" />
+</p>
+
 ### Snap to screen
 
 Tap a cell in the **3×3 pad**:
@@ -204,6 +283,10 @@ Bottom left  | Bottom center  | Bottom right
 
 The active cell stays **highlighted**. If you **drag** the glass bar by hand, the highlight clears (no cell selected).
 
+<p align="center">
+  <img src="screenshots/81-snap-pad-selected.png" alt="Snap pad with a cell selected" height="240" />
+</p>
+
 ### Reset all settings
 
 **Reset all settings** wipes saved preferences and restores factory defaults (avatar, skin, animation, environment, camera, light, avatar transform, audio source, overlay, window scale).
@@ -212,7 +295,7 @@ The active cell stays **highlighted**. If you **drag** the glass bar by hand, th
 
 | Where | Control |
 | :--- | :--- |
-| Appearance → Environments | **Reset to Default** (color fade) |
+| Appearance → Environments | **Reset** (color fade) |
 | Camera & Lighting → Camera | **Reset Camera** / double-click slider |
 | Camera & Lighting → Lighting | **Reset Light** / double-click slider |
 | Camera & Lighting → Avatar | **Reset Avatar** / double-click slider |

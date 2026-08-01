@@ -29,3 +29,7 @@ _persona-ref/
 # Large local media (optional — uncomment when publishing without bundled avatars)
 # *.vrm
 # *.vrma
+
+# Local-only custom environment trials (keep the folder; do not commit media)
+avatar-demo/src/assets/environments/custom/*
+!avatar-demo/src/assets/environments/custom/.gitkeep

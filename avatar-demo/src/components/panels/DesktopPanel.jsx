@@ -47,7 +47,12 @@ export function DesktopPanel({ overlayMode, onOverlayModeToggle }) {
 
       <div className="desktop-toggle-row">
         <span>Overlay mode</span>
-        <input type="checkbox" checked={overlayMode} onChange={() => onOverlayModeToggle()} />
+        <input
+          type="checkbox"
+          className="panel-checkbox"
+          checked={overlayMode}
+          onChange={() => onOverlayModeToggle()}
+        />
       </div>
 
       <p className="panel-note panel-note--compact">Snap to screen</p>

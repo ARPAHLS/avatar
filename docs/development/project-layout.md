@@ -14,7 +14,8 @@ avatar-demo/
     │   ├── avatars/
     │   │   └── VRMA/
     │   └── environments/
-    │       └── custom/
+    │       ├── stars.gif / code.gif / bloom.gif   # bundled built-ins
+    │       └── custom/                            # local trials only (.gitkeep; media gitignored)
     ├── components/
     ├── config/             # catalogs + userSettings schema
     ├── hooks/

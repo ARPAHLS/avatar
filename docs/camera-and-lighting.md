@@ -4,6 +4,11 @@ Gear → **Camera & Lighting**.
 
 All values autosave to `config.yaml` (or browser local storage). See [User settings](user-settings.md).
 
+<p align="center">
+  <img src="screenshots/60-camera-panel.png" alt="Camera controls" height="220" />
+  <img src="screenshots/61-lighting-panel.png" alt="Lighting controls" height="220" />
+</p>
+
 ---
 
 ## Camera
@@ -51,6 +56,12 @@ Offsets the loaded VRM in the scene (not the camera).
 | **Z** | `-1.48` |
 
 Facing defaults to a π Y rotation (toward the camera). **Reset Avatar** restores position and that facing. There is no rotation slider in the UI yet.
+
+<p align="center">
+  <img src="screenshots/62-avatar-transform-panel.png" alt="Avatar transform" height="220" />
+  <img src="screenshots/63-camera-framed-bust.png" alt="Default bust framing" height="220" />
+  <img src="screenshots/64-camera-full-body-hint.png" alt="Fuller body framing" height="220" />
+</p>
 
 ---
 

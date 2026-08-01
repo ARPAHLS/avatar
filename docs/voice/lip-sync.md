@@ -22,6 +22,11 @@ AVATAR drives VRM mouth blendshapes from **audio amplitude** (how loud the signa
 Glass bar **green pulsing dot** = capture active and lip sync enabled.  
 Voice drawer shows status text (`idle`, `starting`, `active`, `error`, …) and **Restart audio capture**.
 
+<p align="center">
+  <img src="../screenshots/11-bar-live-dot.png" alt="Live dot" height="100" />
+  <img src="../screenshots/54-voice-active-lipsync.png" alt="Active lip sync" height="200" />
+</p>
+
 ## Tips
 
 - Prefer **Device output** on desktop when watching videos or chatting with an AI that plays audio through the system.  

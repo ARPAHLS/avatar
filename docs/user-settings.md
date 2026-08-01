@@ -54,6 +54,10 @@ Autosave runs shortly after you change something (~400 ms debounce).
 
 **Settings → Reset all settings** deletes the YAML file (or clears localStorage) and reapplies the factory defaults above.
 
+<p align="center">
+  <img src="screenshots/80-settings-panel.png" alt="Settings with Reset all" height="260" />
+</p>
+
 ### One area only
 
 | Goal | Action |
@@ -61,7 +65,7 @@ Autosave runs shortly after you change something (~400 ms debounce).
 | Camera only | Camera & Lighting → **Reset Camera** (or double-click one slider) |
 | Lights only | **Reset Light** |
 | Avatar pose offset only | **Reset Avatar** |
-| Environment color only | Appearance → Environments → **Reset to Default** |
+| Environment color only | Appearance → Environments → **Reset** |
 | Audio pipeline glitch | Voice → **Restart audio capture** (keeps the selected source) |
 
 ## Example `config.yaml` shape

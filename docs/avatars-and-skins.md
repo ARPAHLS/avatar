@@ -12,6 +12,15 @@ Path: `avatar-demo/src/assets/avatars/`.
 
 Gear → **Appearance** → **Avatars**. Selection persists as `avatarId` in [config.yaml](user-settings.md).
 
+<p align="center">
+  <img src="screenshots/91-multi-avatar-strip.png" alt="Avatar 1, 2, and 3" height="240" />
+</p>
+
+<p align="center">
+  <img src="screenshots/30-appearance-avatars.png" alt="Avatars picker" height="220" />
+  <img src="screenshots/03-window-avatar1-default.png" alt="Avatar 1 on stage" height="220" />
+</p>
+
 ---
 
 ## Drop-in naming
@@ -33,6 +42,10 @@ Gear → **Appearance** → **Skins**.
 - Shows skins for the **currently selected** avatar only.  
 - Each avatar has at least **Default** (the base `avatarN.vrm`).  
 - Extra lettered files unlock Skin B / C / …  
+
+<p align="center">
+  <img src="screenshots/31-appearance-skins.png" alt="Skins section" height="240" />
+</p>
 
 Example: `avatar1B.vrm` → while Avatar 1 is selected, Skins lists Default + Skin B.
 

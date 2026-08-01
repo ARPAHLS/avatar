@@ -51,12 +51,20 @@ html.vox-desktop .glass-drawer__body * {
   cursor: default;
 }
 
+html.vox-desktop .panel-select-menu__list,
+html.vox-desktop .panel-select-menu__list * {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
 html.vox-desktop .avatar-glass-bar__gear,
 html.vox-desktop .avatar-glass-bar__scale,
 html.vox-desktop .avatar-command-menu__btn,
 html.vox-desktop .avatar-command-menu__anim,
 html.vox-desktop .avatar-window-scale-menu__btn,
-html.vox-desktop .glass-drawer__close {
+html.vox-desktop .glass-drawer__close,
+html.vox-desktop .panel-select-menu__trigger,
+html.vox-desktop .panel-select-menu__option {
   cursor: pointer;
 }
 

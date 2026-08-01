@@ -14,6 +14,10 @@ npm run dev:desktop
 
 A transparent window should appear on top of your other apps.
 
+<p align="center">
+  <img src="../screenshots/02-hero-overlay-light-page.png" alt="First launch overlay" width="100%" />
+</p>
+
 ## 2. Orient yourself
 
 | Control | What it does |
@@ -24,6 +28,11 @@ A transparent window should appear on top of your other apps.
 | **Gear** | All panels and menus |
 
 On first launch you get **Avatar 1**, **Default** animation (Greeting, then a loop of poses), lavender **color fade**, and on desktop **Device output** audio.
+
+<p align="center">
+  <img src="../screenshots/10-bar-idle.png" alt="Glass bar" height="90" />
+  <img src="../screenshots/20-gear-main.png" alt="Gear menu" height="200" />
+</p>
 
 ## 3. Try the essentials (2 minutes)
 

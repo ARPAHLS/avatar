@@ -197,6 +197,8 @@ export function AvatarStage() {
       if (drawerRef.current?.contains(target)) return;
       if (target instanceof Element && target.closest('.avatar-glass-bar__gear')) return;
       if (target instanceof Element && target.closest('.avatar-glass-bar__scale')) return;
+      // Portaled lilac selects render on document.body (outside the drawer).
+      if (target instanceof Element && target.closest('.panel-select-menu__list')) return;
 
       if (commandMenuOpen) setCommandMenuOpen(false);
       if (scaleMenuOpen) setScaleMenuOpen(false);
@@ -289,16 +291,27 @@ export function AvatarStage() {
   async function handleResetAllSettings() {
     const defaults = await resetUserSettings();
     skipNextSave.current = true;
-    setAvatarReady(false);
+
+    // Only hide the stage when the VRM actually reloads — same path never
+    // re-fires onLoaded, which left the whole UI at opacity 0 (looked like a crash).
+    const nextPath = resolveAvatarPath(defaults.avatarId, defaults.skinId);
+    if (nextPath !== modelPath) {
+      setAvatarReady(false);
+    }
+
     applySettings(defaults);
     setAudioFile(null);
     setAnimationRequest((count) => count + 1);
 
-    if (desktopApi?.setOverlayMode) {
-      await desktopApi.setOverlayMode(defaults.overlayMode);
-    }
-    if (desktopApi?.setWindowScale) {
-      await desktopApi.setWindowScale(defaults.windowScale);
+    try {
+      if (desktopApi?.setOverlayMode) {
+        await desktopApi.setOverlayMode(defaults.overlayMode);
+      }
+      if (desktopApi?.setWindowScale) {
+        await desktopApi.setWindowScale(defaults.windowScale);
+      }
+    } catch {
+      // Keep in-app defaults even if native window APIs fail.
     }
 
     skipNextSave.current = true;

@@ -10,6 +10,10 @@ Motions are `.vrma` clips from the bundled VRMA motion pack under `src/assets/av
 
 Menu label: **Default** (`id: default`). This is what runs on first launch.
 
+<p align="center">
+  <img src="../screenshots/21-gear-animations.png" alt="Animations submenu" height="260" />
+</p>
+
 | Phase | Clip label | File / id |
 | :--- | :--- | :--- |
 | Intro (once) | **Greeting** | `vrma-02` |

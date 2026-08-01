@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local-only custom environment trials
+src/assets/environments/custom/*
+!src/assets/environments/custom/.gitkeep
