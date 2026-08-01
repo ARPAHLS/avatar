@@ -119,84 +119,16 @@ function defaultBounds() {
 
 /** @type {import('electron').BrowserWindow | null} */
 let mainWindow = null;
-/** @type {import('electron').BrowserWindow | null} */
-let splashWindow = null;
 let overlayMode = true;
-let splashStartedAt = 0;
-let splashDismissed = false;
-const SPLASH_MIN_MS = 1800;
 
 function getLogoPath() {
   return path.join(__dirname, '../public/AVATAR_LOGO_150.png');
 }
 
-function createSplashWindow() {
-  splashDismissed = false;
-  splashStartedAt = Date.now();
-
-  splashWindow = new BrowserWindow({
-    width: 280,
-    height: 280,
-    transparent: true,
-    frame: false,
-    alwaysOnTop: true,
-    skipTaskbar: true,
-    resizable: false,
-    movable: false,
-    focusable: false,
-    hasShadow: false,
-    show: true,
-    backgroundColor: '#00000000',
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
-  });
-
-  // Logo is read inside splash.html via Electron fs (asar-safe data URL).
-  splashWindow.loadFile(path.join(__dirname, 'splash.html'));
-
-  splashWindow.on('closed', () => {
-    splashWindow = null;
-  });
-}
-
 function revealMainWindow() {
-  if (!mainWindow) return;
+  if (!mainWindow || mainWindow.isDestroyed()) return;
   if (!mainWindow.isVisible()) mainWindow.show();
   mainWindow.focus();
-}
-
-function finishSplashAndShowMain() {
-  if (splashDismissed) {
-    revealMainWindow();
-    return;
-  }
-
-  const wait = Math.max(0, SPLASH_MIN_MS - (Date.now() - splashStartedAt));
-
-  setTimeout(() => {
-    if (splashDismissed) {
-      revealMainWindow();
-      return;
-    }
-
-    if (splashWindow && !splashWindow.isDestroyed()) {
-      splashWindow.webContents.send('splash:finish');
-      // Fallback if splash never replies (crash / old HTML)
-      setTimeout(() => {
-        if (!splashDismissed) {
-          splashDismissed = true;
-          if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close();
-          revealMainWindow();
-        }
-      }, 2200);
-      return;
-    }
-
-    splashDismissed = true;
-    revealMainWindow();
-  }, wait);
 }
 
 function applyOverlayMode(enabled) {
@@ -242,7 +174,7 @@ function createWindow() {
     y: bounds.y,
     minWidth,
     minHeight,
-    icon: path.join(__dirname, '../public/AVATAR_LOGO_150.png'),
+    icon: getLogoPath(),
     transparent: true,
     frame: false,
     alwaysOnTop: overlayMode,
@@ -279,7 +211,7 @@ function createWindow() {
   }
 
   setTimeout(() => {
-    finishSplashAndShowMain();
+    revealMainWindow();
   }, 12000);
 
   let saveTimer;
@@ -468,13 +400,6 @@ ipcMain.handle('window:close', () => {
 });
 
 ipcMain.handle('window:avatar-ready', () => {
-  finishSplashAndShowMain();
-});
-
-ipcMain.on('splash:finished', () => {
-  if (splashDismissed) return;
-  splashDismissed = true;
-  if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close();
   revealMainWindow();
 });
 
@@ -494,7 +419,6 @@ ipcMain.handle('settings:info', () => getSettingsInfo(app));
 
 app.whenReady().then(() => {
   setupDisplayMediaHandler();
-  createSplashWindow();
   createWindow();
 });
 

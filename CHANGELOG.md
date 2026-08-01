@@ -12,7 +12,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Windows **NSIS installer** (`npm run dist:win`) writing artifacts to gitignored `desktop-setup/`.
 - Installer branding: `installer_side.png`, `installer_top.png`, logo, and EULA (`build/installer-license.txt`).
-- App launch **splash**: transparent AVATAR mark with physics-style spin (accelerate → cruise → brake → fade) until the companion is ready.
 - Product screenshots under `docs/screenshots/` embedded in README and feature guides.
 - `custom/` environment media is local-only (gitignored); folder kept with `.gitkeep`.
 - Electron desktop companion as the primary product surface (transparent overlay, always-on-top).
@@ -35,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Installer EULA is ASCII-only (NSIS license page encoding).
 - `dist:win` ships with empty Custom environments (local trial GIFs not packaged).
 - Windows `.exe` / shortcuts embed the AVATAR mark (post-pack icon write).
+- Removed launch splash window (show companion when ready).
 
 ## [0.1.0] — 2026-07-31
 
