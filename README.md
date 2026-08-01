@@ -36,6 +36,8 @@
   <a href="docs/getting-started/installation.md">Install</a> ·
   <a href="docs/avatars-and-skins.md">Avatars</a> ·
   <a href="docs/environments.md">Environments</a> ·
+  <a href="docs/voice/audio-sources.md">Voice</a> ·
+  <a href="docs/animations/vrma.md">Animations</a> ·
   <a href="docs/user-settings.md">Settings</a> ·
   <a href="docs/assets-and-credits.md">Assets & Credits</a> ·
   <a href="CHANGELOG.md">Changelog</a> ·
@@ -50,12 +52,12 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 
 ## What this is
 
-- **Electron desktop overlay** — main product surface (pin, snap, window scale, device loopback audio)
-- **VRM avatars & skins** — `avatar1.vrm` … drop-in naming; skins as `avatar1B.vrm`, etc.
-- **Environments** — built-in GIFs, local **Custom** folder, color fade, or none
-- **Persistent settings** — `config.yaml` remembers avatar, skin, camera, lighting, environment, and more
-- **VRMA animations** — Default greeting + loop, plus individual clips
-- **Browser / localhost** — optional for UI development (`npm run dev`)
+- **Electron desktop overlay** — pin, snap, window scale, device loopback ([user guide](docs/using-the-app.md) · [settings](docs/user-settings.md))
+- **VRM avatars & skins** — drop-in `avatarN.vrm` / `avatarNB.vrm` ([avatars](docs/avatars-and-skins.md))
+- **Environments** — built-ins, local Custom folder, color fade, or none ([environments](docs/environments.md))
+- **Persistent settings** — `config.yaml` across launches ([user settings](docs/user-settings.md))
+- **VRMA animations** — Default greeting + loop, plus clips ([VRMA](docs/animations/vrma.md))
+- **Browser / localhost** — optional for contributors ([install](docs/getting-started/installation.md))
 
 <p align="center">
   <img src="docs/screenshots/01-hero-overlay-dark-ide.png" alt="AVATAR overlay on a dark IDE" width="100%" />
@@ -97,12 +99,14 @@ cd avatar-demo
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173). Prefer Electron when testing lip sync against system audio.
+Open [http://localhost:5173](http://localhost:5173). Prefer Electron when testing lip sync against system audio. Details: [Installation](docs/getting-started/installation.md).
 
 ### Try lip sync
 
 1. Gear → **Voice** → Device output (desktop) or Microphone / Tab (browser)
 2. Green pulsating dot next to the gear = active
+
+More: [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-sync.md) · [Using the app → Voice](docs/using-the-app.md#4-voice--lip-sync)
 
 <p align="center">
   <img src="docs/screenshots/50-voice-panel.png" alt="Voice panel" height="220" />
@@ -111,7 +115,7 @@ Open [http://localhost:5173](http://localhost:5173). Prefer Electron when testin
 
 ### Try animations
 
-Gear → **Animations** → **Default** (greeting, then motion loop).
+Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [VRMA animations](docs/animations/vrma.md).
 
 <p align="center">
   <img src="docs/screenshots/21-gear-animations.png" alt="Animations submenu" height="260" />
@@ -172,7 +176,7 @@ Full terms: **[docs/assets-and-credits.md](docs/assets-and-credits.md)** · Righ
 
 ## Privacy
 
-Runs locally. Audio uses Web APIs / Electron loopback; nothing is uploaded.
+Runs locally. Audio uses Web APIs / Electron loopback; nothing is uploaded. See [audio sources](docs/voice/audio-sources.md) for capture options.
 
 ---
 

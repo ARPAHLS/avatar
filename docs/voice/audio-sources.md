@@ -2,7 +2,7 @@
 
 Gear → **Voice** → **Audio source**.
 
-Lip sync reads loudness from the selected source and drives VRM mouth shapes. Details of the analyser: [Lip sync](lip-sync.md).
+This is the full reference for every lip-sync input. Mouth shapes themselves are covered in [Lip sync](lip-sync.md). Everyday walkthrough: [Using the app → Voice](../using-the-app.md#4-voice--lip-sync).
 
 <p align="center">
   <img src="../screenshots/50-voice-panel.png" alt="Voice panel — device output" height="240" />
@@ -16,15 +16,15 @@ Lip sync reads loudness from the selected source and drives VRM mouth shapes. De
 | :--- | :--- | :--- |
 | **Device output (auto)** | `system` | **Default.** Captures what your speakers play (loopback). Best for music, videos, local LLMs talking through the OS mixer. |
 | **Pick app window** | `window` | Choose a specific window/screen from the **Window or screen** list, then wait until status is `active`. |
+| **Microphone** | `microphone` | Your default input device. |
+| **Audio file** | `file` | Pick a local audio file; it plays into the analyser. |
+| **Off** | `none` | Lip sync disabled; green live dot hidden. |
 
 <p align="center">
   <img src="../screenshots/51-voice-window-pick.png" alt="Window picker" height="220" />
   <img src="../screenshots/52-voice-microphone.png" alt="Microphone" height="220" />
   <img src="../screenshots/53-voice-file.png" alt="Audio file" height="220" />
 </p>
-| **Microphone** | `microphone` | Your default input device. |
-| **Audio file** | `file` | Pick a local audio file; it plays into the analyser. |
-| **Off** | `none` | Lip sync disabled; green live dot hidden. |
 
 ### Permissions / troubleshooting
 

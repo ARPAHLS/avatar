@@ -152,6 +152,8 @@ In overlay mode the app samples the desktop near the window **after you finish m
 
 Gear → **Voice**.
 
+**Go deeper:** [Audio sources](voice/audio-sources.md) (every input) · [Lip sync](voice/lip-sync.md) (how the mouth moves).
+
 ### Desktop defaults
 
 | Source | When to use |

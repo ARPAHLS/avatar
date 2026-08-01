@@ -2,6 +2,8 @@
 
 AVATAR drives VRM mouth blendshapes from **audio amplitude** (how loud the signal is), not from speech-to-text phonemes.
 
+Pick the input first: [Audio sources](audio-sources.md). Everyday steps: [Using the app → Voice](../using-the-app.md#4-voice--lip-sync).
+
 ## Pipeline
 
 1. You choose an [audio source](audio-sources.md).  

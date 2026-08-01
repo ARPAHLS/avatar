@@ -20,8 +20,8 @@ Electron desktop companion first; browser localhost for development.
 | [Camera & lighting](camera-and-lighting.md) | Framing, lights, avatar transform, resets |
 | [VRMA animations](animations/vrma.md) | Default greeting + loop, individual clips |
 | [Manual animation testing](animations/manual-testing.md) | QA checklist for Default sequence |
-| [Audio sources](voice/audio-sources.md) | Desktop loopback vs browser capture |
-| [Lip sync](voice/lip-sync.md) | Amplitude visemes + live dot |
+| [Audio sources](voice/audio-sources.md) | Desktop loopback, window, mic, file — full Voice panel reference |
+| [Lip sync](voice/lip-sync.md) | Amplitude visemes, live green dot, troubleshooting |
 
 ## Project
 
