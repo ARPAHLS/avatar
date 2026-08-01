@@ -1,7 +1,6 @@
 const { app, BrowserWindow, ipcMain, screen, session, desktopCapturer } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { pathToFileURL } = require('url');
 const {
   loadSettings,
   saveSettings,
@@ -154,10 +153,8 @@ function createSplashWindow() {
     },
   });
 
-  const logoUrl = pathToFileURL(getLogoPath()).href;
-  splashWindow.loadFile(path.join(__dirname, 'splash.html'), {
-    query: { logo: logoUrl },
-  });
+  // Logo is read inside splash.html via Electron fs (asar-safe data URL).
+  splashWindow.loadFile(path.join(__dirname, 'splash.html'));
 
   splashWindow.on('closed', () => {
     splashWindow = null;

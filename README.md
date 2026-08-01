@@ -9,15 +9,9 @@
 <p align="center">&nbsp;</p>
 
 <div align="center">
-  <a href="https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0"><img src="https://img.shields.io/badge/release-v0.2.0-c4b5fd?style=flat-square" alt="v0.2.0" /></a>
-  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe"><img src="https://img.shields.io/badge/Windows-Setup%20.exe-93c5fd?style=flat-square" alt="Windows Setup" /></a>
-  <img src="https://img.shields.io/badge/License-MIT-efcefa?style=flat-square" alt="License" />
-  <img src="https://img.shields.io/badge/Electron-desktop-bae6fd?style=flat-square" alt="Electron" />
-  <img src="https://img.shields.io/badge/Vite-7-bbf7d0?style=flat-square" alt="Vite" />
-  <img src="https://img.shields.io/badge/React-19-ffdac1?style=flat-square" alt="React" />
-  <img src="https://img.shields.io/badge/three--vrm-3.4-fecdd3?style=flat-square" alt="three-vrm" />
-  <a href="https://booth.pm/"><img src="https://img.shields.io/badge/BOOTH-assets-e9d5ff?style=flat-square" alt="BOOTH" /></a>
-  <a href="https://vroid.com/"><img src="https://img.shields.io/badge/VRoid-compatible-efcefa?style=flat-square" alt="VRoid" /></a>
+  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe"><img src="https://img.shields.io/badge/Version-0.2.0-b8d4f0?style=flat-square" alt="Version 0.2.0" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-ffb38a?style=flat-square" alt="License MIT" /></a>
+  <a href="https://vrm.dev/ja/"><img src="https://img.shields.io/badge/BOOTH-VRM-f87171?style=flat-square" alt="BOOTH VRM" /></a>
 </div>
 
 <p align="center">&nbsp;</p>
