@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { defaultAnimationId } from '../config/animations';
 import { getDefaultAudioSourceId } from '../config/audioSources';
 import { defaultColor } from '../config/environments';
-import { avatarModels, defaultAvatarId } from '../config/avatars';
+import { defaultAvatarId, defaultSkinId, resolveAvatarPath, listSkinsForAvatar } from '../config/avatars';
 import { defaultAvatar, defaultCamera, defaultLight, STAGE } from '../config/defaults';
 import { defaultWindowScale, normalizeWindowScale } from '../config/windowScale';
 import { useAudioSource } from '../hooks/useAudioSource';
@@ -17,7 +17,6 @@ import { VoicePanel } from './panels/VoicePanel';
 import { CameraPanel } from './panels/CameraPanel';
 import { DesktopPanel } from './panels/DesktopPanel';
 
-const defaultModel = avatarModels.find((model) => model.id === defaultAvatarId) ?? avatarModels[0];
 const desktopMode = isDesktopMode();
 
 export function AvatarStage() {
@@ -29,16 +28,17 @@ export function AvatarStage() {
   const [avatarReady, setAvatarReady] = useState(false);
   const [overlayMode, setOverlayMode] = useState(true);
   const hoverAreaRef = useRef(null);
-  const [openAccordion, setOpenAccordion] = useState('avatar');
+  const [openAccordion, setOpenAccordion] = useState('avatars');
   const [openPanel, setOpenPanel] = useState(null);
   const [commandMenuOpen, setCommandMenuOpen] = useState(false);
   const [scaleMenuOpen, setScaleMenuOpen] = useState(false);
   const [windowScale, setWindowScale] = useState(defaultWindowScale);
-  const [selectedAvatar, setSelectedAvatar] = useState(defaultModel.path);
+  const [selectedAvatarId, setSelectedAvatarId] = useState(defaultAvatarId);
+  const [selectedSkinId, setSelectedSkinId] = useState(defaultSkinId);
   const [selectedBg, setSelectedBg] = useState({ type: 'color', value: defaultColor });
-  const [audioSourceId, setAudioSourceId] = useState(getDefaultAudioSourceId);
   const [audioFile, setAudioFile] = useState(null);
   const [windowSourceId, setWindowSourceId] = useState(null);
+  const [audioSourceId, setAudioSourceId] = useState(getDefaultAudioSourceId);
   const panelRef = useRef(null);
   const drawerRef = useRef(null);
   const commandMenuRef = useRef(null);
@@ -117,10 +117,27 @@ export function AvatarStage() {
     void getDesktopApi()?.notifyReady?.();
   }, []);
 
-  const handleAvatarChange = useCallback((path) => {
+  const handleAvatarChange = useCallback(
+    (avatarId) => {
+      setAvatarReady(false);
+      setSelectedAvatarId(avatarId);
+      const skins = listSkinsForAvatar(avatarId);
+      const nextSkin =
+        skins.find((skin) => skin.id === selectedSkinId)?.id ??
+        skins.find((skin) => skin.id === defaultSkinId)?.id ??
+        skins[0]?.id ??
+        defaultSkinId;
+      setSelectedSkinId(nextSkin);
+    },
+    [selectedSkinId],
+  );
+
+  const handleSkinChange = useCallback((skinId) => {
     setAvatarReady(false);
-    setSelectedAvatar(path);
+    setSelectedSkinId(skinId);
   }, []);
+
+  const modelPath = resolveAvatarPath(selectedAvatarId, selectedSkinId);
 
   async function handleOverlayModeToggle() {
     const next = !overlayMode;
@@ -189,7 +206,7 @@ export function AvatarStage() {
             <ambientLight intensity={light.intensity} />
             <directionalLight position={light.position} intensity={light.intensity} color={light.color} />
             <VrmAvatar
-              modelPath={selectedAvatar}
+              modelPath={modelPath}
               animationId={animationId}
               animationRequest={animationRequest}
               avatarPosition={avatar.position}
@@ -212,8 +229,10 @@ export function AvatarStage() {
             <PalettePanel
               openAccordion={openAccordion}
               setOpenAccordion={setOpenAccordion}
-              selectedAvatar={selectedAvatar}
-              setSelectedAvatar={handleAvatarChange}
+              selectedAvatarId={selectedAvatarId}
+              onAvatarChange={handleAvatarChange}
+              selectedSkinId={selectedSkinId}
+              onSkinChange={handleSkinChange}
               selectedBg={selectedBg}
               setSelectedBg={setSelectedBg}
             />

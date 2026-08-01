@@ -2,11 +2,10 @@
 
 ## v0.1 — Current
 
-- [x] Restructured source layout
+- [x] Electron desktop overlay (snap, pin/windowed, window scale, device loopback)
 - [x] VRMA playback + Default greeting/loop sequence
-- [x] Gear menus, Appearance (Avatar / Environments / Custom), Voice, Camera
-- [x] Browser + Electron lip sync (mic, tab, file, device loopback)
-- [x] Desktop overlay (snap, pin/windowed, window scale)
+- [x] Gear menus: Appearance (Avatars / Skins / Environments), Voice, Camera
+- [x] Drop-in `avatarN.vrm` / `avatarNB.vrm` catalog
 - [x] Documentation and asset credits
 
 ## v0.2 — Expression automation
@@ -17,7 +16,7 @@
 
 ## v0.3 — Packaging & polish
 
-- [ ] Windows `.exe` installer (electron-builder / similar)
+- [ ] Windows `.exe` installer for end users
 - [ ] Persisted settings
 - [ ] Screenshot/GIF assets in docs
 - [ ] CI and issue templates

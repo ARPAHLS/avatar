@@ -1,21 +1,26 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { environments, customEnvironments, defaultColor } from '../../config/environments';
-import { avatarModels } from '../../config/avatars';
+import { avatars, listSkinsForAvatar } from '../../config/avatars';
 import { MiniAvatar } from '../avatar/MiniAvatar';
 import { AccordionSection, Divider } from '../ui/PanelPrimitives';
 
 export function PalettePanel({
   openAccordion,
   setOpenAccordion,
-  selectedAvatar,
-  setSelectedAvatar,
+  selectedAvatarId,
+  onAvatarChange,
+  selectedSkinId,
+  onSkinChange,
   selectedBg,
   setSelectedBg,
 }) {
   const [customOpen, setCustomOpen] = useState(
     () => selectedBg.type === 'env' && selectedBg.id?.startsWith('custom-'),
   );
+
+  const skins = listSkinsForAvatar(selectedAvatarId);
+  const selectedAvatar = avatars.find((entry) => entry.id === selectedAvatarId) ?? avatars[0];
 
   const colorValue =
     selectedBg.type === 'color'
@@ -30,20 +35,54 @@ export function PalettePanel({
   return (
     <>
       <AccordionSection
-        open={openAccordion === 'avatar'}
-        onClick={() => setOpenAccordion(openAccordion === 'avatar' ? null : 'avatar')}
-        label="Avatar"
+        open={openAccordion === 'avatars'}
+        onClick={() => setOpenAccordion(openAccordion === 'avatars' ? null : 'avatars')}
+        label="Avatars"
       >
+        <p className="panel-note panel-note--compact">Choose a character model.</p>
         <div className="avatar-picker">
-          {avatarModels.map((model) => (
-            <MiniAvatar
-              key={model.id}
-              modelPath={model.path}
-              selected={selectedAvatar === model.path}
-              onClick={() => setSelectedAvatar(model.path)}
-            />
-          ))}
+          {avatars.map((entry) => {
+            const previewPath =
+              entry.skins.find((skin) => skin.id === 'default')?.path ?? entry.skins[0]?.path;
+            return (
+              <MiniAvatar
+                key={entry.id}
+                modelPath={previewPath}
+                selected={selectedAvatarId === entry.id}
+                onClick={() => onAvatarChange(entry.id)}
+              />
+            );
+          })}
         </div>
+      </AccordionSection>
+
+      <Divider />
+
+      <AccordionSection
+        open={openAccordion === 'skins'}
+        onClick={() => setOpenAccordion(openAccordion === 'skins' ? null : 'skins')}
+        label="Skins"
+      >
+        <p className="panel-note panel-note--compact">
+          Variants for {selectedAvatar?.label ?? 'this avatar'}. Name files like{' '}
+          <code>avatar1B.vrm</code> to add more.
+        </p>
+        {skins.length === 0 ? (
+          <p className="panel-note">No skins found.</p>
+        ) : (
+          <div className="skin-picker">
+            {skins.map((skin) => (
+              <div key={skin.id} className="skin-chip">
+                <MiniAvatar
+                  modelPath={skin.path}
+                  selected={selectedSkinId === skin.id}
+                  onClick={() => onSkinChange(skin.id)}
+                />
+                <span className="skin-chip__label">{skin.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </AccordionSection>
 
       <Divider />

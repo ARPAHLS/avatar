@@ -18,7 +18,7 @@ We will respond and remove or replace the asset promptly.
 | :--- | :--- |
 | Source | Created / customized in [VRoid Studio](https://vroid.com/en/studio) and [VRoid Hub](https://hub.vroid.com/) |
 | Cost | **Free only** — no paid VRoid / BOOTH models, wearables, hair, clothes, or textures are used in this repository |
-| Status | Sample avatars for testing lip sync and motion |
+| Status | Sample files named `avatar1.vrm`, `avatar2.vrm`, `avatar3.vrm` for testing |
 
 Users who ship their own builds **must** use only assets they have rights to, and must obey each creator’s BOOTH / VRoid Hub terms of use (credit, redistribution, commercial use, streaming, etc.). Policies vary per item — always check the product page.
 

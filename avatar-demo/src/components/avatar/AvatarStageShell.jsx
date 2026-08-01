@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Cog } from 'lucide-react';
 import { STAGE } from '../../config/defaults';
+import { resolveChromeTone, resolveChromeToneSync } from '../../lib/chromeTone';
 import { getHoloFieldStyle, isHoloFieldHidden } from '../../lib/holoField';
 import { isDesktopMode } from '../../lib/desktopMode';
 import { BarCommandMenu } from '../ui/BarCommandMenu';
@@ -28,6 +30,18 @@ export function AvatarStageShell({
   const { barHeight, canvasOverflowTop, canvasOverflowSide } = STAGE;
   const desktopMode = isDesktopMode();
   const holoStyle = getHoloFieldStyle(environmentSelection);
+  const [chromeTone, setChromeTone] = useState(() => resolveChromeToneSync(environmentSelection));
+
+  useEffect(() => {
+    let cancelled = false;
+    setChromeTone(resolveChromeToneSync(environmentSelection));
+    void resolveChromeTone(environmentSelection).then((tone) => {
+      if (!cancelled) setChromeTone(tone);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [environmentSelection]);
 
   function toggleMenu(event) {
     event.stopPropagation();
@@ -37,6 +51,7 @@ export function AvatarStageShell({
   return (
     <div
       className="avatar-stage-shell"
+      data-chrome={chromeTone}
       style={{
         '--stage-bar-height': `${barHeight}px`,
         '--stage-canvas-overflow-top': `${canvasOverflowTop}px`,

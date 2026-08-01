@@ -9,37 +9,26 @@ avatar-demo/
 │   ├── AVATAR_LOGO_150.png
 │   └── AVATAR_SPLASH.png
 └── src/
-    ├── App.jsx
-    ├── main.jsx
     ├── assets/
-    │   ├── avatars/          VRM + VRMA
-    │   └── environments/     built-in GIFs + custom/
+    │   ├── avatars/           avatar1.vrm, avatar2.vrm, avatar3.vrm, VRMA/
+    │   └── environments/      stars/code/bloom + custom/
     ├── components/
-    │   ├── AvatarStage.jsx
-    │   ├── avatar/
-    │   ├── panels/
-    │   └── ui/
     ├── config/
+    │   ├── avatars.js         glob catalog (avatars + skins)
+    │   ├── environments.js
+    │   ├── animations.js
+    │   └── …
     ├── hooks/
     ├── lib/
     └── styles/
 ```
 
-Environment GIFs used by the app live under `src/assets/environments/` (Vite-bundled). Drop trial GIFs in `custom/`; promote keepers to the parent folder when ready.
-
-## Conventions
-
-- **Catalogs over magic strings** — UI reads from `config/`.
-- **Hooks own side effects** — components stay declarative.
-- **One avatar frame loop** — `VrmAvatar` coordinates mixer, blink, and lip sync.
-
 ## Scripts
 
-| Command | Action |
-| :--- | :--- |
-| `npm run dev` | Vite browser dev server |
-| `npm run dev:desktop` | Vite + Electron overlay |
-| `npm run desktop` | Build + Electron against `dist/` |
-| `npm run build` | Production web bundle |
-| `npm run preview` | Serve `dist/` |
-| `npm run lint` | ESLint |
+| Command | Audience | Action |
+| :--- | :--- | :--- |
+| `npm run dev:desktop` | Default | Vite + Electron overlay |
+| `npm run desktop` | Packaging check | Build + Electron on `dist/` |
+| `npm run dev` | Contributors | Browser localhost only |
+| `npm run build` | CI / web | Production bundle |
+| `npm run lint` | Contributors | ESLint |

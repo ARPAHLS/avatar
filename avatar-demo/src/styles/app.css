@@ -24,6 +24,37 @@
   width: 100%;
   height: 100%;
   overflow: visible;
+  --chrome-line-edge: rgba(255, 255, 255, 0.08);
+  --chrome-line-mid: rgba(255, 255, 255, 0.9);
+  --chrome-line-glow: rgba(200, 185, 235, 0.45);
+  --chrome-line-glow-soft: rgba(180, 155, 230, 0.22);
+  --chrome-line-inset: rgba(255, 255, 255, 0.95);
+  --chrome-btn-color: rgba(255, 255, 255, 0.9);
+  --chrome-btn-bg: rgba(255, 255, 255, 0.2);
+  --chrome-btn-glow: rgba(180, 160, 220, 0.35);
+  --chrome-btn-inset: rgba(255, 255, 255, 0.5);
+  --chrome-btn-open-color: #c4b0e8;
+  --chrome-btn-open-bg: rgba(255, 255, 255, 0.3);
+  --chrome-menu-bg: rgba(255, 255, 255, 0.82);
+  --chrome-menu-border: rgba(255, 255, 255, 0.55);
+  --chrome-menu-color: #7d62ad;
+}
+
+.avatar-stage-shell[data-chrome='light'] {
+  --chrome-line-edge: rgba(70, 75, 90, 0.12);
+  --chrome-line-mid: rgba(95, 100, 115, 0.78);
+  --chrome-line-glow: rgba(110, 115, 130, 0.35);
+  --chrome-line-glow-soft: rgba(90, 95, 110, 0.2);
+  --chrome-line-inset: rgba(255, 255, 255, 0.55);
+  --chrome-btn-color: rgba(55, 60, 75, 0.92);
+  --chrome-btn-bg: rgba(90, 95, 110, 0.22);
+  --chrome-btn-glow: rgba(80, 85, 100, 0.28);
+  --chrome-btn-inset: rgba(255, 255, 255, 0.45);
+  --chrome-btn-open-color: #5a4d75;
+  --chrome-btn-open-bg: rgba(90, 95, 110, 0.32);
+  --chrome-menu-bg: rgba(235, 236, 240, 0.92);
+  --chrome-menu-border: rgba(120, 125, 140, 0.4);
+  --chrome-menu-color: #4a4558;
 }
 
 .avatar-stage-backdrop {
@@ -122,27 +153,27 @@
   border-radius: 999px;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.78) 18%,
-    rgba(255, 255, 255, 0.92) 50%,
-    rgba(255, 255, 255, 0.78) 82%,
-    rgba(255, 255, 255, 0.08) 100%
+    var(--chrome-line-edge) 0%,
+    var(--chrome-line-mid) 18%,
+    var(--chrome-line-mid) 50%,
+    var(--chrome-line-mid) 82%,
+    var(--chrome-line-edge) 100%
   );
   box-shadow:
-    0 0 16px rgba(200, 185, 235, 0.45),
-    0 0 32px rgba(180, 155, 230, 0.22),
-    0 1px 0 rgba(255, 255, 255, 0.95) inset;
+    0 0 16px var(--chrome-line-glow),
+    0 0 32px var(--chrome-line-glow-soft),
+    0 1px 0 var(--chrome-line-inset) inset;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  transition: box-shadow 0.15s ease;
+  transition: box-shadow 0.15s ease, background 0.2s ease;
 }
 
 .avatar-glass-bar__line:hover {
   cursor: grab;
   box-shadow:
-    0 0 20px rgba(210, 190, 245, 0.55),
-    0 0 36px rgba(180, 155, 230, 0.28),
-    0 1px 0 rgba(255, 255, 255, 0.95) inset;
+    0 0 20px var(--chrome-line-glow),
+    0 0 36px var(--chrome-line-glow-soft),
+    0 1px 0 var(--chrome-line-inset) inset;
 }
 
 .avatar-glass-bar__end {
@@ -191,19 +222,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.88);
-  background: rgba(255, 255, 255, 0.18);
+  color: var(--chrome-btn-color);
+  background: var(--chrome-btn-bg);
   box-shadow:
-    0 0 10px rgba(180, 160, 220, 0.35),
-    0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    0 0 10px var(--chrome-btn-glow),
+    0 1px 0 var(--chrome-btn-inset) inset;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
 .avatar-glass-bar__scale--open {
-  color: #c4b0e8;
-  background: rgba(255, 255, 255, 0.28);
+  color: var(--chrome-btn-open-color);
+  background: var(--chrome-btn-open-bg);
 }
 
 .avatar-window-scale-wrap {
@@ -228,10 +260,10 @@
   min-width: 44px;
   height: 28px;
   padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid var(--chrome-menu-border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
-  color: #4f4068;
+  background: var(--chrome-menu-bg);
+  color: var(--chrome-menu-color);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -256,19 +288,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.88);
-  background: rgba(255, 255, 255, 0.18);
+  color: var(--chrome-btn-color);
+  background: var(--chrome-btn-bg);
   box-shadow:
-    0 0 10px rgba(180, 160, 220, 0.35),
-    0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    0 0 10px var(--chrome-btn-glow),
+    0 1px 0 var(--chrome-btn-inset) inset;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
 .avatar-glass-bar__gear--open {
-  color: #c4b0e8;
-  background: rgba(255, 255, 255, 0.28);
+  color: var(--chrome-btn-open-color);
+  background: var(--chrome-btn-open-bg);
 }
 
 .avatar-command-menu {
@@ -287,10 +320,10 @@
   position: relative;
   width: 30px;
   height: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--chrome-menu-border);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.82);
-  color: #7d62ad;
+  background: var(--chrome-menu-bg);
+  color: var(--chrome-menu-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -318,8 +351,8 @@
 
 .avatar-command-menu__btn:hover,
 .avatar-command-menu__anim:hover {
-  background: rgba(255, 255, 255, 0.95);
-  color: #5c4790;
+  filter: brightness(0.97);
+  color: var(--chrome-menu-color);
 }
 
 .avatar-command-menu__btn--active,
@@ -674,6 +707,27 @@
 }
 
 .avatar-picker,
+.skin-picker {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.skin-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.skin-chip__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4f4068;
+}
+
 .background-picker {
   display: flex;
   gap: 16px;

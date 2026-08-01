@@ -1,42 +1,33 @@
 # First session
 
-## Desktop companion
+## Desktop companion (main UI)
 
-- Open the **gear** on the glass bar for Appearance, Voice, Camera, Animations, and Settings.
-- Drag the window to reposition; snap corners from **Settings**.
-- Use the **scale** control (next to gear) for ×0.5 / ×1 / ×2 window size.
-- Toggle **Pinned / Windowed** from the gear menu on desktop.
-- Green pulsating dot next to the gear = lip sync active.
+- Open the **gear** for Appearance, Voice, Camera, Animations, Settings.
+- Drag to move; snap corners from **Settings**.
+- **Scale** (next to gear): ×0.5 / ×1 / ×2.
+- **Pinned / Windowed** from the gear menu.
+- Green pulsating dot = lip sync active.
 
 ## Appearance
 
-Gear → **Appearance**:
+### Avatars
 
-1. **Avatar** — switch bundled VRM models.
-2. **Environments** — Stars / Code / Bloom, **None**, color fade, or expand **Custom** for GIFs under `src/assets/environments/custom/`.
+Pick **Avatar 1 / 2 / 3** (files `avatar1.vrm`, `avatar2.vrm`, `avatar3.vrm`). Drop more with the same naming scheme — see [Avatars & skins](../avatars-and-skins.md).
+
+### Skins
+
+Variants for the selected avatar (Default today). Add `avatar1B.vrm` to unlock Skin B for Avatar 1.
+
+### Environments
+
+Stars / Code / Bloom / None, color fade, and **Custom** GIFs. See [Environments](../environments.md).
 
 ## Voice
 
-Gear → **Voice** (microphone icon): pick an audio source and restart capture if needed.
+Desktop: **Device output** (system loopback) or a specific window.  
+Browser (dev): Microphone, tab audio, or file.
 
-| Mode | Typical source |
-| :--- | :--- |
-| Desktop | Device output (system loopback), or a specific window |
-| Browser | Microphone, tab/window audio, or local file |
+## Camera & Animations
 
-## Camera & lighting
-
-**Camera & Lighting** sliders: position, look-at, FOV, light intensity, color. Double-click a slider to reset that axis.
-
-## Animations
-
-Gear → **Animations**:
-
-- **Default** — greeting once, then loops model pose → full body → peace → squat → shoot.
-- Individual VRMA clips as listed.
-
-## Lip sync quick test
-
-1. Open **Voice** and choose a source.
-2. Speak, play media, or run an AI/assistant that outputs audio.
-3. Watch the mouth respond; the green live dot stays on while capture is active.
+**Camera & Lighting** for framing.  
+**Animations** → **Default** for greeting + loop, or individual VRMA clips.

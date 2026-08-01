@@ -48,6 +48,7 @@ Frameless transparent window, always-on-top overlay, snap, scale presets, and sy
 
 ## Design notes
 
+- **Electron first** — desktop overlay, scale, and device loopback are the primary product path; browser is for development.
 - **VRMA first** — skeletal clips (and sequences) drive the body while active.
-- **Audio** — browser uses Web Audio (`getUserMedia` / `getDisplayMedia`); Electron adds device loopback and window pick.
+- **Drop-in avatars** — `avatarN.vrm` / `avatarNB.vrm` naming auto-registers models and skins.
 - **Future triggers** — keyword/event mapping will reuse the same animation catalog.

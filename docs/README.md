@@ -1,33 +1,35 @@
 # AVATAR — Documentation
 
-Guides for installation, desktop/browser use, animations, lip sync, architecture, and asset credits.
+Electron desktop companion first; browser localhost for development.
 
 ## Start here
 
 | Section | Description |
 | :--- | :--- |
-| [Installation](getting-started/installation.md) | Browser, Electron, and production builds |
-| [First session](getting-started/first-session.md) | Gear menus, Avatar, Environments, Voice, scale |
-| [Architecture overview](architecture/overview.md) | Rendering, VRMA, audio, Electron |
-| [Assets & credits](assets-and-credits.md) | VRoid / BOOTH terms, Pixiv credit, contact |
+| [Installation](getting-started/installation.md) | Desktop app, `.exe` plans, browser dev |
+| [First session](getting-started/first-session.md) | Gear menus, avatars, skins, environments |
+| [Avatars & skins](avatars-and-skins.md) | `avatar1.vrm` naming and drop-in workflow |
+| [Environments](environments.md) | Built-in, Custom, color, none |
+| [Architecture](architecture/overview.md) | Rendering, VRMA, Electron audio |
+| [Assets & credits](assets-and-credits.md) | VRoid / BOOTH / Pixiv terms |
 
 ## Animations
 
 | Doc | Description |
 | :--- | :--- |
-| [VRMA catalog](animations/vrma.md) | Motion pack entries and registration |
-| [Manual testing](animations/manual-testing.md) | Default sequence and clip checks |
+| [VRMA catalog](animations/vrma.md) | Motion pack entries |
+| [Manual testing](animations/manual-testing.md) | Default sequence checks |
 
-## Voice & lip sync
+## Voice
 
 | Doc | Description |
 | :--- | :--- |
-| [Lip sync](voice/lip-sync.md) | Amplitude visemes and live indicator |
-| [Audio sources](voice/audio-sources.md) | Browser and desktop capture options |
+| [Lip sync](voice/lip-sync.md) | Amplitude visemes |
+| [Audio sources](voice/audio-sources.md) | Desktop loopback + browser capture |
 
 ## Development
 
 | Doc | Description |
 | :--- | :--- |
 | [Project layout](development/project-layout.md) | Folders and scripts |
-| [Roadmap](development/roadmap.md) | Near-term milestones |
+| [Roadmap](development/roadmap.md) | Milestones including `.exe` packaging |

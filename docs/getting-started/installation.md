@@ -1,22 +1,13 @@
 # Installation
 
+AVATAR’s **main product surface is the Electron desktop app**. Browser / localhost is for development and contributors.
+
 ## Requirements
 
-- **Node.js 20 or newer**
-- **npm**
-- Chrome or Edge recommended (WebGL + Web Audio; tab capture on browser)
+- **Node.js 20+** and **npm**
+- Windows recommended for the overlay companion (macOS/Linux Electron also builds)
 
-## Browser
-
-```bash
-cd avatar-demo
-npm install
-npm run dev
-```
-
-Dev server: [http://localhost:5173](http://localhost:5173).
-
-## Desktop (Electron)
+## Desktop (recommended)
 
 ```bash
 cd avatar-demo
@@ -24,17 +15,28 @@ npm install
 npm run dev:desktop
 ```
 
-Hot-reload UI with a transparent overlay window.
+Hot-reloads the UI inside a transparent always-on-top window.
 
-### Production desktop build
+### Production desktop window
 
 ```bash
 npm run desktop
 ```
 
-Builds the Vite app, then opens Electron against `dist/`.
+Builds Vite `dist/`, then launches Electron against it.
 
-A packaged Windows **`.exe` installer** will be published for users who do not want to run from Node or the browser.
+### Packaged `.exe`
+
+A Windows installer is planned so end users can install without Node. Until then, use `npm run desktop` from a clone, or wait for release artifacts on GitHub Releases.
+
+## Browser (dev)
+
+```bash
+cd avatar-demo
+npm run dev
+```
+
+[http://localhost:5173](http://localhost:5173) — useful for UI work; system audio loopback is an Electron feature.
 
 ## Web production bundle
 
@@ -43,14 +45,12 @@ npm run build
 npm run preview
 ```
 
-Output: `avatar-demo/dist/`.
-
 ## Troubleshooting
 
 | Issue | Fix |
 | :--- | :--- |
-| Blank stage | Confirm `.vrm` files under `src/assets/avatars/` |
-| VRMA clip fails | Check console; verify paths in `src/config/animations.js` |
-| Tab audio silent | Re-share the tab with **Share tab audio** enabled (Chrome) |
-| Lip sync never activates | Gear → **Voice**, pick a source, wait for status `active` |
-| Desktop audio missing | Use **Device output** (loopback) or pick a specific window |
+| Blank stage | Confirm `avatar1.vrm` (etc.) under `src/assets/avatars/` |
+| New VRM missing | Match `avatarN.vrm` / `avatarNB.vrm` naming; restart Electron/Vite |
+| VRMA fails | Check console; paths in `src/config/animations.js` |
+| Desktop audio missing | Voice → **Device output** or pick a window |
+| Tab audio (browser) | Share tab with **Share tab audio** enabled |
