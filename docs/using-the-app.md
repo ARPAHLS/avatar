@@ -24,6 +24,10 @@ Glass **bar** at the bottom: drag handle (line), **window scale**, optional gree
 </p>
 
 <p align="center">
+  <img src="screenshots/02-hero-overlay-light-page.png" alt="Overlay on a light page" width="100%" />
+</p>
+
+<p align="center">
   <img src="screenshots/10-bar-idle.png" alt="Glass bar idle" height="100" />
   <img src="screenshots/11-bar-live-dot.png" alt="Glass bar with live lip-sync dot" height="100" />
 </p>

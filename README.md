@@ -48,14 +48,6 @@
 
 It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from live audio — including system / device output on desktop.
 
-<p align="center">
-  <img src="docs/screenshots/01-hero-overlay-dark-ide.png" alt="AVATAR overlay on a dark IDE" width="100%" />
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/02-hero-overlay-light-page.png" alt="AVATAR overlay on a light page" width="100%" />
-</p>
-
 ## What this is
 
 - **Electron desktop overlay** — main product surface (pin, snap, window scale, device loopback audio)
@@ -66,9 +58,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 - **Browser / localhost** — optional for UI development (`npm run dev`)
 
 <p align="center">
-  <img src="docs/screenshots/03-window-avatar1-default.png" alt="Avatar 1" height="240" />
-  <img src="docs/screenshots/04-window-avatar2.png" alt="Avatar 2" height="240" />
-  <img src="docs/screenshots/05-window-avatar3.png" alt="Avatar 3" height="240" />
+  <img src="docs/screenshots/01-hero-overlay-dark-ide.png" alt="AVATAR overlay on a dark IDE" width="100%" />
 </p>
 
 ## Quick start

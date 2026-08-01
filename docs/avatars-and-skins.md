@@ -17,8 +17,13 @@ Gear → **Appearance** → **Avatars**. Selection persists as `avatarId` in [co
 </p>
 
 <p align="center">
-  <img src="screenshots/30-appearance-avatars.png" alt="Avatars picker" height="220" />
   <img src="screenshots/03-window-avatar1-default.png" alt="Avatar 1 on stage" height="220" />
+  <img src="screenshots/04-window-avatar2.png" alt="Avatar 2 on stage" height="220" />
+  <img src="screenshots/05-window-avatar3.png" alt="Avatar 3 on stage" height="220" />
+</p>
+
+<p align="center">
+  <img src="screenshots/30-appearance-avatars.png" alt="Avatars picker" height="220" />
 </p>
 
 ---
