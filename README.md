@@ -66,7 +66,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 
 Download **[AVATAR-Setup-0.2.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe)** — no Node.js. Run the installer, accept the EULA, launch **AVATAR**.
 
-([All releases](https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0) · [install notes](docs/getting-started/installation.md))
+([All releases](https://github.com/ARPAHLS/avatar/releases) · [install notes](docs/getting-started/installation.md))
 
 ### 2. Desktop from source (Electron)
 
