@@ -6,8 +6,10 @@ import { defaultColor } from '../config/environments';
 import { defaultAvatarId, defaultSkinId, resolveAvatarPath, listSkinsForAvatar } from '../config/avatars';
 import { defaultAvatar, defaultCamera, defaultLight, STAGE } from '../config/defaults';
 import { defaultWindowScale, normalizeWindowScale } from '../config/windowScale';
+import { createDefaultUserSettings, snapshotUserSettings } from '../config/userSettings';
 import { useAudioSource } from '../hooks/useAudioSource';
 import { getDesktopApi, isDesktopMode } from '../lib/desktopMode';
+import { loadUserSettings, resetUserSettings, saveUserSettings } from '../lib/userSettingsStore';
 import { VrmAvatar } from './avatar/VrmAvatar';
 import { AvatarStageShell } from './avatar/AvatarStageShell';
 import { CameraController } from './ui/CameraController';
@@ -18,8 +20,10 @@ import { CameraPanel } from './panels/CameraPanel';
 import { DesktopPanel } from './panels/DesktopPanel';
 
 const desktopMode = isDesktopMode();
+const SAVE_DEBOUNCE_MS = 400;
 
 export function AvatarStage() {
+  const [settingsReady, setSettingsReady] = useState(false);
   const [animationId, setAnimationId] = useState(defaultAnimationId);
   const [animationRequest, setAnimationRequest] = useState(0);
   const [camera, setCamera] = useState({ ...defaultCamera });
@@ -39,11 +43,13 @@ export function AvatarStage() {
   const [audioFile, setAudioFile] = useState(null);
   const [windowSourceId, setWindowSourceId] = useState(null);
   const [audioSourceId, setAudioSourceId] = useState(getDefaultAudioSourceId);
+  const [settingsPath, setSettingsPath] = useState(null);
   const panelRef = useRef(null);
   const drawerRef = useRef(null);
   const commandMenuRef = useRef(null);
   const scaleMenuRef = useRef(null);
   const isPanelHovered = useRef(false);
+  const skipNextSave = useRef(true);
 
   const desktopApi = getDesktopApi();
 
@@ -55,20 +61,130 @@ export function AvatarStage() {
 
   const lipSyncEnabled = audioSourceId !== 'none' && audioStatus === 'active';
 
-  useEffect(() => {
-    if (!desktopApi?.getOverlayMode) return;
-    void desktopApi.getOverlayMode().then((mode) => {
-      setOverlayMode(mode);
-      document.documentElement.classList.toggle('vox-desktop-windowed', !mode);
+  const applySettings = useCallback((settings) => {
+    setSelectedAvatarId(settings.avatarId);
+    setSelectedSkinId(settings.skinId);
+    setAnimationId(settings.animationId);
+    setSelectedBg(settings.environment);
+    setCamera({
+      position: [...settings.camera.position],
+      lookAt: [...settings.camera.lookAt],
+      fov: settings.camera.fov,
     });
-  }, [desktopApi]);
+    setLight({
+      intensity: settings.light.intensity,
+      color: settings.light.color,
+      position: [...settings.light.position],
+    });
+    setAvatar({
+      position: [...settings.avatarTransform.position],
+      rotation: [...settings.avatarTransform.rotation],
+    });
+    setAudioSourceId(settings.audioSourceId);
+    setWindowSourceId(settings.windowSourceId);
+    setOverlayMode(settings.overlayMode);
+    document.documentElement.classList.toggle('vox-desktop-windowed', !settings.overlayMode);
+    setWindowScale(normalizeWindowScale(settings.windowScale));
+  }, []);
 
   useEffect(() => {
-    if (!desktopApi?.getWindowScale) return;
-    void desktopApi.getWindowScale().then((scale) => {
-      setWindowScale(normalizeWindowScale(scale));
-    });
-  }, [desktopApi]);
+    let cancelled = false;
+
+    async function hydrate() {
+      const settings = await loadUserSettings();
+      let hasPersisted = false;
+
+      if (desktopApi?.getSettingsInfo) {
+        try {
+          const info = await desktopApi.getSettingsInfo();
+          if (!cancelled && info?.path) setSettingsPath(info.path);
+          hasPersisted = Boolean(info?.exists);
+        } catch {
+          // ignore
+        }
+      } else {
+        try {
+          hasPersisted = Boolean(window.localStorage.getItem('avatar.config.yaml'));
+        } catch {
+          hasPersisted = false;
+        }
+      }
+
+      if (!hasPersisted && desktopApi) {
+        try {
+          if (desktopApi.getOverlayMode) {
+            settings.overlayMode = await desktopApi.getOverlayMode();
+          }
+          if (desktopApi.getWindowScale) {
+            settings.windowScale = normalizeWindowScale(await desktopApi.getWindowScale());
+          }
+        } catch {
+          // keep defaults
+        }
+      }
+
+      if (cancelled) return;
+      applySettings(settings);
+
+      if (hasPersisted && desktopApi) {
+        if (desktopApi.setOverlayMode) {
+          await desktopApi.setOverlayMode(settings.overlayMode);
+        }
+        if (desktopApi.setWindowScale) {
+          await desktopApi.setWindowScale(settings.windowScale);
+        }
+      }
+
+      skipNextSave.current = true;
+      setSettingsReady(true);
+    }
+
+    void hydrate();
+    return () => {
+      cancelled = true;
+    };
+  }, [applySettings, desktopApi]);
+
+  useEffect(() => {
+    if (!settingsReady) return undefined;
+
+    if (skipNextSave.current) {
+      skipNextSave.current = false;
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => {
+      const snapshot = snapshotUserSettings({
+        avatarId: selectedAvatarId,
+        skinId: selectedSkinId,
+        animationId,
+        environment: selectedBg,
+        camera,
+        light,
+        avatarTransform: avatar,
+        audioSourceId,
+        windowSourceId,
+        overlayMode,
+        windowScale,
+      });
+      void saveUserSettings(snapshot);
+    }, SAVE_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    settingsReady,
+    selectedAvatarId,
+    selectedSkinId,
+    animationId,
+    selectedBg,
+    camera,
+    light,
+    avatar,
+    audioSourceId,
+    windowSourceId,
+    overlayMode,
+    windowScale,
+  ]);
 
   useEffect(() => {
     if (!commandMenuOpen && !openPanel && !scaleMenuOpen) return undefined;
@@ -168,6 +284,25 @@ export function AvatarStage() {
       return;
     }
     setWindowScale(nextScale);
+  }
+
+  async function handleResetAllSettings() {
+    const defaults = await resetUserSettings();
+    skipNextSave.current = true;
+    setAvatarReady(false);
+    applySettings(defaults);
+    setAudioFile(null);
+    setAnimationRequest((count) => count + 1);
+
+    if (desktopApi?.setOverlayMode) {
+      await desktopApi.setOverlayMode(defaults.overlayMode);
+    }
+    if (desktopApi?.setWindowScale) {
+      await desktopApi.setWindowScale(defaults.windowScale);
+    }
+
+    skipNextSave.current = true;
+    void saveUserSettings(createDefaultUserSettings());
   }
 
   return (
@@ -280,6 +415,14 @@ export function AvatarStage() {
               {desktopMode && (
                 <DesktopPanel overlayMode={overlayMode} onOverlayModeToggle={handleOverlayModeToggle} />
               )}
+              <p className="panel-note panel-note--compact">
+                Preferences are saved to {settingsPath ? 'config.yaml' : 'local storage'} and restored on
+                launch.
+              </p>
+              {settingsPath && <p className="panel-note panel-note--compact panel-note--mono">{settingsPath}</p>}
+              <button type="button" className="panel-button panel-button--danger" onClick={() => void handleResetAllSettings()}>
+                Reset all settings
+              </button>
               <p className="panel-note panel-note--compact">
                 Expression triggers and keyword-driven animations are planned for a later milestone.
               </p>

@@ -10,6 +10,7 @@ Electron desktop companion first; browser localhost for development.
 | [First session](getting-started/first-session.md) | Gear menus, avatars, skins, environments |
 | [Avatars & skins](avatars-and-skins.md) | `avatar1.vrm` naming and drop-in workflow |
 | [Environments](environments.md) | Built-in, Custom, color, none |
+| [User settings](user-settings.md) | `config.yaml` persistence + reset |
 | [Architecture](architecture/overview.md) | Rendering, VRMA, Electron audio |
 | [Assets & credits](assets-and-credits.md) | VRoid / BOOTH / Pixiv terms |
 

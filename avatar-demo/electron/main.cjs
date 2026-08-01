@@ -1,6 +1,12 @@
 const { app, BrowserWindow, ipcMain, screen, session, desktopCapturer } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const {
+  loadSettings,
+  saveSettings,
+  resetSettings,
+  getSettingsInfo,
+} = require('./settingsStore.cjs');
 
 const WINDOW_STATE_FILE = 'window-state.json';
 const DEFAULT_WIDTH = 420;
@@ -298,6 +304,14 @@ ipcMain.handle('window:set-scale', (_event, factor) => {
 });
 
 ipcMain.handle('window:get-scale', () => windowScale);
+
+ipcMain.handle('settings:load', () => loadSettings(app));
+
+ipcMain.handle('settings:save', (_event, settings) => saveSettings(app, settings));
+
+ipcMain.handle('settings:reset', () => resetSettings(app));
+
+ipcMain.handle('settings:info', () => getSettingsInfo(app));
 
 app.whenReady().then(() => {
   setupDisplayMediaHandler();

@@ -12,4 +12,8 @@ contextBridge.exposeInMainWorld('voxDesktop', {
   getWindowScale: () => ipcRenderer.invoke('window:get-scale'),
   setWindowScale: (factor) => ipcRenderer.invoke('window:set-scale', factor),
   getDesktopSources: (types) => ipcRenderer.invoke('desktop:get-sources', types),
+  loadSettings: () => ipcRenderer.invoke('settings:load'),
+  saveSettings: (settings) => ipcRenderer.invoke('settings:save', settings),
+  resetSettings: () => ipcRenderer.invoke('settings:reset'),
+  getSettingsInfo: () => ipcRenderer.invoke('settings:info'),
 });

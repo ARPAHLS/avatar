@@ -10,7 +10,7 @@ export const STAGE = {
 
 /** Tuned bust / three-quarter framing from the live camera panel. */
 export const defaultCamera = {
-  position: [-0.09, 0.76, 1.69],
+  position: [-0.09, 0.59, 1.69],
   lookAt: [0, 0.5, 0],
   fov: 26.8,
 };

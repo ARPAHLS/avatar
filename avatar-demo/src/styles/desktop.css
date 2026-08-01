@@ -95,9 +95,9 @@ html.vox-desktop .desktop-mode-pill {
 }
 
 html.vox-desktop .avatar-command-menu--animations {
-  max-height: min(320px, 50vh);
-  overflow-y: auto;
-  padding-right: 2px;
+  max-height: none;
+  overflow: visible;
+  padding-right: 0;
 }
 
 html.vox-desktop .avatar-holo-field__fade {

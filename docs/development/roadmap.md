@@ -6,6 +6,7 @@
 - [x] VRMA playback + Default greeting/loop sequence
 - [x] Gear menus: Appearance (Avatars / Skins / Environments), Voice, Camera
 - [x] Drop-in `avatarN.vrm` / `avatarNB.vrm` catalog
+- [x] Persisted `config.yaml` settings + reset
 - [x] Documentation and asset credits
 
 ## v0.2 — Expression automation
@@ -17,7 +18,6 @@
 ## v0.3 — Packaging & polish
 
 - [ ] Windows `.exe` installer for end users
-- [ ] Persisted settings
 - [ ] Screenshot/GIF assets in docs
 - [ ] CI and issue templates
 

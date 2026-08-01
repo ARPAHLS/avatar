@@ -24,7 +24,7 @@ Restart the Electron/Vite process after adding files.
 
 ## Contrast
 
-The glass bar auto-switches to silver / greyscale chrome on light backgrounds and bright white chrome on dark ones.
+Glass bar and gear buttons stay **whitish** on dark scenes (Stars, Code, none, dark colors). They switch to **silver / greyscale** only when the backdrop behind the bar is clearly light (e.g. Bloom, pale color fades, bright custom GIFs). Custom images are sampled from the lower strip of the frame.
 
 ## Asset location
 

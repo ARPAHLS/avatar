@@ -4,7 +4,8 @@
 avatar-demo/
 ├── electron/
 │   ├── main.cjs
-│   └── preload.cjs
+│   ├── preload.cjs
+│   └── settingsStore.cjs   # config.yaml in userData
 ├── public/
 │   ├── AVATAR_LOGO_150.png
 │   └── AVATAR_SPLASH.png
@@ -15,9 +16,9 @@ avatar-demo/
     │   └── environments/
     │       └── custom/
     ├── components/
-    ├── config/
+    ├── config/             # catalogs + userSettings schema
     ├── hooks/
-    ├── lib/
+    ├── lib/                # chromeTone, userSettingsStore, …
     └── styles/
 ```
 

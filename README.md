@@ -31,6 +31,7 @@
   <a href="docs/getting-started/installation.md">Install</a> ·
   <a href="docs/avatars-and-skins.md">Avatars</a> ·
   <a href="docs/environments.md">Environments</a> ·
+  <a href="docs/user-settings.md">Settings</a> ·
   <a href="docs/assets-and-credits.md">Assets & Credits</a> ·
   <a href="CHANGELOG.md">Changelog</a> ·
   <a href="CITATION.cff">Cite</a>
@@ -47,6 +48,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 - **Electron desktop overlay** — main product surface (pin, snap, window scale, device loopback audio)
 - **VRM avatars & skins** — `avatar1.vrm` … drop-in naming; skins as `avatar1B.vrm`, etc.
 - **Environments** — built-in GIFs, Custom folder, color fade, or none
+- **Persistent settings** — `config.yaml` remembers avatar, skin, camera, lighting, environment, and more
 - **VRMA animations** — Default greeting + loop, plus individual clips
 - **Browser / localhost** — optional for UI development (`npm run dev`)
 
