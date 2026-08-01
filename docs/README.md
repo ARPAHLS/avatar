@@ -31,4 +31,3 @@ Electron desktop companion first; browser localhost for development.
 | [Project layout](development/project-layout.md) | Folders and scripts |
 | [Roadmap](development/roadmap.md) | Milestones including `.exe` packaging |
 | [Assets & credits](assets-and-credits.md) | VRoid / BOOTH / Pixiv terms |
-| [Screenshots](screenshots/README.md) | Product media used in README & guides |
