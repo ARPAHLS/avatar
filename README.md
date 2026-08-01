@@ -2,6 +2,10 @@
   <img src="avatar-demo/public/AVATAR_SPLASH.png" alt="AVATAR" width="420" />
 </div>
 
+<p align="center">
+  <em>Give a face to your AI — and anything else you listen to.</em>
+</p>
+
 <div align="center">
   <img src="https://img.shields.io/badge/License-MIT-efcefa?style=flat-square" alt="License" />
   <img src="https://img.shields.io/badge/Vite-7-bae6fd?style=flat-square" alt="Vite" />
@@ -12,6 +16,11 @@
 </div>
 
 <p align="center">
+  Animate cloud APIs, web apps, or private local LLMs with a VRM character that lipsyncs and moves while you work.<br />
+  Or keep a companion on screen while you study, watch a video, hear a podcast, speech, or audiobook — a character that follows the audio instead of a blank background.
+</p>
+
+<p align="center">
   <a href="#quick-start">Quick Start</a> ·
   <a href="docs/README.md">Documentation</a> ·
   <a href="docs/architecture/overview.md">Architecture</a> ·
@@ -19,12 +28,6 @@
   <a href="docs/voice/lip-sync.md">Lip Sync</a> ·
   <a href="docs/assets-and-credits.md">Assets & Credits</a> ·
   <a href="CHANGELOG.md">Changelog</a>
-</p>
-
-<p align="center">
-  <em>Give a face to your AI — and anything else you listen to.</em><br />
-  Animate cloud APIs, web apps, or private local LLMs with a VRM character that lipsyncs and moves while you work.<br />
-  Or keep a companion on screen while you study, watch a video, hear a podcast, speech, or audiobook — a character that follows the audio instead of a blank background.
 </p>
 
 ---
