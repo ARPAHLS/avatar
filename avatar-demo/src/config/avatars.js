@@ -72,17 +72,6 @@ export const avatars = [...byIndex.values()]
     }),
   }));
 
-/** @deprecated Use `avatars` — kept for brief compatibility */
-export const avatarModels = avatars.flatMap((avatar) =>
-  avatar.skins.map((skin) => ({
-    id: `${avatar.id}-${skin.id}`,
-    label: `${avatar.label} · ${skin.label}`,
-    path: skin.path,
-    avatarId: avatar.id,
-    skinId: skin.id,
-  })),
-);
-
 export const defaultAvatarId = avatars[0]?.id ?? 'avatar1';
 export const defaultSkinId = 'default';
 

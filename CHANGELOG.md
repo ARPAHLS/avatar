@@ -38,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Voice audio source uses a small portaled lilac popup (scroll stays inside the menu; drawer width/text no longer jump).
 - Glass **bar** contrast kept as whitish-on-dark / grey-on-light (readable on both desktops). **Buttons only** use the inverted pairing: darker glass + white icons on dark backdrops, lighter glass + dark icons on light backdrops—so controls stay visible without fighting the bar look.
 - Continuous desktop luma polling removed after it made window dragging laggy (repeated `desktopCapturer` thumbnails). Same chrome goal kept via settle/focus sampling + existing color-variable transitions.
-- Docs expanded into a complete illustrated guide; README embeds hero / feature screenshots.
+- Remove unused iteration leftovers: `model.vroid`, public FBX/GLB/`vite.svg`, scaffold `react.svg`, dead `proceduralAnimations` / `AnimationSelector`, unused `react-icons`, and orphaned CSS/exports.
 
 ## [0.1.0] — 2026-07-31
 

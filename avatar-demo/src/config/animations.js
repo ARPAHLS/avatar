@@ -126,8 +126,3 @@ export function resolveVrmaUrl(id) {
 export function getSelectableAnimations() {
   return animationCatalog.filter((entry) => entry.selectable !== false);
 }
-
-/** @returns {string[]} */
-export function listAnimationGroups() {
-  return [...new Set(getSelectableAnimations().map((entry) => entry.group ?? 'Other'))];
-}

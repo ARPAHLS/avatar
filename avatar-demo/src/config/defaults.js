@@ -25,14 +25,3 @@ export const defaultAvatar = {
   position: [0, -1.03, -1.48],
   rotation: [0, Math.PI, 0],
 };
-
-export const pastelTheme = {
-  background: '#e9e1fa',
-  border: '2px solid #bca6e9',
-  icon: '#a18ad6',
-  frameBorder: '#d6c8f7',
-  panelBg: 'rgba(43,43,43,0.7)',
-  panelBorder: '#444',
-  panelText: '#e9e1fa',
-  accent: '#a18ad6',
-};

@@ -165,17 +165,3 @@ export function PanelSelect({ id, value, onChange, options, placeholder = 'Selec
     </div>
   );
 }
-
-export function PanelShell({ title, onClose, className = '', children }) {
-  return (
-    <div className={`floating-panel ${className}`.trim()}>
-      <div className="floating-panel__header">
-        <b>{title}</b>
-        <button type="button" className="floating-panel__close" onClick={onClose} aria-label="Close">
-          ✕
-        </button>
-      </div>
-      {children}
-    </div>
-  );
-}
