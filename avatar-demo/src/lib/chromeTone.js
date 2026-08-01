@@ -4,7 +4,6 @@ import { defaultColor, getEnvironmentById } from '../config/environments';
 
 /** Whitish bar on dark scenes; grey bar on light. Buttons follow the same tone. */
 const IMAGE_LUMA_CACHE = new Map();
-const LIGHT_LUMA_THRESHOLD = 0.62;
 
 /** Built-in environments with known tone (do not trust glow color alone). */
 const BUILTIN_CHROME = {
@@ -13,9 +12,13 @@ const BUILTIN_CHROME = {
   bloom: 'light',
 };
 
-/** @param {number} luma */
-export function toneFromLuma(luma) {
-  return luma >= LIGHT_LUMA_THRESHOLD ? 'light' : 'dark';
+/** @param {number} luma @param {'dark' | 'light'} [previous] */
+export function toneFromLuma(luma, previous = 'dark') {
+  // Hysteresis — avoid flicker at the threshold while desktop sampling.
+  if (previous === 'light') {
+    return luma < 0.5 ? 'dark' : 'light';
+  }
+  return luma >= 0.66 ? 'light' : 'dark';
 }
 
 /** @param {string} hex */

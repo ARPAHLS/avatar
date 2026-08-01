@@ -1,38 +1,46 @@
 # First session
 
-## Desktop companion (main UI)
+New to AVATAR? Do this once after [Installation](installation.md).
 
-- Open the **gear** for Appearance, Voice, Camera, Animations, Settings.
-- Drag to move; snap with the **3×3** pad in **Settings**.
-- **Scale** (next to gear): ×0.5 / ×1 / ×2.
-- **Pinned / Windowed** from the gear menu.
-- Green pulsating dot = lip sync active.
+For every control in depth, see **[Using the app](../using-the-app.md)**.
 
-## Appearance
+## 1. Start the desktop companion
 
-### Avatars
+```bash
+cd avatar-demo
+npm install
+npm run dev:desktop
+```
 
-Pick **Avatar 1 / 2 / 3** (files `avatar1.vrm`, `avatar2.vrm`, `avatar3.vrm`). Drop more with the same naming scheme — see [Avatars & skins](../avatars-and-skins.md).
+A transparent window should appear on top of your other apps.
 
-### Skins
+## 2. Orient yourself
 
-Variants for the selected avatar (Default today). Add `avatar1B.vrm` to unlock Skin B for Avatar 1.
+| Control | What it does |
+| :--- | :--- |
+| **Glass line** | Drag to move |
+| **Scale** (icon) | ×0.5 / ×1 / ×2 |
+| **Green dot** | Lip sync is live |
+| **Gear** | All panels and menus |
 
-### Environments
+On first launch you get **Avatar 1**, **Default** animation (Greeting, then a loop of poses), lavender **color fade**, and on desktop **Device output** audio.
 
-Stars / Code / Bloom / None, color fade, and **Custom** GIFs. See [Environments](../environments.md).
+## 3. Try the essentials (2 minutes)
 
-## Voice
+1. Gear → **Appearance** → pick **Avatar 2** or **3**, then an environment (**Code**, **Stars**, **None**, …).  
+2. Gear → **Voice** → leave **Device output (auto)** (or pick a window / mic). Play music or a video — watch the mouth and the green dot.  
+3. Gear → **Animations** → try **Peace Sign**, then back to **Default**.  
+4. Gear → **Settings** → click a **3×3** cell to snap; drag the bar afterward and notice the pad deselects.  
+5. Scale menu → try **×0.5** then back to **×1**.
 
-Desktop: **Device output** (system loopback) or a specific window.  
-Browser (dev): Microphone, tab audio, or file.
+## 4. Save / reset
 
-## Camera & Animations
+Changes autosave to **`config.yaml`**.  
+Need a clean slate? **Settings → Reset all settings**.  
+Only framing wrong? **Camera & Lighting → Reset Camera**.
 
-**Camera & Lighting** for framing (defaults `X = -0.01`, `Y = 0.59` so heads stay centered in frame).  
-**Animations** → **Default** for greeting + loop, or individual VRMA clips. The animations list expands upward (no scrollbar).
+## Next
 
-## Settings
-
-Preferences autosave to **`config.yaml`** (Electron userData) or browser local storage.  
-**Settings → Reset all settings** restores factory defaults. See [User settings](../user-settings.md).
+- [Using the app](../using-the-app.md) — full walkthrough  
+- [Avatars & skins](../avatars-and-skins.md) · [Environments](../environments.md) · [Camera & lighting](../camera-and-lighting.md)  
+- [Voice](../voice/audio-sources.md) · [Animations](../animations/vrma.md) · [User settings](../user-settings.md)

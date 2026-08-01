@@ -2,33 +2,57 @@
 
 Backgrounds live under `avatar-demo/src/assets/environments/`.
 
+Open Gear → **Appearance** → **Environments**.
+
+---
+
 ## Built-in
 
-| Id | File | Notes |
-| :--- | :--- | :--- |
-| Stars | `stars.gif` | Dark starfield |
-| Code | `code.gif` | Code rain |
-| Bloom | `bloom.gif` | Pastel bloom |
-| None | — | No holo / GIF |
-| Color fade | — | Solid pastel glow from a color picker |
+| Id | Label | File | Look |
+| :--- | :--- | :--- | :--- |
+| `stars` | Stars | `stars.gif` | Dark starfield |
+| `code` | Code | `code.gif` | Code rain |
+| `bloom` | Bloom | `bloom.gif` | Bright pastel bloom |
+| — | None | — | No GIF / glow — desktop shows through in overlay |
+| — | Color fade | — | Soft radial glow from a hex color |
 
-Open Gear → **Appearance** → **Environments**.
+### Color fade
+
+1. Pick a color.  
+2. Click **Use color**.  
+3. **Reset to Default** restores lavender `#e9e1fa`.
+
+---
 
 ## Custom GIFs
 
-Drop trial media into `src/assets/environments/custom/` (`.gif`, `.webp`, `.png`, `.jpg`, …).
+1. Drop media into `src/assets/environments/custom/`  
+   (`.gif`, `.webp`, `.png`, `.jpg`, `.jpeg`, `.jfif`).  
+2. Restart Vite / Electron.  
+3. Open the **Custom** expander in Environments.
 
-They appear under the **Custom** expander in the Environments panel. Use this to test candidates; promote keepers by moving them next to `stars.gif` / `code.gif` / `bloom.gif` and registering them in `src/config/environments.js` if you want them in the top row.
+Labels come from the filename. Keep trials here; promote keepers next to `stars.gif` / `code.gif` / `bloom.gif` and register them in `src/config/environments.js` if you want them in the top row.
 
-Restart the Electron/Vite process after adding files.
+---
 
-## Contrast
+## Contrast (bar & buttons)
 
-Glass bar and gear buttons follow the backdrop (Electron overlay samples the desktop near the window; browser / windowed mode uses the environment).
+The glass bar sits over the **desktop** (overlay) or the window chrome (windowed). Colors adapt:
 
-- **Dark backdrop:** whitish bar; lighter grey button glass + dark grey icons  
-- **Light backdrop:** grey bar; darker grey button glass + white icons  
+| Backdrop | Bar | Buttons |
+| :--- | :--- | :--- |
+| Dark | Whitish | Darker grey glass + white icons |
+| Light | Grey | Lighter grey glass + dark icons |
+
+- **Overlay:** samples desktop luminance near the window when the window **settles** after a move/snap (and on focus) — not on a continuous timer. Chrome colors still crossfade smoothly.  
+- **Browser / windowed:** uses the environment (e.g. Bloom → light chrome; Stars/Code/None → dark).
+
+Custom images are sampled on their lower strip when environment-based tone is used.
+
+---
 
 ## Asset location
 
 Do **not** put environment GIFs only in `public/` — the app imports from `src/assets/environments/` so Vite can bundle them.
+
+See also: [Using the app](using-the-app.md).

@@ -1,55 +1,50 @@
 # Audio sources
 
-Configure sources in **Voice** (gear → microphone).
+Gear → **Voice** → **Audio source**.
 
-## Browser
+Lip sync reads loudness from the selected source and drives VRM mouth shapes. Details of the analyser: [Lip sync](lip-sync.md).
 
-| Source | API | Best for |
+---
+
+## Desktop (Electron) — recommended
+
+| Option | id | Description |
 | :--- | :--- | :--- |
-| **Off** | — | Animation-only testing |
-| **Microphone** | `getUserMedia` | Live speech |
-| **Tab or window audio** | `getDisplayMedia` | AI assistants, YouTube, shared tabs |
-| **Audio file** | `HTMLAudioElement` + Web Audio | Recordings, TTS exports |
+| **Device output (auto)** | `system` | **Default.** Captures what your speakers play (loopback). Best for music, videos, local LLMs talking through the OS mixer. |
+| **Pick app window** | `window` | Choose a specific window/screen from the **Window or screen** list, then wait until status is `active`. |
+| **Microphone** | `microphone` | Your default input device. |
+| **Audio file** | `file` | Pick a local audio file; it plays into the analyser. |
+| **Off** | `none` | Lip sync disabled; green live dot hidden. |
 
-## Desktop (Electron)
+### Permissions / troubleshooting
 
-| Source | Best for |
-| :--- | :--- |
-| **Device output** | Auto-capture of system / loopback audio |
-| **Window** | One app (browser, Discord, player, etc.) |
-| **Microphone** / **File** | Same as browser where available |
+- First capture may prompt for screen/audio permission depending on the OS.  
+- If status sticks on `error` or `starting`, click **Restart audio capture**.  
+- `awaiting-window` / `awaiting-file` means finish picking a target.
 
-### Tab / window capture (browser)
+---
 
-1. Choose **Tab or window audio**.
-2. Pick the tab or window that is **playing** speech.
-3. Enable **Share tab audio** (Chrome) or the equivalent.
-4. Video tracks are stopped — only audio is analyzed.
+## Browser (dev / contributors)
 
-### Device output (desktop)
+| Option | id | Notes |
+| :--- | :--- | :--- |
+| **Off** | `none` | **Default** in the browser |
+| **Microphone** | `microphone` | Requires getUserMedia permission |
+| **Tab or window audio** | `tab` | Browser display-media / tab capture |
+| **Audio file** | `file` | Same as desktop |
 
-Uses Electron’s display-media handler with audio loopback so the avatar can follow whatever is playing on the machine without picking a tab each time.
+System-wide **device output** loopback is an Electron feature — use `npm run dev:desktop` for that.
 
-## Microphone
+---
 
-The analyser does **not** route mic audio to speakers (no monitoring) to avoid feedback.
+## Live indicator
 
-## Audio file
+When the source is not Off and status is **`active`**, a **green pulsing dot** appears on the glass bar (title: *Lip sync active*).
 
-Select a local `.mp3`, `.wav`, or other supported format. The file loops while lip sync runs.
+---
 
-## Permissions & privacy
+## Persistence
 
-- Processing stays on device (browser tab or Electron app).
-- No audio is uploaded or stored.
-- Use **Restart audio capture** after changing sources.
-
-## Status values
-
-| Status | Meaning |
-| :--- | :--- |
-| `idle` | Lip sync off |
-| `starting` | Opening audio context / awaiting permission |
-| `active` | Analyser receiving samples |
-| `awaiting-file` | File source selected but no file chosen |
-| `error` | Permission denied or unsupported capture |
+`audioSourceId` (and `windowSourceId` when relevant) are stored in `config.yaml`.  
+Uploaded files are **not** restored after quit — pick the file again.  
+[User settings](../user-settings.md).

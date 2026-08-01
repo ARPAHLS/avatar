@@ -1,33 +1,29 @@
 # Lip sync
 
-AVATAR drives mouth shapes from **audio amplitude**, not phoneme recognition.
+AVATAR drives VRM mouth blendshapes from **audio amplitude** (how loud the signal is), not from speech-to-text phonemes.
 
-## How it works
+## Pipeline
 
-1. `useAudioSource` captures audio and attaches an `AnalyserNode`.
-2. `useAudioAnalyser` computes RMS level each frame and detects speech vs silence.
-3. `useAmplitudeLipSync` smooths the level and cycles through visemes: `aa`, `ee`, `ih`, `oh`, `ou`.
-4. Values are written to `vrm.expressionManager`.
+1. You choose an [audio source](audio-sources.md).  
+2. `useAudioSource` captures a stream (mic, loopback, file, …).  
+3. An analyser produces a level each frame.  
+4. `useAmplitudeLipSync` maps level → viseme weights on the VRM `expressionManager` while the character is “speaking.”  
+5. Blinking continues via `useBlink` in parallel.
 
-When lip sync is disabled, viseme weights reset to zero.
+## What you’ll notice
 
-## When lip sync runs
+- Louder audio → wider / more active mouth.  
+- Silence → mouth returns toward rest.  
+- Works with any language or non-speech audio (music, UI beeps) because it is level-based.  
+- It will **not** perfectly match every syllable like a dedicated phoneme lip-sync product.
 
-- A non-`none` audio source is selected, **and**
-- Capture status is `active`.
+## Live UI
 
-A **green pulsating dot** appears next to the gear while active.
+Glass bar **green pulsing dot** = capture active and lip sync enabled.  
+Voice drawer shows status text (`idle`, `starting`, `active`, `error`, …) and **Restart audio capture**.
 
-## Tuning
+## Tips
 
-Key constants live in `src/hooks/useAmplitudeLipSync.js`:
-
-- Level multiplier — overall mouth openness
-- Attack / release smoothing — open vs close speed
-- Phase speed — viseme cycling rate while speaking
-
-## Limitations
-
-- No phoneme accuracy — good for presence, not dubbing.
-- Browser tab capture depends on browser/OS support.
-- Desktop device output uses Electron loopback where available.
+- Prefer **Device output** on desktop when watching videos or chatting with an AI that plays audio through the system.  
+- If the mouth never moves, confirm the green dot, OS mute, and that the selected window (if any) is actually producing sound.  
+- Extremely quiet sources may need higher OS volume or a closer mic.

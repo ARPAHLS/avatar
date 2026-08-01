@@ -1,34 +1,49 @@
-# Avatars
+# Avatars & skins
 
-AVATAR loads character models from `avatar-demo/src/assets/avatars/`.
+## Bundled characters
 
-## Naming
-
-| File | Meaning |
+| UI label | File |
 | :--- | :--- |
-| `avatar1.vrm` | Avatar 1 — default skin |
-| `avatar2.vrm` | Avatar 2 — default skin |
-| `avatar3.vrm` | Avatar 3 — default skin |
-| `avatar1B.vrm` | Avatar 1 — skin B |
-| `avatar1C.vrm` | Avatar 1 — skin C |
+| Avatar 1 | `avatar1.vrm` |
+| Avatar 2 | `avatar2.vrm` |
+| Avatar 3 | `avatar3.vrm` |
 
-Pattern: `avatar{N}.vrm` for the base character, `avatar{N}{Letter}.vrm` for alternate skins.
+Path: `avatar-demo/src/assets/avatars/`.
 
-## In the app
+Gear → **Appearance** → **Avatars**. Selection persists as `avatarId` in [config.yaml](user-settings.md).
 
-Gear → **Appearance** → **Avatars** picks the character.  
-Gear → **Appearance** → **Skins** picks a variant of the selected character (Default until you add `B` / `C` files).
+---
 
-## Adding your own models
+## Drop-in naming
 
-1. Export or copy a `.vrm` into `src/assets/avatars/`.
-2. Name it with the pattern above (e.g. `avatar4.vrm` or `avatar2B.vrm`).
-3. Restart `npm run dev:desktop` (or refresh the Vite process) so the glob picks up the new file.
-4. Select it under **Avatars** / **Skins**.
+| Pattern | Meaning |
+| :--- | :--- |
+| `avatarN.vrm` | New character **Avatar N** (N = 1, 2, 3, …) |
+| `avatarNB.vrm` | Skin **B** for Avatar N |
+| `avatarNC.vrm` | Skin **C**, and so on |
 
-The catalog is built automatically via Vite `import.meta.glob` — no manual config edits required for standard names.
+Vite’s glob picks them up after restart. No manual registry edit for basic drop-ins.
 
-## Notes
+---
 
-- Bundled samples are free VRoid-based models. See [Assets & credits](../assets-and-credits.md).
-- Only ship models you have rights to redistribute.
+## Skins
+
+Gear → **Appearance** → **Skins**.
+
+- Shows skins for the **currently selected** avatar only.  
+- Each avatar has at least **Default** (the base `avatarN.vrm`).  
+- Extra lettered files unlock Skin B / C / …  
+
+Example: `avatar1B.vrm` → while Avatar 1 is selected, Skins lists Default + Skin B.
+
+---
+
+## Framing
+
+All avatars share the same default camera (`X = -0.01`, `Y = 0.59`, …). If a new model sits high/low, use **Camera & Lighting** or that model’s own VRM ground offset. See [Camera & lighting](camera-and-lighting.md).
+
+---
+
+## Credits & licenses
+
+Third-party VRM / texture licenses: [Assets & credits](assets-and-credits.md). Contact `input@arpacorp.net` for contribution questions.

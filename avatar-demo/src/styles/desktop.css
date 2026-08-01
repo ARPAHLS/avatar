@@ -64,12 +64,12 @@ html.vox-desktop .desktop-snap-pad {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 6px;
-  width: 108px;
-  height: 108px;
-  margin: 8px auto 12px;
-  padding: 8px;
-  border-radius: 12px;
+  gap: 4px;
+  width: 72px;
+  height: 72px;
+  margin: 4px auto 8px;
+  padding: 5px;
+  border-radius: 10px;
   border: 1px solid rgba(180, 160, 220, 0.45);
   background: rgba(255, 255, 255, 0.22);
   box-sizing: border-box;
@@ -77,13 +77,13 @@ html.vox-desktop .desktop-snap-pad {
 
 html.vox-desktop .desktop-snap-pad__cell {
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 0;
   min-width: 0;
   min-height: 0;
   cursor: pointer;
   background: rgba(120, 100, 170, 0.28);
-  transition: background 0.15s ease, transform 0.12s ease;
+  transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
 }
 
 html.vox-desktop .desktop-snap-pad__cell:hover {
@@ -96,12 +96,21 @@ html.vox-desktop .desktop-snap-pad__cell:active {
   transform: scale(0.96);
 }
 
+html.vox-desktop .desktop-snap-pad__cell--active {
+  background: rgba(161, 138, 214, 0.92);
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.75), 0 0 8px rgba(161, 138, 214, 0.55);
+}
+
+html.vox-desktop .desktop-snap-pad__cell--active:hover {
+  background: rgba(161, 138, 214, 0.98);
+}
+
 html.vox-desktop .desktop-toggle-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin: 10px 0;
+  margin: 6px 0;
   font-size: 13px;
 }
 
@@ -113,7 +122,7 @@ html.vox-desktop .desktop-mode-pill {
   border-radius: 999px;
   font-size: 12px;
   background: rgba(214, 200, 247, 0.35);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 html.vox-desktop .avatar-command-menu--animations {

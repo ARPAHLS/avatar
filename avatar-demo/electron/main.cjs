@@ -213,11 +213,21 @@ function createWindow() {
 
   mainWindow.on('move', persistBounds);
   mainWindow.on('resize', persistBounds);
+  mainWindow.on('moved', () => {
+    // Always re-sample chrome after the window settles (drag or snap).
+    mainWindow?.webContents.send('window:position-settled');
+    if (!suppressManualMoveNotify) {
+      mainWindow?.webContents.send('window:manual-moved');
+    }
+  });
   mainWindow.on('close', persistWindowState);
 }
 
+let suppressManualMoveNotify = false;
+let manualMoveTimer = null;
+
 function snapToCorner(corner) {
-  if (!mainWindow) return;
+  if (!mainWindow) return null;
 
   const win = mainWindow.getBounds();
   const display = screen.getDisplayMatching(win);
@@ -243,8 +253,18 @@ function snapToCorner(corner) {
   };
 
   const next = positions[corner];
-  if (next) mainWindow.setPosition(next.x, next.y);
+  if (!next) return null;
+
+  suppressManualMoveNotify = true;
+  clearTimeout(manualMoveTimer);
+  mainWindow.setPosition(next.x, next.y);
+  manualMoveTimer = setTimeout(() => {
+    suppressManualMoveNotify = false;
+  }, 350);
+
+  return corner;
 }
+
 
 function setupDisplayMediaHandler() {
   session.defaultSession.setDisplayMediaRequestHandler(async (_request, callback) => {
@@ -349,7 +369,7 @@ ipcMain.handle('desktop:sample-luma', async () => {
 });
 
 ipcMain.handle('window:snap', (_event, corner) => {
-  snapToCorner(corner);
+  return snapToCorner(corner);
 });
 
 ipcMain.handle('window:set-always-on-top', (_event, enabled) => {

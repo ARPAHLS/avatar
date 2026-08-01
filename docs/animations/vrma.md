@@ -1,49 +1,51 @@
-# VRMA animation catalog
+# VRMA animations
 
-Animations are declared in `avatar-demo/src/config/animations.js`.
+Gear → **Animations**.
 
-## Entry shape
+Motions are `.vrma` clips from the bundled VRMA motion pack under `src/assets/avatars/VRMA/`.
 
-Each catalog item includes:
+---
 
-| Field | Purpose |
-| :--- | :--- |
-| `id` | Internal key used by the dropdown and runtime |
-| `label` | Human-readable name |
-| `source` | `'procedural'`, `'vrma'`, or `'sequence'` |
-| `vrmaUrl` | Bundled `.vrma` import when `source === 'vrma'` |
-| `playback` | `'loop'` or `'once'` |
-| `group` | Dropdown optgroup label |
+## Default sequence
 
-## Bundled motion pack
+Menu label: **Default** (`id: default`). This is what runs on first launch.
 
-The seven free Pixiv / VRoid Project VRMA files ship under `src/assets/avatars/VRMA/`. They were released on [BOOTH](https://booth.pm/) in 2024 with VRoid Hub Photo Booth.
+| Phase | Clip label | File / id |
+| :--- | :--- | :--- |
+| Intro (once) | **Greeting** | `vrma-02` |
+| Loop 1 | **Model Pose** | `vrma-06` |
+| Loop 2 | **Show Full Body** | `vrma-01` |
+| Loop 3 | **Peace Sign** | `vrma-03` |
+| Loop 4 | **Squat** | `vrma-07` |
+| Loop 5 | **Shoot** | `vrma-04` |
+| → back to Loop 1 | … | forever |
 
-| ID | Label |
-| :--- | :--- |
-| `vrma-01` | Show Full Body |
-| `vrma-02` | Greeting |
-| `vrma-03` | Peace Sign |
-| `vrma-04` | Shoot |
-| `vrma-05` | Spin |
-| `vrma-06` | Model Pose |
-| `vrma-07` | Squat |
+**Spin** (`vrma-05`) is **not** in this loop — pick it manually if you want it.
 
-**Licensing & credit:** see [Assets & credits](../assets-and-credits.md). Copyright remains with pixiv Inc. Public/commercial use requires:
+---
 
-> Animation credits to pixiv Inc.'s VRoid Project
+## All selectable clips
 
-Takedown / rights: **input@arpacorp.net**
+| Label | id | In Default? |
+| :--- | :--- | :--- |
+| Default | `default` | — (the sequence itself) |
+| Show Full Body | `vrma-01` | Yes (loop) |
+| Greeting | `vrma-02` | Yes (intro once) |
+| Peace Sign | `vrma-03` | Yes (loop) |
+| Shoot | `vrma-04` | Yes (loop) |
+| Spin | `vrma-05` | No |
+| Model Pose | `vrma-06` | Yes (loop) |
+| Squat | `vrma-07` | Yes (loop) |
 
-## Adding a clip
+Internal **Rest** (`rest`) is not shown in the menu (bind pose for systems that need it).
 
-1. Place the `.vrma` file under `src/assets/avatars/VRMA/` (or `public/assets/animations/` for URL-based loading).
-2. Import it at the top of `animations.js`.
-3. Append a catalog entry with `source: 'vrma'`.
-4. Reload the dev server — the dropdown picks up new entries automatically.
+---
 
-Only add clips you have rights to redistribute.
+## How to use
 
-## Playback pipeline
+1. Gear → **Animations** (submenu expands upward; no scrollbar).  
+2. Tap **Back** (circular) to return to the main gear.  
+3. Choosing a clip starts it immediately; choosing **Default** restarts greeting + loop.  
+4. Selection is stored in `config.yaml` as `animationId`.
 
-`useVrmAnimation` uses `VRMAnimationLoaderPlugin` and `createVRMAnimationClip` from `@pixiv/three-vrm-animation`.
+Manual QA checklist: [Manual testing](manual-testing.md).

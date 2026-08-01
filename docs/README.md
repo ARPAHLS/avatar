@@ -7,30 +7,27 @@ Electron desktop companion first; browser localhost for development.
 | Section | Description |
 | :--- | :--- |
 | [Installation](getting-started/installation.md) | Desktop app, `.exe` plans, browser dev |
-| [First session](getting-started/first-session.md) | Gear menus, avatars, skins, environments |
-| [Avatars & skins](avatars-and-skins.md) | `avatar1.vrm` naming and drop-in workflow |
-| [Environments](environments.md) | Built-in, Custom, color, none |
-| [User settings](user-settings.md) | `config.yaml` persistence + reset |
-| [Architecture](architecture/overview.md) | Rendering, VRMA, Electron audio |
-| [Assets & credits](assets-and-credits.md) | VRoid / BOOTH / Pixiv terms |
+| [First session](getting-started/first-session.md) | 2-minute onboarding |
+| [**Using the app**](using-the-app.md) | **Full user guide — every menu and option** |
+| [User settings](user-settings.md) | `config.yaml`, what persists, reset all / per-section |
 
-## Animations
+## Features in depth
 
 | Doc | Description |
 | :--- | :--- |
-| [VRMA catalog](animations/vrma.md) | Motion pack entries |
-| [Manual testing](animations/manual-testing.md) | Default sequence checks |
+| [Avatars & skins](avatars-and-skins.md) | `avatarN.vrm` / `avatarNB.vrm` drop-in naming |
+| [Environments](environments.md) | Built-in, Custom, color, none, chrome contrast |
+| [Camera & lighting](camera-and-lighting.md) | Framing, lights, avatar transform, resets |
+| [VRMA animations](animations/vrma.md) | Default greeting + loop, individual clips |
+| [Manual animation testing](animations/manual-testing.md) | QA checklist for Default sequence |
+| [Audio sources](voice/audio-sources.md) | Desktop loopback vs browser capture |
+| [Lip sync](voice/lip-sync.md) | Amplitude visemes + live dot |
 
-## Voice
-
-| Doc | Description |
-| :--- | :--- |
-| [Lip sync](voice/lip-sync.md) | Amplitude visemes |
-| [Audio sources](voice/audio-sources.md) | Desktop loopback + browser capture |
-
-## Development
+## Project
 
 | Doc | Description |
 | :--- | :--- |
+| [Architecture](architecture/overview.md) | Rendering, VRMA, Electron, settings |
 | [Project layout](development/project-layout.md) | Folders and scripts |
 | [Roadmap](development/roadmap.md) | Milestones including `.exe` packaging |
+| [Assets & credits](assets-and-credits.md) | VRoid / BOOTH / Pixiv terms |

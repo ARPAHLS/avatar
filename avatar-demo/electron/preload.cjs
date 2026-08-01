@@ -13,6 +13,16 @@ contextBridge.exposeInMainWorld('voxDesktop', {
   setWindowScale: (factor) => ipcRenderer.invoke('window:set-scale', factor),
   getDesktopSources: (types) => ipcRenderer.invoke('desktop:get-sources', types),
   sampleDesktopLuma: () => ipcRenderer.invoke('desktop:sample-luma'),
+  onPositionSettled: (callback) => {
+    const listener = () => callback();
+    ipcRenderer.on('window:position-settled', listener);
+    return () => ipcRenderer.removeListener('window:position-settled', listener);
+  },
+  onManualMoved: (callback) => {
+    const listener = () => callback();
+    ipcRenderer.on('window:manual-moved', listener);
+    return () => ipcRenderer.removeListener('window:manual-moved', listener);
+  },
   loadSettings: () => ipcRenderer.invoke('settings:load'),
   saveSettings: (settings) => ipcRenderer.invoke('settings:save', settings),
   resetSettings: () => ipcRenderer.invoke('settings:reset'),

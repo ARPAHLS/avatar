@@ -27,6 +27,7 @@
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> ·
+  <a href="docs/using-the-app.md">User guide</a> ·
   <a href="docs/README.md">Documentation</a> ·
   <a href="docs/getting-started/installation.md">Install</a> ·
   <a href="docs/avatars-and-skins.md">Avatars</a> ·
@@ -74,6 +75,8 @@ A packaged Windows **`.exe`** installer is planned for end users who should not 
 
 Gear menu: Appearance (Avatars · Skins · Environments) · Voice · Camera · Animations · Settings. Scale control sits next to the gear.
 
+**First launch behavior:** Greeting once, then a looping motion set; desktop audio defaults to device output; preferences restore from `config.yaml` on later launches. Full walkthrough: [Using the app](docs/using-the-app.md).
+
 ### Browser (dev / contributors)
 
 ```bash
@@ -100,11 +103,12 @@ Drop `avatar4.vrm` (or `avatar1B.vrm` for a skin) into `avatar-demo/src/assets/a
 
 | Topic | Links |
 | :--- | :--- |
+| **User guide** | [Using the app](docs/using-the-app.md) — every menu, default, and reset |
 | **Getting started** | [Install](docs/getting-started/installation.md) · [First session](docs/getting-started/first-session.md) |
-| **Characters** | [Avatars & skins](docs/avatars-and-skins.md) · [Environments](docs/environments.md) |
+| **Characters & stage** | [Avatars & skins](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [Camera & lighting](docs/camera-and-lighting.md) |
+| **Motion & voice** | [VRMA](docs/animations/vrma.md) · [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-sync.md) |
+| **Settings** | [config.yaml & resets](docs/user-settings.md) |
 | **Architecture** | [Overview](docs/architecture/overview.md) · [Layout](docs/development/project-layout.md) |
-| **Animations** | [VRMA](docs/animations/vrma.md) · [Manual testing](docs/animations/manual-testing.md) |
-| **Voice** | [Lip sync](docs/voice/lip-sync.md) · [Audio sources](docs/voice/audio-sources.md) |
 | **Assets** | [Assets & credits](docs/assets-and-credits.md) |
 | **Cite** | [CITATION.cff](CITATION.cff) · [Changelog](CHANGELOG.md) |
 
@@ -113,6 +117,8 @@ Drop `avatar4.vrm` (or `avatar1B.vrm` for a skin) into `avatar-demo/src/assets/a
 ```text
 avatar/
 ├── docs/
+│   ├── using-the-app.md
+│   └── …
 ├── avatar-demo/
 │   ├── electron/
 │   ├── public/

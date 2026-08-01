@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Layers, Pin } from 'lucide-react';
 import { getDesktopApi } from '../../lib/desktopMode';
 
@@ -16,9 +17,21 @@ const SNAP_CELLS = [
 
 export function DesktopPanel({ overlayMode, onOverlayModeToggle }) {
   const desktop = getDesktopApi();
+  const [selectedSnap, setSelectedSnap] = useState(null);
 
-  function handleSnap(corner) {
-    void desktop?.snapToCorner?.(corner);
+  useEffect(() => {
+    if (!desktop?.onManualMoved) return undefined;
+    return desktop.onManualMoved(() => {
+      setSelectedSnap(null);
+    });
+  }, [desktop]);
+
+  async function handleSnap(corner) {
+    setSelectedSnap(corner);
+    const applied = await desktop?.snapToCorner?.(corner);
+    if (applied && applied !== corner) {
+      setSelectedSnap(applied);
+    }
   }
 
   return (
@@ -28,9 +41,8 @@ export function DesktopPanel({ overlayMode, onOverlayModeToggle }) {
         <span>{overlayMode ? 'Overlay — transparent & on top' : 'Windowed — layered'}</span>
       </div>
 
-      <p className="panel-note">
-        Drag the glass bar to reposition. Use the pin/layers button on the bar for a quick mode switch,
-        or toggle below.
+      <p className="panel-note panel-note--compact">
+        Drag the glass bar to move. Pin/layers on the bar toggles overlay mode.
       </p>
 
       <div className="desktop-toggle-row">
@@ -40,16 +52,20 @@ export function DesktopPanel({ overlayMode, onOverlayModeToggle }) {
 
       <p className="panel-note panel-note--compact">Snap to screen</p>
       <div className="desktop-snap-pad" role="group" aria-label="Snap to screen position">
-        {SNAP_CELLS.map((cell) => (
-          <button
-            key={cell.id}
-            type="button"
-            className="desktop-snap-pad__cell"
-            aria-label={cell.label}
-            title={cell.label}
-            onClick={() => handleSnap(cell.id)}
-          />
-        ))}
+        {SNAP_CELLS.map((cell) => {
+          const active = selectedSnap === cell.id;
+          return (
+            <button
+              key={cell.id}
+              type="button"
+              className={`desktop-snap-pad__cell ${active ? 'desktop-snap-pad__cell--active' : ''}`}
+              aria-label={cell.label}
+              aria-pressed={active}
+              title={cell.label}
+              onClick={() => void handleSnap(cell.id)}
+            />
+          );
+        })}
       </div>
     </>
   );

@@ -7,8 +7,6 @@ import { getDesktopApi, isDesktopMode } from '../../lib/desktopMode';
 import { BarCommandMenu } from '../ui/BarCommandMenu';
 import { WindowScaleMenu } from '../ui/WindowScaleMenu';
 
-const DESKTOP_LUMA_POLL_MS = 900;
-
 export function AvatarStageShell({
   environmentSelection,
   commandMenuOpen,
@@ -50,26 +48,39 @@ export function AvatarStageShell({
       try {
         const luma = await desktopApi.sampleDesktopLuma();
         if (cancelled || typeof luma !== 'number') return;
-        setChromeTone(toneFromLuma(luma));
+        setChromeTone((previous) => {
+          const next = toneFromLuma(luma, previous);
+          return next === previous ? previous : next;
+        });
       } catch {
         // keep last tone
       }
     }
 
-    if (useDesktopSample) {
-      void applyDesktopTone();
-      const timer = window.setInterval(() => {
-        void applyDesktopTone();
-      }, DESKTOP_LUMA_POLL_MS);
+    if (!useDesktopSample) {
+      void applyEnvironmentTone();
       return () => {
         cancelled = true;
-        window.clearInterval(timer);
       };
     }
 
-    void applyEnvironmentTone();
+    // Overlay: sample on demand only (no continuous screen capture).
+    // CSS crossfades chrome vars (~0.85s) when tone flips.
+    void applyDesktopTone();
+
+    const unsubSettled = desktopApi.onPositionSettled?.(() => {
+      void applyDesktopTone();
+    });
+
+    function onFocus() {
+      void applyDesktopTone();
+    }
+    window.addEventListener('focus', onFocus);
+
     return () => {
       cancelled = true;
+      unsubSettled?.();
+      window.removeEventListener('focus', onFocus);
     };
   }, [environmentSelection, desktopMode, overlayMode]);
 
