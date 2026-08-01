@@ -9,6 +9,8 @@
 <p align="center">&nbsp;</p>
 
 <div align="center">
+  <a href="https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0"><img src="https://img.shields.io/badge/release-v0.2.0-c4b5fd?style=flat-square" alt="v0.2.0" /></a>
+  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe"><img src="https://img.shields.io/badge/Windows-Setup%20.exe-93c5fd?style=flat-square" alt="Windows Setup" /></a>
   <img src="https://img.shields.io/badge/License-MIT-efcefa?style=flat-square" alt="License" />
   <img src="https://img.shields.io/badge/Electron-desktop-bae6fd?style=flat-square" alt="Electron" />
   <img src="https://img.shields.io/badge/Vite-7-bbf7d0?style=flat-square" alt="Vite" />
@@ -31,6 +33,7 @@
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> ·
+  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe">Download .exe</a> ·
   <a href="docs/using-the-app.md">User guide</a> ·
   <a href="docs/README.md">Documentation</a> ·
   <a href="docs/getting-started/installation.md">Install</a> ·
@@ -46,7 +49,7 @@
 
 ---
 
-**AVATAR** is an open-source **desktop companion** from ARPA. The primary experience is the **Electron app** (transparent always-on-top overlay, with a Windows **`.exe`** installer planned). The browser / localhost Vite app is for **development and contributors**.
+**AVATAR** is an open-source **desktop companion** from ARPA. The primary experience is the **Electron** transparent always-on-top overlay. A Windows **[`.exe` installer](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe)** is available for end users. The browser / localhost Vite app is for **development and contributors**.
 
 It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from live audio — including system / device output on desktop.
 
@@ -65,41 +68,42 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 
 ## Quick start
 
-Requires **Node.js 20+** and **npm**.
+### 1. Windows installer (easiest)
 
-### Desktop (recommended)
+Download **[AVATAR-Setup-0.2.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe)** — no Node.js. Run the installer, accept the EULA, launch **AVATAR**.
+
+([All releases](https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0) · [install notes](docs/getting-started/installation.md))
+
+### 2. Desktop from source (Electron)
+
+Requires **Node.js 20+** and **npm**:
 
 ```bash
 cd avatar-demo
 npm install
-npm run dev:desktop
-```
-
-Production desktop window:
-
-```bash
 npm run desktop
 ```
 
-A packaged Windows **`.exe`** installer is planned for end users who should not need Node.
+### 3. Web app (browser)
+
+```bash
+cd avatar-demo
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173). Prefer Electron when testing lip sync against system audio.
+
+---
 
 Gear menu: Appearance (Avatars · Skins · Environments) · Voice · Camera · Animations · Settings. Scale control sits next to the gear.
 
-**First launch behavior:** Greeting once, then a looping motion set; desktop audio defaults to device output; preferences restore from `config.yaml` on later launches. Full walkthrough: [Using the app](docs/using-the-app.md).
+**First launch behavior:** Greeting once, then a looping motion set; desktop audio defaults to device output; preferences restore from `config.yaml` on later launches. Full walkthrough: [Using the app](docs/using-the-app.md) · [First session](docs/getting-started/first-session.md).
 
 <p align="center">
   <img src="docs/screenshots/20-gear-main.png" alt="Gear menu" height="220" />
   <img src="docs/screenshots/12-scale-menu.png" alt="Window scale menu" height="220" />
 </p>
-
-### Browser (dev / contributors)
-
-```bash
-cd avatar-demo
-npm run dev
-```
-
-Open [http://localhost:5173](http://localhost:5173). Prefer Electron when testing lip sync against system audio. Details: [Installation](docs/getting-started/installation.md).
 
 ### Try lip sync
 
@@ -127,7 +131,7 @@ Drop `avatar4.vrm` (or `avatar1B.vrm` for a skin) into `avatar-demo/src/assets/a
 
 ### Custom environments (local)
 
-Drop trial GIFs into `avatar-demo/src/assets/environments/custom/` (gitignored — local only). Restart, open Appearance → Environments → **Custom**. Details: [Environments](docs/environments.md).
+Drop trial GIFs into `avatar-demo/src/assets/environments/custom/` (gitignored — local only; not shipped in the Windows installer). Restart, open Appearance → Environments → **Custom**. Details: [Environments](docs/environments.md).
 
 ## Documentation
 
@@ -135,6 +139,7 @@ Drop trial GIFs into `avatar-demo/src/assets/environments/custom/` (gitignored �
 | :--- | :--- |
 | **User guide** | [Using the app](docs/using-the-app.md) — every menu, default, and reset |
 | **Getting started** | [Install](docs/getting-started/installation.md) · [First session](docs/getting-started/first-session.md) |
+| **Download** | [AVATAR-Setup-0.2.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) · [v0.2.0 release](https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0) |
 | **Characters & stage** | [Avatars & skins](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [Camera & lighting](docs/camera-and-lighting.md) |
 | **Motion & voice** | [VRMA](docs/animations/vrma.md) · [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-sync.md) |
 | **Settings** | [config.yaml & resets](docs/user-settings.md) |

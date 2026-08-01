@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'unsafe-inline'; img-src 'self' file: data:;"
+    />
+    <title>AVATAR</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: transparent;
+        user-select: none;
+        -webkit-app-region: no-drag;
+      }
+
+      .stage {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+      }
+
+      .logo-wrap {
+        width: 128px;
+        height: 128px;
+        display: grid;
+        place-items: center;
+        opacity: 1;
+        transition: opacity 0.55s ease;
+        will-change: transform, opacity;
+      }
+
+      .logo-wrap.is-fading {
+        opacity: 0;
+      }
+
+      .logo {
+        width: 110px;
+        height: 110px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 18px rgba(210, 200, 255, 0.4));
+        transform: rotate(0deg);
+        will-change: transform;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+      <div class="logo-wrap" id="wrap">
+        <img class="logo" id="logo" alt="AVATAR" />
+      </div>
+    </div>
+    <script>
+      const { ipcRenderer } = require('electron');
+
+      const logo = document.getElementById('logo');
+      const wrap = document.getElementById('wrap');
+      const params = new URLSearchParams(window.location.search);
+      const sourceUrl = params.get('logo') || '../public/AVATAR_LOGO_150.png';
+
+      /** Knock out near-black pixels so the mark reads transparent over the desktop. */
+      function makeLogoTransparent(src) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = image.data;
+            for (let i = 0; i < data.length; i += 4) {
+              const r = data[i];
+              const g = data[i + 1];
+              const b = data[i + 2];
+              if (r < 28 && g < 28 && b < 28) {
+                data[i + 3] = 0;
+              }
+            }
+            ctx.putImageData(image, 0, 0);
+            resolve(canvas.toDataURL('image/png'));
+          };
+          img.onerror = reject;
+          img.src = src;
+        });
+      }
+
+      let angle = 0;
+      let velocity = 0;
+      let mode = 'accel';
+      let last = performance.now();
+      let finishing = false;
+
+      const MAX_VEL = 14;
+      const ACCEL = 9;
+      const BRAKE = 7;
+
+      function tick(now) {
+        const dt = Math.min(0.05, (now - last) / 1000);
+        last = now;
+
+        if (mode === 'accel') {
+          velocity = Math.min(MAX_VEL, velocity + ACCEL * dt);
+          if (velocity >= MAX_VEL - 0.01) mode = 'cruise';
+        } else if (mode === 'brake') {
+          const drag = BRAKE + velocity * 0.35;
+          velocity = Math.max(0, velocity - drag * dt);
+          if (velocity < 0.04) {
+            velocity = 0;
+            mode = 'fade';
+            wrap.classList.add('is-fading');
+            window.setTimeout(() => {
+              ipcRenderer.send('splash:finished');
+            }, 580);
+          }
+        }
+
+        angle += velocity * dt;
+        logo.style.transform = `rotate(${angle}rad)`;
+
+        if (mode !== 'fade') {
+          requestAnimationFrame(tick);
+        }
+      }
+
+      makeLogoTransparent(sourceUrl)
+        .then((dataUrl) => {
+          logo.src = dataUrl;
+          requestAnimationFrame(tick);
+        })
+        .catch(() => {
+          logo.src = sourceUrl;
+          requestAnimationFrame(tick);
+        });
+
+      ipcRenderer.on('splash:finish', () => {
+        if (finishing) return;
+        finishing = true;
+        mode = 'brake';
+      });
+    </script>
+  </body>
+</html>

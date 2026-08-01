@@ -1,8 +1,11 @@
 {
   "name": "avatar",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "AVATAR — VRM companion with VRMA motion and real-time lip sync",
+  "author": "ARPA Hellenic Logical Systems <input@arpacorp.net>",
+  "homepage": "https://github.com/ARPAHLS/avatar",
+  "license": "MIT",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -10,6 +13,8 @@
     "dev:desktop": "concurrently -n vite,electron -c cyan,magenta \"vite\" \"wait-on http://127.0.0.1:5173 && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron .\"",
     "desktop": "npm run build && cross-env NODE_ENV=production electron .",
     "build": "vite build",
+    "icons": "node scripts/make-icons.mjs",
+    "dist:win": "npm run icons && cross-env AVATAR_SHIP=1 vite build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win nsis",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -33,11 +38,58 @@
     "concurrently": "^9.2.1",
     "cross-env": "^7.0.3",
     "electron": "^34.5.8",
+    "electron-builder": "^25.1.8",
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "png-to-ico": "^3.0.2",
+    "resedit": "^3.0.2",
     "vite": "^7.0.4",
     "wait-on": "^8.0.5"
+  },
+  "build": {
+    "appId": "net.arpacorp.avatar",
+    "productName": "AVATAR",
+    "copyright": "Copyright © ARPA Hellenic Logical Systems",
+    "directories": {
+      "output": "../desktop-setup",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "public/AVATAR_LOGO_150.png",
+      "package.json"
+    ],
+    "asar": true,
+    "afterPack": "./scripts/afterPack.cjs",
+    "win": {
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false,
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "AVATAR-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeader": "build/installer_top.bmp",
+      "installerSidebar": "build/installer_side.bmp",
+      "uninstallerSidebar": "build/installer_side.bmp",
+      "license": "build/installer-license.txt",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AVATAR",
+      "deleteAppDataOnUninstall": false
+    }
   }
 }

@@ -1,56 +1,66 @@
 # Installation
 
-AVATAR’s **main product surface is the Electron desktop app**. Browser / localhost is for development and contributors.
+Three ways to run AVATAR, simplest first.
 
-## Requirements
+## 1. Windows installer (easiest)
 
-- **Node.js 20+** and **npm**
-- Windows recommended for the overlay companion (macOS/Linux Electron also builds)
+No Node.js. Download and run:
 
-## Desktop (recommended)
+**[AVATAR-Setup-0.2.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe)**
+
+Also listed on [Releases](https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0). Accept the EULA, finish the wizard, launch **AVATAR**.
+
+<p align="center">
+  <img src="../screenshots/installer.png" alt="AVATAR Windows installer — license agreement" width="100%" />
+</p>
+
+> Unsigned build: SmartScreen may warn — **More info** → **Run anyway**.
+
+## 2. Desktop from source (Electron)
+
+Requires **Node.js 20+** and **npm**. Builds the app, then opens the Electron companion:
 
 ```bash
 cd avatar-demo
 npm install
-npm run dev:desktop
-```
-
-Hot-reloads the UI inside a transparent always-on-top window.
-
-### Production desktop window
-
-```bash
 npm run desktop
 ```
 
-Builds Vite `dist/`, then launches Electron against it.
+For hot-reload while developing the UI:
 
-### Packaged `.exe`
+```bash
+npm run dev:desktop
+```
 
-A Windows installer is planned so end users can install without Node. Until then, use `npm run desktop` from a clone, or wait for release artifacts on GitHub Releases.
+## 3. Web app (browser)
 
-## Browser (dev)
+Contributors / UI work in the browser (no system-audio loopback):
 
 ```bash
 cd avatar-demo
+npm install
 npm run dev
 ```
 
-[http://localhost:5173](http://localhost:5173) — useful for UI work; system audio loopback is an Electron feature.
+Open [http://localhost:5173](http://localhost:5173).
 
-## Web production bundle
+---
+
+## Packaging the installer (maintainers)
 
 ```bash
-npm run build
-npm run preview
+cd avatar-demo
+npm run dist:win
 ```
+
+Output: gitignored `desktop-setup/AVATAR-Setup-0.2.0.exe` (upload to the GitHub Release). Uses `AVATAR_SHIP=1` so local `custom/` environment trials are not bundled.
 
 ## Troubleshooting
 
 | Issue | Fix |
 | :--- | :--- |
+| SmartScreen warning | Unsigned installer — More info → Run anyway |
 | Blank stage | Confirm `avatar1.vrm` (etc.) under `src/assets/avatars/` |
-| New VRM missing | Match `avatarN.vrm` / `avatarNB.vrm` naming; restart Electron/Vite |
-| VRMA fails | Check console; paths in `src/config/animations.js` |
+| New VRM missing | Match `avatarN.vrm` / `avatarNB.vrm` naming; restart |
 | Desktop audio missing | Voice → **Device output** or pick a window |
 | Tab audio (browser) | Share tab with **Share tab audio** enabled |

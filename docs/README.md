@@ -6,10 +6,11 @@ Electron desktop companion first; browser localhost for development.
 
 | Section | Description |
 | :--- | :--- |
-| [Installation](getting-started/installation.md) | Desktop app, `.exe` plans, browser dev |
+| [Installation](getting-started/installation.md) | **1.** Windows `.exe` · **2.** `npm run desktop` · **3.** `npm run dev` |
 | [First session](getting-started/first-session.md) | 2-minute onboarding |
 | [**Using the app**](using-the-app.md) | **Full user guide — every menu and option** |
 | [User settings](user-settings.md) | `config.yaml`, what persists, reset all / per-section |
+| [Release v0.2.0](releases/v0.2.0.md) | Release notes draft · [download installer](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) |
 
 ## Features in depth
 
@@ -29,5 +30,5 @@ Electron desktop companion first; browser localhost for development.
 | :--- | :--- |
 | [Architecture](architecture/overview.md) | Rendering, VRMA, Electron, settings |
 | [Project layout](development/project-layout.md) | Folders and scripts |
-| [Roadmap](development/roadmap.md) | Milestones including `.exe` packaging |
+| [Roadmap](development/roadmap.md) | Milestones |
 | [Assets & credits](assets-and-credits.md) | VRoid / BOOTH / Pixiv terms |

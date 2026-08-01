@@ -27,8 +27,10 @@ avatar-demo/
 
 | Command | Audience | Action |
 | :--- | :--- | :--- |
-| `npm run dev:desktop` | Default | Vite + Electron overlay |
-| `npm run desktop` | Packaging check | Build + Electron on `dist/` |
+| Windows [`.exe`](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) | End users | Installer — no Node |
+| `npm run desktop` | From source | Build + Electron on `dist/` |
 | `npm run dev` | Contributors | Browser localhost only |
-| `npm run build` | CI / web | Production bundle |
+| `npm run dev:desktop` | Contributors | Vite + Electron (hot reload) |
+| `npm run dist:win` | Maintainers | NSIS installer → `desktop-setup/` |
+| `npm run build` | CI / web | Production Vite bundle |
 | `npm run lint` | Contributors | ESLint |

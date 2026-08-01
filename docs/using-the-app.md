@@ -1,6 +1,6 @@
 # Using AVATAR — complete user guide
 
-This guide walks through every control in the **Electron desktop companion**. Browser / localhost (`npm run dev`) is for contributors; some desktop-only features (overlay, device loopback, window scale, snap pad) are unavailable or limited there.
+This guide walks through every control in the **Electron desktop companion**. Prefer the [Windows installer](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) when you can. From source: `npm run desktop`. Browser / localhost (`npm run dev`) is for contributors; some desktop-only features (overlay, device loopback, window scale, snap pad) are unavailable or limited there.
 
 **Related:** [Installation](getting-started/installation.md) · [User settings / config.yaml](user-settings.md)
 
@@ -119,7 +119,7 @@ Add `avatar1B.vrm`, `avatar1C.vrm`, … for Skin B / C on Avatar 1.
 | **Code** | Code-rain GIF |
 | **Bloom** | Bright pastel GIF (bar often switches to “light” chrome) |
 | **None** | No stage backdrop — desktop shows through (overlay) |
-| **Custom** | Local GIFs/images in `src/assets/environments/custom/` (not in git). Opening Custom hides built-ins until closed; Color fade stays pinned under the list |
+| **Custom** | Local GIFs/images in `src/assets/environments/custom/` (dev only; **not** shipped in the Windows installer). Opening Custom hides built-ins until closed; Color fade stays pinned under the list |
 | **Color fade** | Soft glow from a color you pick → **Use color** |
 | **Reset** | Back to lavender `#e9e1fa` |
 

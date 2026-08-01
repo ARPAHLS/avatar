@@ -12,11 +12,12 @@ abstract: >-
   (browser/localhost for development). It can follow cloud APIs, local LLMs, or
   everyday listening — study, video, podcasts, speech, and audiobooks — instead of
   a blank background.
-version: "0.1.0"
-date-released: "2026-07-31"
+version: "0.2.0"
+date-released: "2026-08-01"
 license: MIT
 repository-code: "https://github.com/ARPAHLS/avatar"
 url: "https://github.com/ARPAHLS/avatar"
+repository-artifact: "https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe"
 authors:
   - family-names: Peilivanidis
     given-names: Vladimiros

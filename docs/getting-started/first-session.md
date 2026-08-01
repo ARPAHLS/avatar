@@ -1,16 +1,13 @@
 # First session
 
-New to AVATAR? Do this once after [Installation](installation.md).
+New to AVATAR? Prefer the [Windows installer](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) when you can. Otherwise see [Installation](installation.md).
 
-For every control in depth, see **[Using the app](../using-the-app.md)**.
+For every control in depth: **[Using the app](../using-the-app.md)**.
 
-## 1. Start the desktop companion
+## 1. Launch
 
-```bash
-cd avatar-demo
-npm install
-npm run dev:desktop
-```
+- **Installer:** start **AVATAR** from the Start menu or desktop shortcut.  
+- **From source:** `cd avatar-demo` → `npm install` → `npm run desktop`
 
 A transparent window should appear on top of your other apps.
 

@@ -46,6 +46,8 @@ The Color fade row stays pinned under the environment list (**Use color** + **Re
 
 The `custom/` folder is for **your** trial media. Files inside it are **not** committed to git (the empty folder is kept via `.gitkeep`).
 
+**Shipped Windows builds** (`npm run dist:win`) intentionally leave Custom empty — local trial GIFs are not packaged into the installer. Dev (`npm run dev` / `dev:desktop`) still picks up anything you drop in `custom/`.
+
 ### How to use
 
 1. Drop media into `avatar-demo/src/assets/environments/custom/`  
@@ -89,6 +91,6 @@ Custom images are sampled on their lower strip when environment-based tone is us
 
 Do **not** put environment GIFs only in `public/` — the app imports from `src/assets/environments/` so Vite can bundle them.
 
-Built-ins (`stars.gif`, `code.gif`, `bloom.gif`) ship with the repo. **`custom/` media stays on your machine.**
+Built-ins (`stars.gif`, `code.gif`, `bloom.gif`) ship with the repo and the installer. **`custom/` media stays on your machine** (dev only; not in the packaged app).
 
 See also: [Using the app](using-the-app.md).

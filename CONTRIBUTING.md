@@ -1,6 +1,14 @@
 # Contributing
 
-Thanks for helping shape AVATAR. These guidelines apply to contributions.
+Thanks for helping shape AVATAR.
+
+## Run locally
+
+1. Windows end users: [AVATAR-Setup-0.2.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe)  
+2. Desktop from source: `cd avatar-demo && npm install && npm run desktop`  
+3. Web app: `npm run dev`  
+
+Details: [Installation](docs/getting-started/installation.md).
 
 ## Before you open a PR
 
@@ -21,4 +29,4 @@ Do not commit copyrighted VRM/VRMA files without license documentation. See `doc
 
 ## Questions
 
-Open an issue in the repository once GitHub access is enabled, or contact the ARPA maintainers internally.
+Open an issue in the repository, or contact the ARPA maintainers.
