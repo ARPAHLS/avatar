@@ -46,14 +46,14 @@ Open [http://localhost:5173](http://localhost:5173).
 
 ---
 
-## Packaging the installer (maintainers)
+## Build the Windows installer (from source)
 
 ```bash
 cd avatar-demo
 npm run dist:win
 ```
 
-Output: gitignored `desktop-setup/AVATAR-Setup-0.2.0.exe` (upload to the GitHub Release). Uses `AVATAR_SHIP=1` so local `custom/` environment trials are not bundled.
+Produces `AVATAR-Setup-*.exe` under `desktop-setup/` at the repo root (local build output; not committed). Production packaging omits local `custom/` environment trials.
 
 ## Troubleshooting
 

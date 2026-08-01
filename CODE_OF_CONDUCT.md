@@ -25,4 +25,4 @@ Project maintainers may remove, edit, or reject contributions that violate this 
 
 ## Contact
 
-Report issues to the ARPA Hellenic Logical Systems maintainers through your internal channel until public issue tracking is available.
+Report issues to **input@arpacorp.net** or open a GitHub issue on this repository.

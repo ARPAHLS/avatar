@@ -10,7 +10,7 @@ Electron desktop companion first; browser localhost for development.
 | [First session](getting-started/first-session.md) | 2-minute onboarding |
 | [**Using the app**](using-the-app.md) | **Full user guide — every menu and option** |
 | [User settings](user-settings.md) | `config.yaml`, what persists, reset all / per-section |
-| [Release v0.2.0](releases/v0.2.0.md) | Release notes draft · [download installer](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) |
+| [Releases](releases/README.md) | Version notes · [v0.2.0](releases/v0.2.0.md) · [Changelog](../CHANGELOG.md) |
 
 ## Features in depth
 

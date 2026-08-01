@@ -11,7 +11,7 @@ flowchart TB
     Avatar --> VRMA[useVrmAnimation]
     Avatar --> Lip[useAmplitudeLipSync]
     Avatar --> Blink[useBlink]
-    VRMA --> Pixiv[@pixiv/three-vrm-animation]
+    VRMA --> Pixiv["@pixiv/three-vrm-animation"]
     Lip --> Expressions[VRM expressionManager]
     Electron[Electron shell] --> UI
     Electron --> Persist

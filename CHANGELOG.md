@@ -10,10 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Windows **NSIS installer** (`npm run dist:win`) writing artifacts to gitignored `desktop-setup/`.
+- Windows **NSIS installer** (`npm run dist:win`).
 - Installer branding: `installer_side.png`, `installer_top.png`, logo, and EULA (`build/installer-license.txt`).
 - Product screenshots under `docs/screenshots/` embedded in README and feature guides.
-- `custom/` environment media is local-only (gitignored); folder kept with `.gitkeep`.
+- `custom/` environment media is local-only (not committed); folder kept with `.gitkeep`.
 - Electron desktop companion as the primary product surface (transparent overlay, always-on-top).
 - Window scale presets (×0.5 / ×1 / ×2); pin / windowed mode; **3×3 snap pad**.
 - Gear command menu with Appearance, Voice, Camera, Animations, Settings, and Close.

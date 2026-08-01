@@ -31,6 +31,6 @@ avatar-demo/
 | `npm run desktop` | From source | Build + Electron on `dist/` |
 | `npm run dev` | Contributors | Browser localhost only |
 | `npm run dev:desktop` | Contributors | Vite + Electron (hot reload) |
-| `npm run dist:win` | Maintainers | NSIS installer → `desktop-setup/` |
+| `npm run dist:win` | Contributors | Build Windows NSIS installer (local `desktop-setup/` output) |
 | `npm run build` | CI / web | Production Vite bundle |
 | `npm run lint` | Contributors | ESLint |

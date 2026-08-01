@@ -8,7 +8,7 @@
 - [x] Drop-in `avatarN.vrm` / `avatarNB.vrm` catalog
 - [x] Persisted `config.yaml` settings + reset
 - [x] Documentation, screenshots, asset credits
-- [x] Windows NSIS installer build (`npm run dist:win` → `desktop-setup/`)
+- [x] Windows NSIS installer (`npm run dist:win`)
 - [x] GitHub Release download path for `AVATAR-Setup-0.2.0.exe`
 
 ## Next
