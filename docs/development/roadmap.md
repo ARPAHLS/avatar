@@ -1,28 +1,29 @@
 # Roadmap
 
-## v0.1 — Current preview
+## v0.1 — Current
 
 - [x] Restructured source layout
-- [x] VRMA playback via `@pixiv/three-vrm-animation`
-- [x] Animation dropdown (built-in + motion pack)
-- [x] Browser lip sync with audio source selection
-- [x] Documentation scaffold
+- [x] VRMA playback + Default greeting/loop sequence
+- [x] Gear menus, Appearance (Avatar / Environments / Custom), Voice, Camera
+- [x] Browser + Electron lip sync (mic, tab, file, device loopback)
+- [x] Desktop overlay (snap, pin/windowed, window scale)
+- [x] Documentation and asset credits
 
 ## v0.2 — Expression automation
 
 - [ ] Keyword → animation mapping table
 - [ ] Agent/event bus hook for external triggers
-- [ ] Optional idle VRMA loop replacing procedural idle
+- [ ] Optional idle VRMA loop
 
-## v0.3 — Product hardening
+## v0.3 — Packaging & polish
 
-- [ ] Persisted settings (localStorage or host app bridge)
+- [ ] Windows `.exe` installer (electron-builder / similar)
+- [ ] Persisted settings
 - [ ] Screenshot/GIF assets in docs
-- [ ] Public repo polish (CI, issue templates)
-- [ ] Optional Electron shell for native audio loopback
+- [ ] CI and issue templates
 
-## v1.0 — Public release gate
+## v1.0 — Release gate
 
 - [ ] Asset license audit and manifest
 - [ ] Security review for capture permissions copy
-- [ ] Performance pass on dual Canvas avatar previews
+- [ ] Performance pass on dual Canvas avatar pickers

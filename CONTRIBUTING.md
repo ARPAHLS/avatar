@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping shape AVATAR. This repository is in private preview; these guidelines apply as we move toward a public release.
+Thanks for helping shape AVATAR. These guidelines apply to contributions.
 
 ## Before you open a PR
 

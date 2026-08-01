@@ -12,33 +12,42 @@ flowchart TB
     Avatar --> Blink[useBlink]
     VRMA --> Pixiv[@pixiv/three-vrm-animation]
     Lip --> Expressions[VRM expressionManager]
+    Electron[Electron shell] --> UI
+    Electron --> Loopback[displayMedia loopback]
 ```
 
 ## Layers
 
 ### Presentation (`components/`)
 
-`AvatarStage` owns viewport interaction, floating panels, and menus. Panels: `PalettePanel` (Avatar + Environments), `VoicePanel`, `CameraPanel`.
+`AvatarStage` owns the stage, gear menus, glass drawers, and window scale. Panels:
+
+| Panel | Contents |
+| :--- | :--- |
+| `PalettePanel` | Avatar picker + Environments (built-in, Custom, color, none) |
+| `VoicePanel` | Audio source / lip sync controls |
+| `CameraPanel` | Camera, light, avatar transform |
+| `DesktopPanel` | Snap corners, overlay vs windowed |
 
 ### Configuration (`config/`)
 
-Declarative catalogs for avatars, animations, audio sources, and visual defaults. Adding a VRMA clip means extending `animationCatalog` — no scattered hard-coded paths.
+Catalogs for avatars, animations (including the Default sequence), audio sources, environments, window scale, and visual defaults.
 
 ### Runtime hooks (`hooks/`)
 
 | Hook | Role |
 | :--- | :--- |
-| `useVrmAnimation` | Loads `.vrma`, builds clips, cross-fades actions |
+| `useVrmAnimation` | Loads `.vrma`, sequences, cross-fades |
 | `useAmplitudeLipSync` | Maps audio level → cycling visemes |
-| `useAudioSource` | Browser capture lifecycle |
+| `useAudioSource` | Capture lifecycle (browser + Electron) |
 | `useBlink` | Idle blink on expression manager |
 
-### Fallback motion (`lib/proceduralAnimations.js`)
+### Desktop (`electron/`)
 
-Procedural bone posing remains for built-in test states until dedicated idle VRMA loops are assigned.
+Frameless transparent window, always-on-top overlay, snap, scale presets, and system audio loopback via `setDisplayMediaRequestHandler`.
 
 ## Design notes
 
-- **VRMA first** — skeletal clips override procedural posing while active.
-- **Browser-only audio** — unlike [Persona](https://github.com/xikhar/persona), this preview uses Web Audio APIs rather than native process loopback.
-- **Future triggers** — keyword/event mapping will hook into the same animation catalog without changing the loader.
+- **VRMA first** — skeletal clips (and sequences) drive the body while active.
+- **Audio** — browser uses Web Audio (`getUserMedia` / `getDisplayMedia`); Electron adds device loopback and window pick.
+- **Future triggers** — keyword/event mapping will reuse the same animation catalog.

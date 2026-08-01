@@ -1,6 +1,6 @@
 # Assets & credits
 
-This document covers third-party character and animation assets shipped for preview and development. **AVATAR** (this software) is MIT-licensed; **bundled media retain their original rights holders’ terms**.
+This document covers third-party character and animation assets shipped with AVATAR. **AVATAR** (this software) is MIT-licensed; **bundled media retain their original rights holders’ terms**.
 
 ## Contact for rights / takedown
 
@@ -12,13 +12,13 @@ We will respond and remove or replace the asset promptly.
 
 ---
 
-## VRM characters (preview)
+## VRM characters
 
 | Item | Notes |
 | :--- | :--- |
 | Source | Created / customized in [VRoid Studio](https://vroid.com/en/studio) and [VRoid Hub](https://hub.vroid.com/) |
 | Cost | **Free only** — no paid VRoid / BOOTH models, wearables, hair, clothes, or textures are used in this repository |
-| Status | Development / preview avatars for testing lip sync and motion |
+| Status | Sample avatars for testing lip sync and motion |
 
 Users who ship their own builds **must** use only assets they have rights to, and must obey each creator’s BOOTH / VRoid Hub terms of use (credit, redistribution, commercial use, streaming, etc.). Policies vary per item — always check the product page.
 
@@ -92,6 +92,6 @@ These are open-source libraries under their own licenses (see each package).
 
 ## Disclaimer
 
-AVATAR is an independent ARPA project. It is **not** affiliated with, endorsed by, or sponsored by pixiv Inc., VRoid Project, or BOOTH, except that it uses publicly distributed free assets and open-source libraries according to their stated terms.
+AVATAR is an independent open-source ARPA project. It is **not** affiliated with, endorsed by, or sponsored by pixiv Inc., VRoid Project, or BOOTH, except that it uses publicly distributed free assets and open-source libraries according to their stated terms.
 
-Preview assets may be replaced at any time. Do not treat bundled characters or motions as permanent product branding.
+Sample assets may be replaced at any time. Do not treat bundled characters or motions as permanent product branding.

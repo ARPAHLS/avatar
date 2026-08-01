@@ -1,33 +1,33 @@
 # AVATAR — Documentation
 
-Welcome to the AVATAR docs. Installation, animation testing, lip sync, architecture, and asset credits.
+Guides for installation, desktop/browser use, animations, lip sync, architecture, and asset credits.
 
 ## Start here
 
 | Section | Description |
 | :--- | :--- |
-| [Getting started](getting-started/installation.md) | Install dependencies and run the dev server |
-| [First session](getting-started/first-session.md) | Avatar, environments, voice, camera, animations |
-| [Architecture overview](architecture/overview.md) | How rendering, VRMA, and audio fit together |
-| [Assets & credits](assets-and-credits.md) | VRoid / BOOTH terms, Pixiv credit, takedown contact |
+| [Installation](getting-started/installation.md) | Browser, Electron, and production builds |
+| [First session](getting-started/first-session.md) | Gear menus, Avatar, Environments, Voice, scale |
+| [Architecture overview](architecture/overview.md) | Rendering, VRMA, audio, Electron |
+| [Assets & credits](assets-and-credits.md) | VRoid / BOOTH terms, Pixiv credit, contact |
 
 ## Animations
 
 | Doc | Description |
 | :--- | :--- |
-| [VRMA catalog](animations/vrma.md) | Motion pack entries and how clips are registered |
-| [Manual testing](animations/manual-testing.md) | Dropdown workflow and adding new clips |
+| [VRMA catalog](animations/vrma.md) | Motion pack entries and registration |
+| [Manual testing](animations/manual-testing.md) | Default sequence and clip checks |
 
 ## Voice & lip sync
 
 | Doc | Description |
 | :--- | :--- |
-| [Lip sync](voice/lip-sync.md) | Amplitude viseme model and tuning notes |
-| [Audio sources](voice/audio-sources.md) | Microphone, tab capture, and file playback |
+| [Lip sync](voice/lip-sync.md) | Amplitude visemes and live indicator |
+| [Audio sources](voice/audio-sources.md) | Browser and desktop capture options |
 
 ## Development
 
 | Doc | Description |
 | :--- | :--- |
-| [Project layout](development/project-layout.md) | Folders, config files, and conventions |
+| [Project layout](development/project-layout.md) | Folders and scripts |
 | [Roadmap](development/roadmap.md) | Near-term milestones |

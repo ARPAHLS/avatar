@@ -7,15 +7,16 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Restructured `avatar-demo` into config, hooks, lib, and panel components.
-- VRMA animation pipeline with motion pack catalog and dropdown selector.
-- Browser lip sync (microphone, tab/window audio, file playback) via Voice settings.
-- Root README and `docs/` scaffold; AVATAR branding and asset credits.
+- VRMA animation pipeline with Default sequence and motion pack catalog.
+- Lip sync (microphone, tab/window, file, Electron device loopback) via Voice settings.
+- Desktop overlay: snap, pin/windowed, window scale, Custom environments.
+- Open-source docs, AVATAR branding, and asset credits.
 
 ### Changed
 
-- Replaced separate Idle / Laugh / Test buttons with a grouped animation dropdown.
-- Procedural poses moved to `lib/proceduralAnimations.js` as built-in fallbacks.
+- Gear menus and glass drawers replace the old hover options bar.
+- Environment GIFs live only under `src/assets/environments/` (duplicates removed from `public/`).
 
 ## [0.1.0] — 2026-07-31
 
-- Initial private preview scaffold.
+- Initial open-source scaffold.

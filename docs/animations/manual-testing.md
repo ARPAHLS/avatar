@@ -1,29 +1,23 @@
 # Manual animation testing
 
-## Dropdown workflow
+## Gear → Animations
 
-The **Animation** control below the avatar replaces the old separate Idle / Laugh / Test buttons. All motions live in one grouped `<select>`:
+All motions are selected from the gear **Animations** submenu:
 
-- Change selection → clip or procedural state starts immediately.
-- Re-selecting the same one-shot VRMA increments an internal request counter to replay it.
-- When a one-shot VRMA finishes, the stage returns to **Idle**.
+- Change selection → clip or sequence starts immediately.
+- Re-selecting the same entry increments a request counter to replay it.
+- **Default** plays Greeting once, then loops Model Pose → Show Full Body → Peace Sign → Squat → Shoot.
 
-## Built-in procedural states
+## Individual VRMA clips
 
-| ID | Purpose |
-| :--- | :--- |
-| `idle` | Default breathing idle |
-| `laugh` | Exaggerated laugh for expression sanity checks |
-| `test` | Hand-on-hip subtle idle |
-
-These are useful when iterating on lip sync without fighting a skeletal clip.
+Selectable motion-pack entries loop while selected. Prefer **Default** for the companion idle show.
 
 ## Debugging tips
 
-- Open the browser console — VRMA load failures log as `[avatar] VRMA load failed`.
-- Confirm the model's humanoid rig is compatible with the clip (mixing unrelated VRM/VRMA pairs can look wrong).
+- Open the console — VRMA load failures log as `[avatar] VRMA load failed`.
+- Confirm the model’s humanoid rig matches the clip.
 - Use **Camera & Lighting** to frame full-body clips like `vrma-01`.
 
 ## Next: automated triggers
 
-Future work will map keywords and agent events to catalog `id` values. The manual dropdown is the reference path for validating clips before wiring automation.
+Future work will map keywords and agent events to catalog `id` values. Manual selection is the reference path for validating clips first.

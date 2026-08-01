@@ -4,9 +4,9 @@
 
 - **Node.js 20 or newer**
 - **npm**
-- A desktop browser with WebGL and Web Audio support (Chrome or Edge recommended for tab audio capture)
+- Chrome or Edge recommended (WebGL + Web Audio; tab capture on browser)
 
-## Steps
+## Browser
 
 ```bash
 cd avatar-demo
@@ -14,22 +14,43 @@ npm install
 npm run dev
 ```
 
-The dev server starts at [http://localhost:5173](http://localhost:5173).
+Dev server: [http://localhost:5173](http://localhost:5173).
 
-## Production build
+## Desktop (Electron)
+
+```bash
+cd avatar-demo
+npm install
+npm run dev:desktop
+```
+
+Hot-reload UI with a transparent overlay window.
+
+### Production desktop build
+
+```bash
+npm run desktop
+```
+
+Builds the Vite app, then opens Electron against `dist/`.
+
+A packaged Windows **`.exe` installer** will be published for users who do not want to run from Node or the browser.
+
+## Web production bundle
 
 ```bash
 npm run build
 npm run preview
 ```
 
-Output is written to `avatar-demo/dist/`.
+Output: `avatar-demo/dist/`.
 
 ## Troubleshooting
 
 | Issue | Fix |
 | :--- | :--- |
-| Blank avatar circle | Confirm `.vrm` files exist under `src/assets/avatars/` |
-| VRMA clip fails | Check browser console; verify `.vrma` paths in `src/config/animations.js` |
+| Blank stage | Confirm `.vrm` files under `src/assets/avatars/` |
+| VRMA clip fails | Check console; verify paths in `src/config/animations.js` |
 | Tab audio silent | Re-share the tab with **Share tab audio** enabled (Chrome) |
-| Lip sync never activates | Open **Voice**, pick a source, wait for status `active` |
+| Lip sync never activates | Gear → **Voice**, pick a source, wait for status `active` |
+| Desktop audio missing | Use **Device output** (loopback) or pick a specific window |

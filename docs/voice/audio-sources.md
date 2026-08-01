@@ -2,35 +2,47 @@
 
 Configure sources in **Voice** (gear → microphone).
 
+## Browser
+
 | Source | API | Best for |
 | :--- | :--- | :--- |
 | **Off** | — | Animation-only testing |
-| **Microphone** | `getUserMedia` | Live speech, room audio |
-| **Tab or window audio** | `getDisplayMedia` | AI assistants, YouTube, meetings in a shared tab |
+| **Microphone** | `getUserMedia` | Live speech |
+| **Tab or window audio** | `getDisplayMedia` | AI assistants, YouTube, shared tabs |
 | **Audio file** | `HTMLAudioElement` + Web Audio | Recordings, TTS exports |
 
-## Tab / window capture
+## Desktop (Electron)
+
+| Source | Best for |
+| :--- | :--- |
+| **Device output** | Auto-capture of system / loopback audio |
+| **Window** | One app (browser, Discord, player, etc.) |
+| **Microphone** / **File** | Same as browser where available |
+
+### Tab / window capture (browser)
 
 1. Choose **Tab or window audio**.
-2. When prompted, pick the tab or window that is **playing** speech.
-3. Enable **Share tab audio** (Chrome) or the equivalent checkbox.
-4. Video tracks are stopped immediately — only audio is analyzed.
+2. Pick the tab or window that is **playing** speech.
+3. Enable **Share tab audio** (Chrome) or the equivalent.
+4. Video tracks are stopped — only audio is analyzed.
 
-This is the closest browser equivalent to Persona's automatic voice-output listener. It does not require a backend.
+### Device output (desktop)
+
+Uses Electron’s display-media handler with audio loopback so the avatar can follow whatever is playing on the machine without picking a tab each time.
 
 ## Microphone
 
-Useful for direct interaction. The analyser does **not** route mic audio to speakers (no monitoring) to avoid feedback.
+The analyser does **not** route mic audio to speakers (no monitoring) to avoid feedback.
 
 ## Audio file
 
-Select a local `.mp3`, `.wav`, or other browser-supported format. The file loops while lip sync runs and is audible through the default output.
+Select a local `.mp3`, `.wav`, or other supported format. The file loops while lip sync runs.
 
 ## Permissions & privacy
 
-- All processing stays in the browser tab.
+- Processing stays on device (browser tab or Electron app).
 - No audio is uploaded or stored.
-- Restart capture after changing sources using **Restart audio capture**.
+- Use **Restart audio capture** after changing sources.
 
 ## Status values
 

@@ -1,52 +1,45 @@
 # Project layout
 
 ```text
-avatar-demo/src/
-├── App.jsx                 Root component
-├── main.jsx                Entry point
-├── components/
-│   ├── AvatarStage.jsx     Main stage & interaction
-│   ├── avatar/
-│   │   ├── VrmAvatar.jsx   VRM + VRMA + lip sync frame loop
-│   │   └── MiniAvatar.jsx  Avatar picker preview
-│   ├── panels/
-│   │   ├── PalettePanel.jsx
-│   │   └── CameraPanel.jsx
-│   └── ui/
-│       ├── AnimationSelector.jsx
-│       ├── CameraController.jsx
-│       └── PanelPrimitives.jsx
-├── config/
-│   ├── animations.js       VRMA + procedural catalog
-│   ├── avatars.js          Model registry
-│   ├── audioSources.js     Lip sync inputs
-│   └── defaults.js         Theme & camera defaults
-├── hooks/
-│   ├── useVrmAnimation.js
-│   ├── useAmplitudeLipSync.js
-│   ├── useAudioSource.js
-│   ├── useAudioAnalyser.js
-│   └── useBlink.js
-├── lib/
-│   ├── proceduralAnimations.js
-│   └── vrmAnimationAction.js
-└── styles/
-    ├── tokens.css          Pastel CSS variables
-    ├── index.css           Base reset
-    └── app.css             Component styles
+avatar-demo/
+├── electron/
+│   ├── main.cjs
+│   └── preload.cjs
+├── public/
+│   ├── AVATAR_LOGO_150.png
+│   └── AVATAR_SPLASH.png
+└── src/
+    ├── App.jsx
+    ├── main.jsx
+    ├── assets/
+    │   ├── avatars/          VRM + VRMA
+    │   └── environments/     built-in GIFs + custom/
+    ├── components/
+    │   ├── AvatarStage.jsx
+    │   ├── avatar/
+    │   ├── panels/
+    │   └── ui/
+    ├── config/
+    ├── hooks/
+    ├── lib/
+    └── styles/
 ```
+
+Environment GIFs used by the app live under `src/assets/environments/` (Vite-bundled). Drop trial GIFs in `custom/`; promote keepers to the parent folder when ready.
 
 ## Conventions
 
 - **Catalogs over magic strings** — UI reads from `config/`.
 - **Hooks own side effects** — components stay declarative.
-- **One avatar frame loop** — `VrmAvatar` coordinates mixer, procedural fallback, blink, and lip sync.
+- **One avatar frame loop** — `VrmAvatar` coordinates mixer, blink, and lip sync.
 
 ## Scripts
 
 | Command | Action |
 | :--- | :--- |
-| `npm run dev` | Vite dev server |
-| `npm run build` | Production bundle |
+| `npm run dev` | Vite browser dev server |
+| `npm run dev:desktop` | Vite + Electron overlay |
+| `npm run desktop` | Build + Electron against `dist/` |
+| `npm run build` | Production web bundle |
 | `npm run preview` | Serve `dist/` |
 | `npm run lint` | ESLint |

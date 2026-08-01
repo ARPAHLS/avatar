@@ -16,7 +16,7 @@
 </div>
 
 <p align="center">
-  Animate cloud APIs, web apps, or private local LLMs with a VRM character that lipsyncs and moves while you work.<br />
+  Animate cloud APIs, web apps, or local LLMs with a VRM character that lipsyncs and moves while you work.<br />
   Or keep a companion on screen while you study, watch a video, hear a podcast, speech, or audiobook — a character that follows the audio instead of a blank background.
 </p>
 
@@ -32,20 +32,21 @@
 
 ---
 
-**AVATAR** is a VRM character stage from ARPA — browser and Electron desktop overlay. It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from live audio.
-
-> Private repo: [ARPAHLS/avatar](https://github.com/ARPAHLS/avatar)
+**AVATAR** is an open-source VRM character stage from ARPA — run it in the browser or as a local Electron desktop companion (including a packaged `.exe` installer for Windows). It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from live audio.
 
 ## What this is
 
 - **VRM avatars** — switch characters from Appearance
-- **VRMA animations** — default greeting + loop, plus individual clips
-- **Lip sync** — mic, tab audio, file, or desktop device output
-- **Desktop overlay** — transparent, always-on-top companion
+- **Environments** — Stars / Code / Bloom, color fade, none, plus a Custom GIF library
+- **VRMA animations** — Default greeting + loop, plus individual clips
+- **Lip sync** — mic, tab/window audio, file, or desktop device output
+- **Desktop overlay** — transparent, always-on-top window with snap, pin/windowed, and ×0.5 / ×1 / ×2 scale
 
 ## Quick start
 
 Requires **Node.js 20+** and **npm**.
+
+### Browser
 
 ```bash
 cd avatar-demo
@@ -55,7 +56,7 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173).
 
-### Desktop overlay
+### Desktop (Electron)
 
 ```bash
 cd avatar-demo
@@ -63,19 +64,25 @@ npm install
 npm run dev:desktop
 ```
 
-Production overlay: `npm run desktop`
+Production desktop window (loads the built UI):
 
-Gear: Appearance (Avatar + Environments), Voice, Camera, Animations, Settings. Scale for ×0.5 / ×1 / ×2.
+```bash
+npm run desktop
+```
+
+A Windows **`.exe` installer** is planned for users who prefer a one-click install instead of running from source or the browser.
+
+Gear menu: Appearance · Voice · Camera · Animations · Settings. Scale control sits next to the gear.
 
 ### Try lip sync
 
 1. Gear → **Voice**
-2. Pick an audio source
-3. Green dot next to the gear = lip sync active
+2. Pick an audio source (Device output on desktop; Microphone / Tab in the browser)
+3. Green pulsating dot next to the gear = lip sync active
 
 ### Try animations
 
-Gear → **Animations**. **Default** greets once, then loops the motion pack sequence.
+Gear → **Animations**. **Default** greets once, then loops model pose → full body → peace → squat → shoot.
 
 ## Documentation
 
@@ -92,9 +99,9 @@ Gear → **Animations**. **Default** greets once, then loops the motion pack seq
 ```text
 avatar/
 ├── docs/
-├── avatar-demo/          Vite + React (+ Electron)
+├── avatar-demo/
 │   ├── electron/
-│   ├── public/           AVATAR_SPLASH / AVATAR_LOGO_150
+│   ├── public/
 │   └── src/
 ├── CHANGELOG.md
 └── README.md
@@ -102,7 +109,7 @@ avatar/
 
 ## Assets & licensing (summary)
 
-Preview characters are made in **VRoid Studio** / **VRoid Hub** with free, custom setups — **no paid models, wearables, or paid BOOTH items** are used in this repo.
+Sample characters are made in **VRoid Studio** / **VRoid Hub** with free, custom setups — **no paid models, wearables, or paid BOOTH items** are used in this repo.
 
 Bundled motions are the **7 free VRMA files** released by the **VRoid Project** on [BOOTH](https://booth.pm/) (2024). Copyright remains with **pixiv Inc.** Commercial use requires the credit:
 

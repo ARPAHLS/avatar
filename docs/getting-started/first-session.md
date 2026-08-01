@@ -3,32 +3,40 @@
 ## Desktop companion
 
 - Open the **gear** on the glass bar for Appearance, Voice, Camera, Animations, and Settings.
-- Drag the window to reposition; snap corners from Settings.
-- Use the **scale** button (next to gear) for ×0.5 / ×1 / ×2 window size.
+- Drag the window to reposition; snap corners from **Settings**.
+- Use the **scale** control (next to gear) for ×0.5 / ×1 / ×2 window size.
+- Toggle **Pinned / Windowed** from the gear menu on desktop.
+- Green pulsating dot next to the gear = lip sync active.
 
 ## Appearance
 
-Open **Appearance** to:
+Gear → **Appearance**:
 
-1. **Avatar** — switch between bundled VRM models.
-2. **Environments** — animated backgrounds, color fade, or none.
+1. **Avatar** — switch bundled VRM models.
+2. **Environments** — Stars / Code / Bloom, **None**, color fade, or expand **Custom** for GIFs under `src/assets/environments/custom/`.
 
 ## Voice
 
-Open **Voice** (microphone icon) to pick an audio source for lip sync and restart capture if needed.
+Gear → **Voice** (microphone icon): pick an audio source and restart capture if needed.
+
+| Mode | Typical source |
+| :--- | :--- |
+| Desktop | Device output (system loopback), or a specific window |
+| Browser | Microphone, tab/window audio, or local file |
 
 ## Camera & lighting
 
-**Camera & Lighting** has sliders for position, look-at, FOV, light intensity, and color. Double-click a slider to reset that axis.
+**Camera & Lighting** sliders: position, look-at, FOV, light intensity, color. Double-click a slider to reset that axis.
 
 ## Animations
 
-From the gear → **Animations**:
+Gear → **Animations**:
 
 - **Default** — greeting once, then loops model pose → full body → peace → squat → shoot.
-- Individual VRMA clips and other entries as listed.
+- Individual VRMA clips as listed.
 
 ## Lip sync quick test
 
-1. Open **Voice**, set audio source (Device output on desktop, or Microphone / Tab in browser).
-2. A green pulsating dot next to the gear appears when lip sync is active.
+1. Open **Voice** and choose a source.
+2. Speak, play media, or run an AI/assistant that outputs audio.
+3. Watch the mouth respond; the green live dot stays on while capture is active.
