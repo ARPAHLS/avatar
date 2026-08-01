@@ -60,18 +60,40 @@ html.vox-desktop .glass-drawer__close {
   cursor: pointer;
 }
 
-html.vox-desktop .desktop-snap-grid {
+html.vox-desktop .desktop-snap-pad {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin: 10px 0;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 6px;
+  width: 108px;
+  height: 108px;
+  margin: 8px auto 12px;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(180, 160, 220, 0.45);
+  background: rgba(255, 255, 255, 0.22);
+  box-sizing: border-box;
 }
 
-html.vox-desktop .desktop-snap-grid .panel-button {
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
-  padding: 8px 6px;
+html.vox-desktop .desktop-snap-pad__cell {
+  border: none;
+  border-radius: 6px;
+  padding: 0;
+  min-width: 0;
+  min-height: 0;
+  cursor: pointer;
+  background: rgba(120, 100, 170, 0.28);
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+html.vox-desktop .desktop-snap-pad__cell:hover {
+  background: rgba(140, 115, 200, 0.55);
+  transform: scale(1.04);
+}
+
+html.vox-desktop .desktop-snap-pad__cell:active {
+  background: rgba(161, 138, 214, 0.85);
+  transform: scale(0.96);
 }
 
 html.vox-desktop .desktop-toggle-row {

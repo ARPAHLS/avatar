@@ -2,9 +2,9 @@ import { defaultColor, getEnvironmentById } from '../config/environments';
 
 /** @typedef {'dark' | 'light'} ChromeTone */
 
-/** White chrome is the default. Silver only when the backdrop is clearly light. */
+/** Whitish bar on dark scenes; grey bar on light. Buttons follow the same tone. */
 const IMAGE_LUMA_CACHE = new Map();
-const LIGHT_LUMA_THRESHOLD = 0.72;
+const LIGHT_LUMA_THRESHOLD = 0.62;
 
 /** Built-in environments with known tone (do not trust glow color alone). */
 const BUILTIN_CHROME = {
@@ -12,6 +12,11 @@ const BUILTIN_CHROME = {
   code: 'dark',
   bloom: 'light',
 };
+
+/** @param {number} luma */
+export function toneFromLuma(luma) {
+  return luma >= LIGHT_LUMA_THRESHOLD ? 'light' : 'dark';
+}
 
 /** @param {string} hex */
 export function hexLuminance(hex) {
@@ -25,7 +30,7 @@ export function hexLuminance(hex) {
 }
 
 /**
- * Sync tone — defaults to dark (whitish bar/buttons).
+ * Sync tone from environment selection (browser / windowed fallback).
  * @param {import('../config/environments').EnvironmentSelection} selection
  * @returns {ChromeTone}
  */
@@ -36,7 +41,7 @@ export function resolveChromeToneSync(selection) {
 
   if (selection.type === 'color') {
     const hex = selection.value?.length === 4 ? defaultColor : selection.value;
-    return hexLuminance(hex ?? defaultColor) >= LIGHT_LUMA_THRESHOLD ? 'light' : 'dark';
+    return toneFromLuma(hexLuminance(hex ?? defaultColor));
   }
 
   if (selection.type === 'env') {
@@ -46,7 +51,7 @@ export function resolveChromeToneSync(selection) {
 
     const env = getEnvironmentById(selection.id);
     if (env?.src && IMAGE_LUMA_CACHE.has(env.src)) {
-      return IMAGE_LUMA_CACHE.get(env.src) >= LIGHT_LUMA_THRESHOLD ? 'light' : 'dark';
+      return toneFromLuma(IMAGE_LUMA_CACHE.get(env.src));
     }
   }
 
@@ -77,7 +82,6 @@ export function sampleImageLuminance(src) {
           return;
         }
         ctx.drawImage(img, 0, 0, size, size);
-        // Sample the lower strip — closest to the glass bar / chrome buttons.
         const yStart = Math.floor(size * 0.72);
         const { data } = ctx.getImageData(0, yStart, size, size - yStart);
         let total = 0;
@@ -120,5 +124,5 @@ export async function resolveChromeTone(selection) {
   if (!env?.src) return 'dark';
 
   const luma = await sampleImageLuminance(env.src);
-  return luma >= LIGHT_LUMA_THRESHOLD ? 'light' : 'dark';
+  return toneFromLuma(luma);
 }

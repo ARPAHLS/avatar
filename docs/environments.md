@@ -24,7 +24,10 @@ Restart the Electron/Vite process after adding files.
 
 ## Contrast
 
-Glass bar and gear buttons stay **whitish** on dark scenes (Stars, Code, none, dark colors). They switch to **silver / greyscale** only when the backdrop behind the bar is clearly light (e.g. Bloom, pale color fades, bright custom GIFs). Custom images are sampled from the lower strip of the frame.
+Glass bar and gear buttons follow the backdrop (Electron overlay samples the desktop near the window; browser / windowed mode uses the environment).
+
+- **Dark backdrop:** whitish bar; lighter grey button glass + dark grey icons  
+- **Light backdrop:** grey bar; darker grey button glass + white icons  
 
 ## Asset location
 

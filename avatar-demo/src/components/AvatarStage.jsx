@@ -415,17 +415,20 @@ export function AvatarStage() {
               {desktopMode && (
                 <DesktopPanel overlayMode={overlayMode} onOverlayModeToggle={handleOverlayModeToggle} />
               )}
+              <button
+                type="button"
+                className="panel-button panel-button--danger"
+                onClick={() => void handleResetAllSettings()}
+              >
+                Reset all settings
+              </button>
               <p className="panel-note panel-note--compact">
                 Preferences are saved to {settingsPath ? 'config.yaml' : 'local storage'} and restored on
                 launch.
               </p>
-              {settingsPath && <p className="panel-note panel-note--compact panel-note--mono">{settingsPath}</p>}
-              <button type="button" className="panel-button panel-button--danger" onClick={() => void handleResetAllSettings()}>
-                Reset all settings
-              </button>
-              <p className="panel-note panel-note--compact">
-                Expression triggers and keyword-driven animations are planned for a later milestone.
-              </p>
+              {settingsPath && (
+                <p className="panel-note panel-note--compact panel-note--mono">{settingsPath}</p>
+              )}
             </div>
           )}
         </GlassDrawer>

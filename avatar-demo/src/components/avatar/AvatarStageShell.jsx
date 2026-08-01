@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Cog } from 'lucide-react';
 import { STAGE } from '../../config/defaults';
-import { resolveChromeTone, resolveChromeToneSync } from '../../lib/chromeTone';
+import { resolveChromeTone, resolveChromeToneSync, toneFromLuma } from '../../lib/chromeTone';
 import { getHoloFieldStyle, isHoloFieldHidden } from '../../lib/holoField';
-import { isDesktopMode } from '../../lib/desktopMode';
+import { getDesktopApi, isDesktopMode } from '../../lib/desktopMode';
 import { BarCommandMenu } from '../ui/BarCommandMenu';
 import { WindowScaleMenu } from '../ui/WindowScaleMenu';
+
+const DESKTOP_LUMA_POLL_MS = 900;
 
 export function AvatarStageShell({
   environmentSelection,
@@ -34,14 +36,42 @@ export function AvatarStageShell({
 
   useEffect(() => {
     let cancelled = false;
-    setChromeTone(resolveChromeToneSync(environmentSelection));
-    void resolveChromeTone(environmentSelection).then((tone) => {
+    const desktopApi = getDesktopApi();
+    const useDesktopSample = desktopMode && overlayMode && typeof desktopApi?.sampleDesktopLuma === 'function';
+
+    async function applyEnvironmentTone() {
+      const sync = resolveChromeToneSync(environmentSelection);
+      if (!cancelled) setChromeTone(sync);
+      const tone = await resolveChromeTone(environmentSelection);
       if (!cancelled) setChromeTone(tone);
-    });
+    }
+
+    async function applyDesktopTone() {
+      try {
+        const luma = await desktopApi.sampleDesktopLuma();
+        if (cancelled || typeof luma !== 'number') return;
+        setChromeTone(toneFromLuma(luma));
+      } catch {
+        // keep last tone
+      }
+    }
+
+    if (useDesktopSample) {
+      void applyDesktopTone();
+      const timer = window.setInterval(() => {
+        void applyDesktopTone();
+      }, DESKTOP_LUMA_POLL_MS);
+      return () => {
+        cancelled = true;
+        window.clearInterval(timer);
+      };
+    }
+
+    void applyEnvironmentTone();
     return () => {
       cancelled = true;
     };
-  }, [environmentSelection]);
+  }, [environmentSelection, desktopMode, overlayMode]);
 
   function toggleMenu(event) {
     event.stopPropagation();
@@ -91,7 +121,7 @@ export function AvatarStageShell({
               aria-expanded={commandMenuOpen}
               onClick={toggleMenu}
             >
-              <Cog size={14} strokeWidth={2} />
+              <Cog size={14} strokeWidth={2.25} />
             </button>
           </div>
         </div>

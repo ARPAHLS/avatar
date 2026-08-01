@@ -29,49 +29,52 @@
   --chrome-line-glow: rgba(200, 185, 235, 0.45);
   --chrome-line-glow-soft: rgba(180, 155, 230, 0.22);
   --chrome-line-inset: rgba(255, 255, 255, 0.95);
-  --chrome-btn-color: #f5f7fb;
-  --chrome-btn-bg: rgba(255, 255, 255, 0.38);
-  --chrome-btn-glow: rgba(220, 225, 240, 0.45);
-  --chrome-btn-inset: rgba(255, 255, 255, 0.7);
-  --chrome-btn-open-color: #ffffff;
-  --chrome-btn-open-bg: rgba(255, 255, 255, 0.5);
-  --chrome-menu-bg: rgba(255, 255, 255, 0.88);
-  --chrome-menu-border: rgba(255, 255, 255, 0.65);
-  --chrome-menu-color: #6b528f;
+  /* Dark BG default: lighter grey glass + dark grey icons */
+  --chrome-btn-color: rgba(50, 54, 68, 0.92);
+  --chrome-btn-bg: rgba(210, 215, 225, 0.5);
+  --chrome-btn-border: rgba(255, 255, 255, 0.35);
+  --chrome-btn-glow: rgba(200, 205, 220, 0.3);
+  --chrome-btn-inset: rgba(255, 255, 255, 0.55);
+  --chrome-btn-open-color: rgba(40, 44, 58, 0.95);
+  --chrome-btn-open-bg: rgba(230, 233, 240, 0.62);
+  --chrome-menu-bg: rgba(255, 255, 255, 0.82);
+  --chrome-menu-border: rgba(255, 255, 255, 0.55);
+  --chrome-menu-color: #7d62ad;
 }
 
-/* Whitish chrome on dark backdrops (default). Explicit so data-chrome="dark" is stable. */
+/* Dark backdrop: whitish bar; lighter grey button glass + dark grey icons */
 .avatar-stage-shell[data-chrome='dark'] {
   --chrome-line-edge: rgba(255, 255, 255, 0.08);
   --chrome-line-mid: rgba(255, 255, 255, 0.9);
   --chrome-line-glow: rgba(200, 185, 235, 0.45);
   --chrome-line-glow-soft: rgba(180, 155, 230, 0.22);
   --chrome-line-inset: rgba(255, 255, 255, 0.95);
-  /* Near-white silver icons — avoid mid-grey that disappears on dark IDE themes */
-  --chrome-btn-color: #f5f7fb;
-  --chrome-btn-bg: rgba(255, 255, 255, 0.38);
-  --chrome-btn-glow: rgba(220, 225, 240, 0.45);
-  --chrome-btn-inset: rgba(255, 255, 255, 0.7);
-  --chrome-btn-open-color: #ffffff;
-  --chrome-btn-open-bg: rgba(255, 255, 255, 0.5);
-  --chrome-menu-bg: rgba(255, 255, 255, 0.88);
-  --chrome-menu-border: rgba(255, 255, 255, 0.65);
-  --chrome-menu-color: #6b528f;
+  --chrome-btn-color: rgba(50, 54, 68, 0.92);
+  --chrome-btn-bg: rgba(210, 215, 225, 0.5);
+  --chrome-btn-border: rgba(255, 255, 255, 0.35);
+  --chrome-btn-glow: rgba(200, 205, 220, 0.3);
+  --chrome-btn-inset: rgba(255, 255, 255, 0.55);
+  --chrome-btn-open-color: rgba(40, 44, 58, 0.95);
+  --chrome-btn-open-bg: rgba(230, 233, 240, 0.62);
+  --chrome-menu-bg: rgba(255, 255, 255, 0.82);
+  --chrome-menu-border: rgba(255, 255, 255, 0.55);
+  --chrome-menu-color: #7d62ad;
 }
 
-/* Silver / greyscale chrome only when the backdrop behind the bar is clearly light. */
+/* Light backdrop: grey bar; darker grey button glass + white icons */
 .avatar-stage-shell[data-chrome='light'] {
   --chrome-line-edge: rgba(70, 75, 90, 0.12);
-  --chrome-line-mid: rgba(95, 100, 115, 0.78);
+  --chrome-line-mid: rgba(90, 95, 110, 0.82);
   --chrome-line-glow: rgba(110, 115, 130, 0.35);
   --chrome-line-glow-soft: rgba(90, 95, 110, 0.2);
   --chrome-line-inset: rgba(255, 255, 255, 0.55);
-  --chrome-btn-color: rgba(55, 60, 75, 0.92);
-  --chrome-btn-bg: rgba(90, 95, 110, 0.22);
-  --chrome-btn-glow: rgba(80, 85, 100, 0.28);
-  --chrome-btn-inset: rgba(255, 255, 255, 0.45);
-  --chrome-btn-open-color: #5a4d75;
-  --chrome-btn-open-bg: rgba(90, 95, 110, 0.32);
+  --chrome-btn-color: #ffffff;
+  --chrome-btn-bg: rgba(70, 75, 90, 0.55);
+  --chrome-btn-border: rgba(50, 55, 70, 0.35);
+  --chrome-btn-glow: rgba(60, 65, 80, 0.28);
+  --chrome-btn-inset: rgba(255, 255, 255, 0.2);
+  --chrome-btn-open-color: #ffffff;
+  --chrome-btn-open-bg: rgba(55, 60, 75, 0.7);
   --chrome-menu-bg: rgba(235, 236, 240, 0.92);
   --chrome-menu-border: rgba(120, 125, 140, 0.4);
   --chrome-menu-color: #4a4558;
@@ -236,7 +239,7 @@
   flex-shrink: 0;
   width: 20px;
   height: 20px;
-  border: none;
+  border: 1px solid var(--chrome-btn-border, transparent);
   border-radius: 50%;
   padding: 0;
   display: flex;
@@ -250,19 +253,7 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease;
-}
-
-.avatar-stage-shell[data-chrome='dark'] .avatar-glass-bar__scale,
-.avatar-stage-shell[data-chrome='dark'] .avatar-glass-bar__gear {
-  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.55));
-}
-
-.avatar-stage-shell[data-chrome='dark'] .avatar-glass-bar__scale svg,
-.avatar-stage-shell[data-chrome='dark'] .avatar-glass-bar__gear svg {
-  stroke: currentColor;
-  color: inherit;
-  opacity: 1;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .avatar-glass-bar__scale--open {
@@ -314,7 +305,7 @@
   flex-shrink: 0;
   width: 20px;
   height: 20px;
-  border: none;
+  border: 1px solid var(--chrome-btn-border, transparent);
   border-radius: 50%;
   padding: 0;
   display: flex;
@@ -328,7 +319,7 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .avatar-glass-bar__gear--open {
@@ -551,6 +542,16 @@
   background: rgba(255, 255, 255, 0.62);
   color: #4f3f70;
   border-color: rgba(161, 138, 214, 0.5);
+}
+
+.glass-drawer .panel-button--danger {
+  background: rgba(255, 230, 236, 0.88);
+  color: #9a4a62;
+  border-color: rgba(180, 90, 110, 0.55);
+}
+
+.glass-drawer .panel-button--danger:hover {
+  background: rgba(255, 214, 224, 0.98);
 }
 
 .glass-drawer .slider-row__label,

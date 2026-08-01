@@ -29,7 +29,7 @@ flowchart TB
 | `PalettePanel` | Avatar picker + Environments (built-in, Custom, color, none) |
 | `VoicePanel` | Audio source / lip sync controls |
 | `CameraPanel` | Camera, light, avatar transform |
-| `DesktopPanel` | Snap corners, overlay vs windowed |
+| `DesktopPanel` | Overlay toggle + 3×3 snap pad |
 | Settings drawer | Desktop controls + **Reset all settings** |
 
 ### Configuration (`config/`)

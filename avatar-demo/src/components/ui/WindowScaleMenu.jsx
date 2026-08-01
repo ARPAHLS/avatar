@@ -27,7 +27,7 @@ export function WindowScaleMenu({ open, scale, onOpenChange, onSelectScale, menu
         title="Window size"
         onClick={toggleMenu}
       >
-        <Scaling size={14} strokeWidth={2} />
+        <Scaling size={14} strokeWidth={2.25} />
       </button>
 
       {open && (

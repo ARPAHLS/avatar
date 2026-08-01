@@ -223,27 +223,23 @@ function snapToCorner(corner) {
   const display = screen.getDisplayMatching(win);
   const area = display.workArea;
 
+  const left = area.x + EDGE_MARGIN;
+  const right = area.x + area.width - win.width - EDGE_MARGIN;
+  const centerX = area.x + Math.round((area.width - win.width) / 2);
+  const top = area.y + EDGE_MARGIN;
+  const bottom = area.y + area.height - win.height - EDGE_MARGIN;
+  const centerY = area.y + Math.round((area.height - win.height) / 2);
+
   const positions = {
-    'bottom-left': {
-      x: area.x + EDGE_MARGIN,
-      y: area.y + area.height - win.height - EDGE_MARGIN,
-    },
-    'bottom-right': {
-      x: area.x + area.width - win.width - EDGE_MARGIN,
-      y: area.y + area.height - win.height - EDGE_MARGIN,
-    },
-    'top-left': {
-      x: area.x + EDGE_MARGIN,
-      y: area.y + EDGE_MARGIN,
-    },
-    'top-right': {
-      x: area.x + area.width - win.width - EDGE_MARGIN,
-      y: area.y + EDGE_MARGIN,
-    },
-    'bottom-center': {
-      x: area.x + Math.round((area.width - win.width) / 2),
-      y: area.y + area.height - win.height - EDGE_MARGIN,
-    },
+    'top-left': { x: left, y: top },
+    'top-center': { x: centerX, y: top },
+    'top-right': { x: right, y: top },
+    'center-left': { x: left, y: centerY },
+    center: { x: centerX, y: centerY },
+    'center-right': { x: right, y: centerY },
+    'bottom-left': { x: left, y: bottom },
+    'bottom-center': { x: centerX, y: bottom },
+    'bottom-right': { x: right, y: bottom },
   };
 
   const next = positions[corner];
@@ -272,6 +268,84 @@ function setupDisplayMediaHandler() {
 ipcMain.handle('desktop:get-sources', async (_event, types = ['window', 'screen']) => {
   const sources = await desktopCapturer.getSources({ types });
   return sources.map(({ id, name }) => ({ id, name }));
+});
+
+/**
+ * Sample luminance of the desktop near the window (not under our chrome),
+ * so the glass bar can follow light vs dark pages behind the overlay.
+ * @returns {Promise<number | null>} 0–1 luma, or null if unavailable
+ */
+ipcMain.handle('desktop:sample-luma', async () => {
+  if (!mainWindow || !overlayMode) return null;
+
+  try {
+    const bounds = mainWindow.getBounds();
+    const display = screen.getDisplayMatching(bounds);
+    const area = display.bounds;
+    const thumbW = Math.max(80, Math.round(area.width / 12));
+    const thumbH = Math.max(80, Math.round(area.height / 12));
+
+    const sources = await desktopCapturer.getSources({
+      types: ['screen'],
+      thumbnailSize: { width: thumbW, height: thumbH },
+    });
+
+    const source =
+      sources.find((entry) => String(entry.display_id) === String(display.id)) || sources[0];
+    if (!source?.thumbnail || source.thumbnail.isEmpty()) return null;
+
+    const img = source.thumbnail;
+    const size = img.getSize();
+    if (size.width < 4 || size.height < 4) return null;
+
+    /** Prefer a patch beside / below the window so we don't sample our own UI. */
+    const candidates = [
+      { x: bounds.x - 12, y: bounds.y + bounds.height - 18 },
+      { x: bounds.x + bounds.width + 12, y: bounds.y + bounds.height - 18 },
+      { x: bounds.x + Math.round(bounds.width / 2), y: bounds.y + bounds.height + 8 },
+      { x: bounds.x + Math.round(bounds.width / 2), y: bounds.y - 8 },
+    ];
+
+    let sampleX = bounds.x + Math.round(bounds.width / 2);
+    let sampleY = bounds.y + bounds.height - 12;
+    for (const point of candidates) {
+      if (
+        point.x >= area.x + 2 &&
+        point.x < area.x + area.width - 2 &&
+        point.y >= area.y + 2 &&
+        point.y < area.y + area.height - 2
+      ) {
+        sampleX = point.x;
+        sampleY = point.y;
+        break;
+      }
+    }
+
+    const relX = (sampleX - area.x) / area.width;
+    const relY = (sampleY - area.y) / area.height;
+    const px = Math.min(size.width - 3, Math.max(0, Math.floor(relX * size.width)));
+    const py = Math.min(size.height - 3, Math.max(0, Math.floor(relY * size.height)));
+    const patch = img.crop({
+      x: px,
+      y: py,
+      width: Math.min(3, size.width - px),
+      height: Math.min(3, size.height - py),
+    });
+
+    const bitmap = patch.toBitmap();
+    let total = 0;
+    let count = 0;
+    for (let i = 0; i + 3 < bitmap.length; i += 4) {
+      const b = bitmap[i] / 255;
+      const g = bitmap[i + 1] / 255;
+      const r = bitmap[i + 2] / 255;
+      total += 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      count += 1;
+    }
+    return count > 0 ? total / count : null;
+  } catch {
+    return null;
+  }
 });
 
 ipcMain.handle('window:snap', (_event, corner) => {

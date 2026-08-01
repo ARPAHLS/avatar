@@ -1,12 +1,17 @@
 import { Layers, Pin } from 'lucide-react';
 import { getDesktopApi } from '../../lib/desktopMode';
 
-const SNAP_OPTIONS = [
-  { id: 'bottom-left', label: 'Bottom left' },
-  { id: 'bottom-right', label: 'Bottom right' },
-  { id: 'bottom-center', label: 'Bottom center' },
+/** 3×3 screen positions — row-major, top → bottom, left → right. */
+const SNAP_CELLS = [
   { id: 'top-left', label: 'Top left' },
+  { id: 'top-center', label: 'Top center' },
   { id: 'top-right', label: 'Top right' },
+  { id: 'center-left', label: 'Center left' },
+  { id: 'center', label: 'Center' },
+  { id: 'center-right', label: 'Center right' },
+  { id: 'bottom-left', label: 'Bottom left' },
+  { id: 'bottom-center', label: 'Bottom center' },
+  { id: 'bottom-right', label: 'Bottom right' },
 ];
 
 export function DesktopPanel({ overlayMode, onOverlayModeToggle }) {
@@ -33,17 +38,17 @@ export function DesktopPanel({ overlayMode, onOverlayModeToggle }) {
         <input type="checkbox" checked={overlayMode} onChange={() => onOverlayModeToggle()} />
       </div>
 
-      <p className="panel-note panel-note--compact">Snap to screen edge</p>
-      <div className="desktop-snap-grid">
-        {SNAP_OPTIONS.map((option) => (
+      <p className="panel-note panel-note--compact">Snap to screen</p>
+      <div className="desktop-snap-pad" role="group" aria-label="Snap to screen position">
+        {SNAP_CELLS.map((cell) => (
           <button
-            key={option.id}
+            key={cell.id}
             type="button"
-            className="panel-button"
-            onClick={() => handleSnap(option.id)}
-          >
-            {option.label}
-          </button>
+            className="desktop-snap-pad__cell"
+            aria-label={cell.label}
+            title={cell.label}
+            onClick={() => handleSnap(cell.id)}
+          />
         ))}
       </div>
     </>

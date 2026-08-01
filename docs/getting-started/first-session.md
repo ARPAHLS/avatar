@@ -3,7 +3,7 @@
 ## Desktop companion (main UI)
 
 - Open the **gear** for Appearance, Voice, Camera, Animations, Settings.
-- Drag to move; snap corners from **Settings**.
+- Drag to move; snap with the **3×3** pad in **Settings**.
 - **Scale** (next to gear): ×0.5 / ×1 / ×2.
 - **Pinned / Windowed** from the gear menu.
 - Green pulsating dot = lip sync active.
