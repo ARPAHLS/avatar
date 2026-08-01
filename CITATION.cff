@@ -1,0 +1,52 @@
+# Citation metadata for ARPAHLS/avatar.
+# Validate: pip install cffconvert && cffconvert -i CITATION.cff -f apalike
+cff-version: 1.2.0
+message: >-
+  If you use this software, please cite it using the metadata below.
+  Also record the AVATAR version you used (Git tag or release) for reproducibility.
+type: software
+title: AVATAR
+abstract: >-
+  AVATAR is an open-source desktop companion that gives a face to AI and audio:
+  VRM characters with VRMA motion and real-time lip sync in an Electron overlay
+  (browser/localhost for development). It can follow cloud APIs, local LLMs, or
+  everyday listening — study, video, podcasts, speech, and audiobooks — instead of
+  a blank background.
+version: "0.1.0"
+date-released: "2026-07-31"
+license: MIT
+repository-code: "https://github.com/ARPAHLS/avatar"
+url: "https://github.com/ARPAHLS/avatar"
+authors:
+  - family-names: Peilivanidis
+    given-names: Vladimiros
+    alias: Ross Peili
+    email: vpeilivanidis@gmail.com
+    affiliation: "ARPA Hellenic Logical Systems"
+    website: "https://github.com/rosspeili"
+  - name: "ARPA Hellenic Logical Systems"
+    email: input@arpacorp.net
+    website: "https://arpacorp.net"
+keywords:
+  - avatar
+  - vrm
+  - vrma
+  - lip-sync
+  - electron
+  - desktop-overlay
+  - threejs
+  - three-vrm
+  - vroid
+  - ai-companion
+  - local-llm
+  - open-source
+preferred-citation:
+  type: software
+  title: AVATAR
+  authors:
+    - family-names: Peilivanidis
+      given-names: Vladimiros
+      alias: Ross Peili
+    - name: "ARPA Hellenic Logical Systems"
+  year: 2026
+  url: "https://github.com/ARPAHLS/avatar"

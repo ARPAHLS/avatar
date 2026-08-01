@@ -32,7 +32,8 @@
   <a href="docs/avatars-and-skins.md">Avatars</a> ·
   <a href="docs/environments.md">Environments</a> ·
   <a href="docs/assets-and-credits.md">Assets & Credits</a> ·
-  <a href="CHANGELOG.md">Changelog</a>
+  <a href="CHANGELOG.md">Changelog</a> ·
+  <a href="CITATION.cff">Cite</a>
 </p>
 
 ---
@@ -103,6 +104,7 @@ Drop `avatar4.vrm` (or `avatar1B.vrm` for a skin) into `avatar-demo/src/assets/a
 | **Animations** | [VRMA](docs/animations/vrma.md) · [Manual testing](docs/animations/manual-testing.md) |
 | **Voice** | [Lip sync](docs/voice/lip-sync.md) · [Audio sources](docs/voice/audio-sources.md) |
 | **Assets** | [Assets & credits](docs/assets-and-credits.md) |
+| **Cite** | [CITATION.cff](CITATION.cff) · [Changelog](CHANGELOG.md) |
 
 ## Repository layout
 
@@ -113,9 +115,10 @@ avatar/
 │   ├── electron/
 │   ├── public/
 │   └── src/
-│       ├── assets/avatars/        avatar1.vrm, avatar2.vrm, …
-│       └── assets/environments/   built-in + custom/
+│       ├── assets/avatars/
+│       └── assets/environments/
 ├── CHANGELOG.md
+├── CITATION.cff
 └── README.md
 ```
 
@@ -136,6 +139,8 @@ Runs locally. Audio uses Web APIs / Electron loopback; nothing is uploaded.
 
 ---
 
-<p align="center">
+<div align="center">
+  <img src="https://raw.githubusercontent.com/ARPAHLS/.github/main/Group%202061.png" alt="ARPA Logo" width="50" />
+  <br />
   <sub>Built & Maintained by <strong>ARPA Hellenic Logical Systems</strong></sub>
-</p>
+</div>

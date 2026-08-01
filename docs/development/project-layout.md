@@ -10,14 +10,12 @@ avatar-demo/
 │   └── AVATAR_SPLASH.png
 └── src/
     ├── assets/
-    │   ├── avatars/           avatar1.vrm, avatar2.vrm, avatar3.vrm, VRMA/
-    │   └── environments/      stars/code/bloom + custom/
+    │   ├── avatars/
+    │   │   └── VRMA/
+    │   └── environments/
+    │       └── custom/
     ├── components/
     ├── config/
-    │   ├── avatars.js         glob catalog (avatars + skins)
-    │   ├── environments.js
-    │   ├── animations.js
-    │   └── …
     ├── hooks/
     ├── lib/
     └── styles/
