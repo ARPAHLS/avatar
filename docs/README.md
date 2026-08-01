@@ -1,6 +1,6 @@
-# VOX Avatar — Documentation
+# AVATAR — Documentation
 
-Welcome to the VOX Avatar docs. This guide covers installation, animation testing, lip sync, and how the codebase is organized.
+Welcome to the AVATAR docs. Installation, animation testing, lip sync, architecture, and asset credits.
 
 ## Start here
 
@@ -9,6 +9,7 @@ Welcome to the VOX Avatar docs. This guide covers installation, animation testin
 | [Getting started](getting-started/installation.md) | Install dependencies and run the dev server |
 | [First session](getting-started/first-session.md) | Avatar, environments, voice, camera, animations |
 | [Architecture overview](architecture/overview.md) | How rendering, VRMA, and audio fit together |
+| [Assets & credits](assets-and-credits.md) | VRoid / BOOTH terms, Pixiv credit, takedown contact |
 
 ## Animations
 
@@ -30,14 +31,3 @@ Welcome to the VOX Avatar docs. This guide covers installation, animation testin
 | :--- | :--- |
 | [Project layout](development/project-layout.md) | Folders, config files, and conventions |
 | [Roadmap](development/roadmap.md) | Near-term milestones |
-
-## Media placeholders
-
-Screenshot and GIF slots are reserved for upcoming releases. Suggested captures:
-
-- Default avatar viewport (circular frame, pastel chrome)
-- Palette panel with Avatar picker and environments
-- VRMA motion mid-playback
-- Lip sync active indicator with tab audio
-
-Store assets under `docs/assets/` when ready and link them from the relevant pages.

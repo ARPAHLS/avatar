@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
 
 - Restructured `avatar-demo` into config, hooks, lib, and panel components.
 - VRMA animation pipeline with motion pack catalog and dropdown selector.
-- Browser lip sync (microphone, tab/window audio, file playback) via VOX settings.
-- Root README and `docs/` scaffold aligned with ARPA presentation style.
+- Browser lip sync (microphone, tab/window audio, file playback) via Voice settings.
+- Root README and `docs/` scaffold; AVATAR branding and asset credits.
 
 ### Changed
 

@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping shape VOX Avatar. This repository is in private preview; these guidelines apply as we move toward a public release.
+Thanks for helping shape AVATAR. This repository is in private preview; these guidelines apply as we move toward a public release.
 
 ## Before you open a PR
 
@@ -17,7 +17,7 @@ Thanks for helping shape VOX Avatar. This repository is in private preview; thes
 
 ## Assets
 
-Do not commit copyrighted VRM/VRMA files without license documentation. See `docs/animations/vrma.md`.
+Do not commit copyrighted VRM/VRMA files without license documentation. See `docs/assets-and-credits.md` and `docs/animations/vrma.md`.
 
 ## Questions
 

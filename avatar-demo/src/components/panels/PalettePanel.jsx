@@ -1,4 +1,6 @@
-import { environments, defaultColor } from '../../config/environments';
+import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { environments, customEnvironments, defaultColor } from '../../config/environments';
 import { avatarModels } from '../../config/avatars';
 import { MiniAvatar } from '../avatar/MiniAvatar';
 import { AccordionSection, Divider } from '../ui/PanelPrimitives';
@@ -11,12 +13,19 @@ export function PalettePanel({
   selectedBg,
   setSelectedBg,
 }) {
+  const [customOpen, setCustomOpen] = useState(
+    () => selectedBg.type === 'env' && selectedBg.id?.startsWith('custom-'),
+  );
+
   const colorValue =
     selectedBg.type === 'color'
       ? selectedBg.value.length === 4
         ? defaultColor
         : selectedBg.value
       : defaultColor;
+
+  const customSelected =
+    selectedBg.type === 'env' && customEnvironments.some((env) => env.id === selectedBg.id);
 
   return (
     <>
@@ -75,6 +84,46 @@ export function PalettePanel({
             <span className="background-thumb__label">None</span>
           </button>
         </div>
+
+        {customEnvironments.length > 0 && (
+          <div className="environment-custom">
+            <button
+              type="button"
+              className={`environment-custom__toggle ${customOpen ? 'environment-custom__toggle--open' : ''} ${
+                customSelected ? 'environment-custom__toggle--active' : ''
+              }`}
+              onClick={() => setCustomOpen((open) => !open)}
+              aria-expanded={customOpen}
+            >
+              <span>
+                Custom
+                <span className="environment-custom__count">{customEnvironments.length}</span>
+              </span>
+              <ChevronDown size={14} strokeWidth={2} />
+            </button>
+
+            {customOpen && (
+              <div className="environment-custom__grid">
+                {customEnvironments.map((env) => (
+                  <button
+                    type="button"
+                    key={env.id}
+                    className={`background-thumb ${
+                      selectedBg.type === 'env' && selectedBg.id === env.id
+                        ? 'background-thumb--selected'
+                        : ''
+                    }`}
+                    onClick={() => setSelectedBg({ type: 'env', id: env.id })}
+                    title={env.label}
+                  >
+                    <img src={env.src} alt={env.label} loading="lazy" />
+                    <span className="background-thumb__label">{env.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="environment-color-row">
           <label className="environment-color-picker">

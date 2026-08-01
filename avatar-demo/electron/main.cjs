@@ -158,6 +158,7 @@ function createWindow() {
     y: bounds.y,
     minWidth,
     minHeight,
+    icon: path.join(__dirname, '../public/AVATAR_LOGO_150.png'),
     transparent: true,
     frame: false,
     alwaysOnTop: overlayMode,

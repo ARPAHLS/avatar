@@ -13,12 +13,19 @@ export const defaultHoloGlow = {
 
 export const defaultColor = '#e9e1fa';
 
+const customGlow = {
+  strong: 'rgba(190, 175, 230, 0.52)',
+  soft: 'rgba(150, 130, 200, 0.24)',
+  highlight: 'rgba(255, 255, 255, 0.12)',
+};
+
 /**
  * @typedef {Object} EnvironmentEntry
  * @property {string} id
  * @property {string} label
  * @property {string} src Bundled GIF URL (Vite-resolved)
  * @property {HoloGlow} glow
+ * @property {boolean} [custom]
  */
 
 /** @type {EnvironmentEntry[]} */
@@ -55,9 +62,42 @@ export const environments = [
   },
 ];
 
+const customModules = import.meta.glob('../assets/environments/custom/*.{gif,webp,png,jpg,jpeg,jfif}', {
+  eager: true,
+  import: 'default',
+});
+
+/** @param {string} path */
+function labelFromPath(path) {
+  const file = path.split('/').pop() ?? path;
+  const base = file.replace(/\.[^.]+$/, '');
+  const cleaned = base.replace(/[_-]+/g, ' ').trim();
+  if (cleaned.length > 18) return `${cleaned.slice(0, 16)}…`;
+  return cleaned || 'Custom';
+}
+
+/** @type {EnvironmentEntry[]} */
+export const customEnvironments = Object.entries(customModules)
+  .map(([path, src]) => {
+    const file = path.split('/').pop() ?? path;
+    const id = `custom-${file.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+    return {
+      id,
+      label: labelFromPath(path),
+      src: /** @type {string} */ (src),
+      glow: customGlow,
+      custom: true,
+    };
+  })
+  .sort((a, b) => a.label.localeCompare(b.label));
+
 /** @param {string} id */
 export function getEnvironmentById(id) {
-  return environments.find((entry) => entry.id === id) ?? environments[0];
+  return (
+    environments.find((entry) => entry.id === id) ??
+    customEnvironments.find((entry) => entry.id === id) ??
+    environments[0]
+  );
 }
 
 /**

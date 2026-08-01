@@ -1,6 +1,6 @@
 # Lip sync
 
-VOX Avatar drives mouth shapes from **audio amplitude**, not phoneme recognition. The approach is adapted from the viseme cycling model used in [Persona](https://github.com/xikhar/persona) — simplified for a browser-only stack.
+AVATAR drives mouth shapes from **audio amplitude**, not phoneme recognition.
 
 ## How it works
 

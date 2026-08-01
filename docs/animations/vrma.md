@@ -10,14 +10,14 @@ Each catalog item includes:
 | :--- | :--- |
 | `id` | Internal key used by the dropdown and runtime |
 | `label` | Human-readable name |
-| `source` | `'procedural'` or `'vrma'` |
+| `source` | `'procedural'`, `'vrma'`, or `'sequence'` |
 | `vrmaUrl` | Bundled `.vrma` import when `source === 'vrma'` |
 | `playback` | `'loop'` or `'once'` |
 | `group` | Dropdown optgroup label |
 
 ## Bundled motion pack
 
-The Pixiv VRMA Motion Pack ships under `src/assets/avatars/VRMA/`:
+The seven free Pixiv / VRoid Project VRMA files ship under `src/assets/avatars/VRMA/`. They were released on [BOOTH](https://booth.pm/) in 2024 with VRoid Hub Photo Booth.
 
 | ID | Label |
 | :--- | :--- |
@@ -29,7 +29,11 @@ The Pixiv VRMA Motion Pack ships under `src/assets/avatars/VRMA/`:
 | `vrma-06` | Model Pose |
 | `vrma-07` | Squat |
 
-See `Readme_VRMA_MotionPack_EN.txt` for license terms. Include Pixiv credit in public releases that ship these files.
+**Licensing & credit:** see [Assets & credits](../assets-and-credits.md). Copyright remains with pixiv Inc. Public/commercial use requires:
+
+> Animation credits to pixiv Inc.'s VRoid Project
+
+Takedown / rights: **input@arpacorp.net**
 
 ## Adding a clip
 
@@ -38,6 +42,8 @@ See `Readme_VRMA_MotionPack_EN.txt` for license terms. Include Pixiv credit in p
 3. Append a catalog entry with `source: 'vrma'`.
 4. Reload the dev server — the dropdown picks up new entries automatically.
 
+Only add clips you have rights to redistribute.
+
 ## Playback pipeline
 
-`useVrmAnimation` uses `VRMAnimationLoaderPlugin` and `createVRMAnimationClip` from `@pixiv/three-vrm-animation`, matching the approach used by production VRM tooling rather than manual bone rotation.
+`useVrmAnimation` uses `VRMAnimationLoaderPlugin` and `createVRMAnimationClip` from `@pixiv/three-vrm-animation`.
