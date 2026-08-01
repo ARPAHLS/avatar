@@ -23,6 +23,6 @@ Electron `userData` is app-owned (not inside the git repo). Window bounds stay i
 
 ## Reset
 
-**Settings → Reset all settings** deletes the saved file (or clears local storage) and restores factory defaults, including the default camera framing (`Y = 0.59`).
+**Settings → Reset all settings** deletes the saved file (or clears local storage) and restores factory defaults, including the default camera framing (`X = -0.01`, `Y = 0.59`).
 
 Changes autosave shortly after you adjust anything.

@@ -29,15 +29,15 @@
   --chrome-line-glow: rgba(200, 185, 235, 0.45);
   --chrome-line-glow-soft: rgba(180, 155, 230, 0.22);
   --chrome-line-inset: rgba(255, 255, 255, 0.95);
-  --chrome-btn-color: rgba(255, 255, 255, 0.9);
-  --chrome-btn-bg: rgba(255, 255, 255, 0.2);
-  --chrome-btn-glow: rgba(180, 160, 220, 0.35);
-  --chrome-btn-inset: rgba(255, 255, 255, 0.5);
-  --chrome-btn-open-color: #c4b0e8;
-  --chrome-btn-open-bg: rgba(255, 255, 255, 0.3);
-  --chrome-menu-bg: rgba(255, 255, 255, 0.82);
-  --chrome-menu-border: rgba(255, 255, 255, 0.55);
-  --chrome-menu-color: #7d62ad;
+  --chrome-btn-color: #f5f7fb;
+  --chrome-btn-bg: rgba(255, 255, 255, 0.38);
+  --chrome-btn-glow: rgba(220, 225, 240, 0.45);
+  --chrome-btn-inset: rgba(255, 255, 255, 0.7);
+  --chrome-btn-open-color: #ffffff;
+  --chrome-btn-open-bg: rgba(255, 255, 255, 0.5);
+  --chrome-menu-bg: rgba(255, 255, 255, 0.88);
+  --chrome-menu-border: rgba(255, 255, 255, 0.65);
+  --chrome-menu-color: #6b528f;
 }
 
 /* Whitish chrome on dark backdrops (default). Explicit so data-chrome="dark" is stable. */
@@ -47,15 +47,16 @@
   --chrome-line-glow: rgba(200, 185, 235, 0.45);
   --chrome-line-glow-soft: rgba(180, 155, 230, 0.22);
   --chrome-line-inset: rgba(255, 255, 255, 0.95);
-  --chrome-btn-color: rgba(255, 255, 255, 0.9);
-  --chrome-btn-bg: rgba(255, 255, 255, 0.2);
-  --chrome-btn-glow: rgba(180, 160, 220, 0.35);
-  --chrome-btn-inset: rgba(255, 255, 255, 0.5);
-  --chrome-btn-open-color: #c4b0e8;
-  --chrome-btn-open-bg: rgba(255, 255, 255, 0.3);
-  --chrome-menu-bg: rgba(255, 255, 255, 0.82);
-  --chrome-menu-border: rgba(255, 255, 255, 0.55);
-  --chrome-menu-color: #7d62ad;
+  /* Near-white silver icons — avoid mid-grey that disappears on dark IDE themes */
+  --chrome-btn-color: #f5f7fb;
+  --chrome-btn-bg: rgba(255, 255, 255, 0.38);
+  --chrome-btn-glow: rgba(220, 225, 240, 0.45);
+  --chrome-btn-inset: rgba(255, 255, 255, 0.7);
+  --chrome-btn-open-color: #ffffff;
+  --chrome-btn-open-bg: rgba(255, 255, 255, 0.5);
+  --chrome-menu-bg: rgba(255, 255, 255, 0.88);
+  --chrome-menu-border: rgba(255, 255, 255, 0.65);
+  --chrome-menu-color: #6b528f;
 }
 
 /* Silver / greyscale chrome only when the backdrop behind the bar is clearly light. */
@@ -250,6 +251,18 @@
   -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
   transition: color 0.2s ease, background 0.2s ease;
+}
+
+.avatar-stage-shell[data-chrome='dark'] .avatar-glass-bar__scale,
+.avatar-stage-shell[data-chrome='dark'] .avatar-glass-bar__gear {
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.55));
+}
+
+.avatar-stage-shell[data-chrome='dark'] .avatar-glass-bar__scale svg,
+.avatar-stage-shell[data-chrome='dark'] .avatar-glass-bar__gear svg {
+  stroke: currentColor;
+  color: inherit;
+  opacity: 1;
 }
 
 .avatar-glass-bar__scale--open {

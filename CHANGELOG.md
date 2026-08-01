@@ -27,7 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Rebranded from VOX Avatar to **AVATAR**; README narrative focuses on Electron (browser = dev/contributors).
 - Gear glass drawers replace the old hover options bar.
 - Voice moved out of Appearance into its own gear item (microphone).
-- Default camera Y lowered (`0.76` → `0.59`) so avatar heads stay in frame.
+- Default camera framing tuned (`X = -0.01`, `Y = 0.59`) so avatars sit centered with heads in frame.
 - Animations menu expands fully (no scrollbar); back control is circular like other gear buttons.
 - Environment GIFs sourced only from `src/assets/environments/` (duplicates removed from `public/`).
 - Public OSS wording across README and docs (no “private preview” framing).
