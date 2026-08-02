@@ -1,7 +1,7 @@
 name: Voice / lip sync
 description: Audio capture, sources, live dot, mouth movement
 title: "[Voice]: "
-labels: ["bug", "area:voice", "area:lip-sync", "needs info"]
+labels: ["bug", "area:voice", "area:lip-sync"]
 body:
   - type: markdown
     attributes:
@@ -13,9 +13,9 @@ body:
     attributes:
       label: How do you run AVATAR?
       options:
-        - Windows installer / `npm run desktop`
-        - `npm run dev:desktop`
-        - Browser (`npm run dev`)
+        - Windows installer / npm run desktop
+        - npm run dev:desktop
+        - Browser (npm run dev)
     validations:
       required: true
 
@@ -28,7 +28,7 @@ body:
         - Pick app window
         - Microphone
         - Audio file
-        - Off
+        - "Off"
         - Tab / window (browser)
         - Not sure
     validations:
@@ -39,8 +39,8 @@ body:
     attributes:
       label: Live green dot on the glass bar
       options:
-        - On / pulsing (status active)
-        - Off
+        - "On / pulsing (status active)"
+        - "Off"
         - Flickers / intermittent
         - Not sure
     validations:
@@ -88,8 +88,8 @@ body:
     attributes:
       label: Steps to reproduce
       placeholder: |
-        1. Gear → Voice → …
-        2. Play audio from …
+        1. Gear -> Voice -> ...
+        2. Play audio from ...
         3. Observe live dot / mouth
     validations:
       required: true
@@ -98,7 +98,7 @@ body:
     id: permissions
     attributes:
       label: Permissions / status text (optional)
-      description: Any OS prompt, Voice panel status (`starting`, `error`, `awaiting-window`, …).
+      description: Any OS prompt, Voice panel status (starting, error, awaiting-window, ...).
 
   - type: checkboxes
     id: checklist
@@ -107,5 +107,5 @@ body:
       options:
         - label: I searched existing issues for a duplicate
           required: true
-        - label: I tried **Restart audio capture** (if available) before filing
+        - label: I tried Restart audio capture (if available) before filing
           required: false

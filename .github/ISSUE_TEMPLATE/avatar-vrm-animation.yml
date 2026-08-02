@@ -1,7 +1,7 @@
 name: Avatar / VRM / animation
 description: Models, skins, drop-in naming, VRMA clips, Default sequence
 title: "[Avatar]: "
-labels: ["bug", "stack:vrm", "needs info"]
+labels: ["bug", "stack:vrm"]
 body:
   - type: markdown
     attributes:
@@ -25,7 +25,7 @@ body:
       required: true
 
   - type: input
-    id: asset
+    id: asset_name
     attributes:
       label: Model or clip name
       description: e.g. avatar2.vrm, VRMA_03, Default sequence
@@ -38,9 +38,9 @@ body:
     attributes:
       label: How do you run AVATAR?
       options:
-        - Windows installer / `npm run desktop`
-        - `npm run dev:desktop`
-        - Browser (`npm run dev`)
+        - Windows installer / npm run desktop
+        - npm run dev:desktop
+        - Browser (npm run dev)
     validations:
       required: true
 

@@ -1,21 +1,21 @@
 name: Desktop window / overlay
 description: Overlay, windowed mode, snap pad, window scale, glass chrome
 title: "[Desktop]: "
-labels: ["bug", "area:window-desktop", "needs info"]
+labels: ["bug", "area:window-desktop"]
 body:
   - type: markdown
     attributes:
       value: |
-        Overlay (pinned) vs windowed, ×0.5 / ×1 / ×2 scale, and the 3×3 snap pad are Electron features. Chrome contrast samples desktop luma after move/focus.
+        Overlay (pinned) vs windowed, x0.5 / x1 / x2 scale, and the 3x3 snap pad are Electron features. Chrome contrast samples desktop luma after move/focus.
 
   - type: dropdown
     id: run_mode
     attributes:
       label: How do you run AVATAR?
       options:
-        - Windows installer / `npm run desktop`
-        - `npm run dev:desktop`
-        - Browser (`npm run dev`) — limited
+        - Windows installer / npm run desktop
+        - npm run dev:desktop
+        - Browser (npm run dev) - limited
     validations:
       required: true
 
@@ -26,7 +26,7 @@ body:
       options:
         - Overlay / always-on-top
         - Windowed mode
-        - Window scale (×0.5 / ×1 / ×2)
+        - Window scale (x0.5 / x1 / x2)
         - Snap pad
         - Drag / move / bounds
         - Glass bar contrast (too dark / too light)
@@ -52,9 +52,9 @@ body:
     attributes:
       label: Window scale
       options:
-        - ×0.5
-        - ×1
-        - ×2
+        - "x0.5"
+        - "x1"
+        - "x2"
         - Not sure / mixed
     validations:
       required: true
