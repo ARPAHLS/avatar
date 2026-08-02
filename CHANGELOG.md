@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - GitHub issue templates (bug, feature, question, docs, installer, voice/lip-sync, avatar/VRMA, desktop window) and pastel label set with CI sync (`.github/labels.yml`).
 
+### Changed
+
+- Expanded [CONTRIBUTING.md](CONTRIBUTING.md) with ripple-effect guidance (docs, changelog, catalogs, Electron vs browser, assets).
+
 ## [0.2.0] — 2026-08-01
 
 ### Added
