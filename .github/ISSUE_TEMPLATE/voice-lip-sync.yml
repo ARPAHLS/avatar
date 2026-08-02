@@ -51,7 +51,7 @@ body:
     attributes:
       label: Main symptom
       options:
-        - No capture / never becomes active
+        - "No capture / never becomes active"
         - Capture active but mouth does not move
         - Mouth moves wrongly / stuck open
         - Wrong window or device captured

@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Drop-in naming: `avatarN.vrm` / `avatarNB.vrm`. Motions: bundled VRMA pack — see [Avatars & skins](https://github.com/ARPAHLS/avatar/blob/main/docs/avatars-and-skins.md) and [VRMA](https://github.com/ARPAHLS/avatar/blob/main/docs/animations/vrma.md).
+        Drop-in naming: avatarN.vrm / avatarNB.vrm. Motions use the bundled VRMA pack. See docs/avatars-and-skins.md and docs/animations/vrma.md.
 
   - type: dropdown
     id: topic
