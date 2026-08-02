@@ -1,0 +1,90 @@
+name: Avatar / VRM / animation
+description: Models, skins, drop-in naming, VRMA clips, Default sequence
+title: "[Avatar]: "
+labels: ["bug", "stack:vrm", "needs info"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Drop-in naming: `avatarN.vrm` / `avatarNB.vrm`. Motions: bundled VRMA pack — see [Avatars & skins](https://github.com/ARPAHLS/avatar/blob/main/docs/avatars-and-skins.md) and [VRMA](https://github.com/ARPAHLS/avatar/blob/main/docs/animations/vrma.md).
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      options:
+        - Bundled avatar / skin display
+        - Custom drop-in VRM not appearing
+        - Skin picker / avatarNB naming
+        - Default animation sequence
+        - Individual VRMA clip
+        - Load / parse error
+        - Performance / hitching
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: asset
+    attributes:
+      label: Model or clip name
+      description: e.g. avatar2.vrm, VRMA_03, Default sequence
+      placeholder: avatar1.vrm
+    validations:
+      required: true
+
+  - type: dropdown
+    id: run_mode
+    attributes:
+      label: How do you run AVATAR?
+      options:
+        - Windows installer / `npm run desktop`
+        - `npm run dev:desktop`
+        - Browser (`npm run dev`)
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors (optional)
+      render: text
+
+  - type: checkboxes
+    id: licensing
+    attributes:
+      label: Custom assets
+      options:
+        - label: If this involves a custom VRM/VRMA, I can share license/source info if asked
+          required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues for a duplicate
+          required: true
+        - label: I restarted the app after adding/replacing files (for drop-ins)
+          required: false

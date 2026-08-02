@@ -10,6 +10,10 @@ Thanks for helping shape AVATAR.
 
 Details: [Installation](docs/getting-started/installation.md).
 
+## Issues
+
+Use a [GitHub issue template](https://github.com/ARPAHLS/avatar/issues/new/choose) when possible (bug, feature, docs, installer, voice, avatar/VRMA, desktop window, or question). Labels are defined in [`.github/labels.yml`](.github/labels.yml) and synced by CI.
+
 ## Before you open a PR
 
 1. Run `npm run lint` and `npm run build` inside `avatar-demo/`.
@@ -29,4 +33,4 @@ Do not commit copyrighted VRM/VRMA files without license documentation. See `doc
 
 ## Questions
 
-Open an issue in the repository, or contact the ARPA maintainers.
+Open an issue with the **Question / support** template, or contact **input@arpacorp.net**.

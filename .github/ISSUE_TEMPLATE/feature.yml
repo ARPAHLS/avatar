@@ -1,0 +1,73 @@
+name: Feature request
+description: Propose a new capability or meaningful improvement
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        AVATAR is **local-first** (Electron overlay + optional browser dev). Features that require a mandatory cloud avatar SaaS are usually out of scope unless framed as optional local tooling.
+
+  - type: input
+    id: summary
+    attributes:
+      label: One-line summary
+      placeholder: e.g. Map spoken keywords to VRMA clips while an agent talks
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What pain does this solve? Who hits it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How should it work in the UI and (if relevant) in config.yaml?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds, other tools, or simpler variants.
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Primary surface
+      options:
+        - Appearance (avatars / skins / environments)
+        - Voice / lip sync
+        - Camera & lighting
+        - Animations
+        - Glass bar / menus
+        - Window / overlay / snap / scale
+        - Settings / persistence
+        - Installer / packaging
+        - Agent / external triggers (roadmap)
+        - Other
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints you accept
+      options:
+        - label: Should stay usable offline / local-first
+          required: true
+        - label: Browser-only mode may remain limited vs Electron
+          required: false
+
+  - type: textarea
+    id: mock
+    attributes:
+      label: Mock / sketch / reference (optional)
+      description: Describe layout or link a redacted image.

@@ -1,0 +1,111 @@
+name: Voice / lip sync
+description: Audio capture, sources, live dot, mouth movement
+title: "[Voice]: "
+labels: ["bug", "area:voice", "area:lip-sync", "needs info"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Device-output loopback is **Electron-only**. Browser mode supports mic / tab / file. See [Audio sources](https://github.com/ARPAHLS/avatar/blob/main/docs/voice/audio-sources.md).
+
+  - type: dropdown
+    id: run_mode
+    attributes:
+      label: How do you run AVATAR?
+      options:
+        - Windows installer / `npm run desktop`
+        - `npm run dev:desktop`
+        - Browser (`npm run dev`)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: Audio source in use
+      options:
+        - Device output (auto)
+        - Pick app window
+        - Microphone
+        - Audio file
+        - Off
+        - Tab / window (browser)
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: live_dot
+    attributes:
+      label: Live green dot on the glass bar
+      options:
+        - On / pulsing (status active)
+        - Off
+        - Flickers / intermittent
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: symptom
+    attributes:
+      label: Main symptom
+      options:
+        - No capture / never becomes active
+        - Capture active but mouth does not move
+        - Mouth moves wrongly / stuck open
+        - Wrong window or device captured
+        - Permission / OS prompt problems
+        - Restart audio capture does not help
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: Windows 11
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Gear → Voice → …
+        2. Play audio from …
+        3. Observe live dot / mouth
+    validations:
+      required: true
+
+  - type: textarea
+    id: permissions
+    attributes:
+      label: Permissions / status text (optional)
+      description: Any OS prompt, Voice panel status (`starting`, `error`, `awaiting-window`, …).
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues for a duplicate
+          required: true
+        - label: I tried **Restart audio capture** (if available) before filing
+          required: false

@@ -1,0 +1,113 @@
+name: Bug report
+description: Something is broken or behaves incorrectly
+title: "[Bug]: "
+labels: ["bug", "needs info"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please **redact** personal paths and any sensitive audio/file names before pasting.
+
+  - type: dropdown
+    id: version
+    attributes:
+      label: AVATAR version
+      options:
+        - v0.2.0 (Windows installer)
+        - v0.2.0 (from source)
+        - From source (main / other commit)
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: run_mode
+    attributes:
+      label: How do you run AVATAR?
+      options:
+        - Windows installer (AVATAR.exe)
+        - From source (`npm run desktop`)
+        - From source (`npm run dev:desktop`)
+        - Browser only (`npm run dev`)
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      description: e.g. Windows 11 24H2
+      placeholder: Windows 11
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Primary area
+      options:
+        - Appearance (avatars / skins)
+        - Environments
+        - Voice / audio capture
+        - Lip sync
+        - Camera & lighting
+        - Animations (VRMA)
+        - Glass bar / menus
+        - Window / overlay / snap / scale
+        - Settings / config.yaml
+        - Installer / packaging
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+      description: Observed behavior — be specific.
+      placeholder: After switching to Device output, the live dot never turns green…
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Numbered, minimal steps.
+      placeholder: |
+        1. Launch AVATAR (installer)
+        2. Gear → Voice → Device output
+        3. Play system audio
+        4. …
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console / error text (optional)
+      description: Paste text only — no secrets.
+      render: text
+
+  - type: textarea
+    id: extras
+    attributes:
+      label: Screenshots / notes (optional)
+      description: Describe what a screenshot would show, or link a redacted image.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues for a duplicate
+          required: true
+        - label: I redacted personal paths and sensitive names
+          required: true

@@ -1,0 +1,51 @@
+name: Question / support
+description: Ask how something works — not a confirmed bug
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Prefer docs first: [Using the app](https://github.com/ARPAHLS/avatar/blob/main/docs/using-the-app.md) · [Installation](https://github.com/ARPAHLS/avatar/blob/main/docs/getting-started/installation.md).
+
+  - type: dropdown
+    id: run_mode
+    attributes:
+      label: How do you run AVATAR?
+      options:
+        - Windows installer
+        - From source (`npm run desktop` / `dev:desktop`)
+        - Browser (`npm run dev`)
+        - Not running yet — planning
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to do?
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you tried?
+      description: Docs pages, settings, sources, commands…
+    validations:
+      required: true
+
+  - type: textarea
+    id: blockers
+    attributes:
+      label: Where are you stuck?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I checked the docs linked above (or could not find an answer there)
+          required: true

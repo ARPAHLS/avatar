@@ -1,0 +1,96 @@
+name: Installer / packaging
+description: Windows setup.exe, NSIS, SmartScreen, shortcuts, uninstall
+title: "[Installer]: "
+labels: ["bug", "platform:windows-installer"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For the published build, use [v0.2.0](https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0). Unsigned installers may trigger SmartScreen — that alone is expected for now.
+
+  - type: dropdown
+    id: version
+    attributes:
+      label: Installer / app version
+      options:
+        - AVATAR-Setup-0.2.0.exe
+        - Built locally (`npm run dist:win`)
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: Windows 11 24H2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Where does it fail?
+      options:
+        - Download
+        - SmartScreen / Windows Defender prompt
+        - Installer wizard (EULA / path / finish)
+        - Shortcuts / Start menu
+        - First launch after install
+        - Uninstall
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: install_path
+    attributes:
+      label: Install path (if known)
+      placeholder: C:\Users\…\AppData\Local\Programs\AVATAR
+      description: Optional — helps with permission / shortcut issues.
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: smartscreen
+    attributes:
+      label: SmartScreen
+      options:
+        - label: I saw a SmartScreen / “Windows protected your PC” warning
+          required: false
+        - label: I chose More info → Run anyway (or equivalent) and it still failed
+          required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Extra details (optional)
+      description: Exact dialog text, antivirus name, etc.
+      render: text
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues for a duplicate
+          required: true

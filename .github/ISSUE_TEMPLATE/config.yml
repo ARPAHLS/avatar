@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: AVATAR documentation
+    url: https://github.com/ARPAHLS/avatar/tree/main/docs
+    about: User guide — install, using the app, voice, animations, settings
+  - name: Changelog & releases
+    url: https://github.com/ARPAHLS/avatar/blob/main/CHANGELOG.md
+    about: Version history and release notes
+  - name: ARPA Hellenic Logical Systems
+    url: https://arpacorp.net
+    about: Publisher site

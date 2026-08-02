@@ -1,0 +1,48 @@
+name: Documentation
+description: Fix or improve README, guides, screenshots, or credits
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: Doc location
+      description: Path or URL (e.g. docs/using-the-app.md, README Quick start)
+      placeholder: docs/getting-started/installation.md
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of change?
+      options:
+        - Typo / wording
+        - Outdated or wrong information
+        - Missing section
+        - Screenshot update / new screenshot
+        - Broken link
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What’s wrong or missing?
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested fix (optional)
+      description: Proposed text, structure, or screenshot description.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues for a duplicate
+          required: true

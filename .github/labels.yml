@@ -1,0 +1,122 @@
+# Source of truth for repo labels. Synced by .github/workflows/sync-labels.yml
+# Soft pastel palette (ARPA style). Do not add priority labels here —
+# use GitHub’s native priority fields instead.
+#
+# delete-other-labels is false so native / ad-hoc labels are preserved.
+
+# --- Type ---
+- name: bug
+  color: "F2A7A0"
+  description: Something is broken or behaves incorrectly
+
+- name: feature
+  color: "B8D4F0"
+  description: New feature or improvement request
+
+- name: question
+  color: "D4C4F0"
+  description: Question or support — not a confirmed bug
+
+- name: documentation
+  color: "F5E8A0"
+  description: Documentation, README, screenshots, or guides
+
+- name: regression
+  color: "E88890"
+  description: Used to work — broke after a change or release
+
+# --- Status / help ---
+- name: good first issue
+  color: "B5E0B8"
+  description: Good for newcomers — scoped and approachable
+
+- name: help wanted
+  color: "9DD4C8"
+  description: Extra attention or community help welcome
+
+- name: needs info
+  color: "D8D0E8"
+  description: Needs clearer steps, sample, or environment info
+
+- name: needs design
+  color: "F5C6D8"
+  description: Needs UX / visual decision before implementation
+
+- name: duplicate
+  color: "C8C4D0"
+  description: Already tracked in another issue
+
+- name: wontfix
+  color: "D4D0CC"
+  description: Will not be addressed (out of scope or intentional)
+
+# --- Area (product) ---
+- name: "area:appearance"
+  color: "E8E0F5"
+  description: Avatars, skins, drop-in VRM naming
+
+- name: "area:environments"
+  color: "D4F0E0"
+  description: Built-ins, Custom, color fade, none, chrome contrast
+
+- name: "area:voice"
+  color: "C8E8F0"
+  description: Audio sources, capture, permissions, restart
+
+- name: "area:lip-sync"
+  color: "B8E0D8"
+  description: Visemes, live green dot, mouth mapping
+
+- name: "area:camera-lighting"
+  color: "F5E0D0"
+  description: Framing, lights, avatar transform, resets
+
+- name: "area:animations"
+  color: "F5D5E8"
+  description: Default sequence, VRMA clips, cross-fade
+
+- name: "area:glass-bar"
+  color: "F5E8C8"
+  description: Glass bar, gear menus, drawers, dismiss
+
+- name: "area:window-desktop"
+  color: "D8D0F0"
+  description: Overlay, windowed, snap pad, window scale
+
+- name: "area:settings"
+  color: "E0D8D0"
+  description: config.yaml, persistence, reset all / section
+
+# --- Platform / stack ---
+- name: "platform:electron"
+  color: "C8D8E8"
+  description: Electron shell, IPC, loopback, luma sampling
+
+- name: "platform:browser"
+  color: "D0E8D0"
+  description: Vite / localhost browser mode
+
+- name: "platform:windows-installer"
+  color: "F0D0C8"
+  description: NSIS setup.exe, EULA, SmartScreen, shortcuts
+
+- name: "stack:vrm"
+  color: "D0E0F5"
+  description: VRM / VRMA loaders, three-vrm, expressions
+
+- name: assets-licensing
+  color: "F5F0C8"
+  description: VRoid / BOOTH / Pixiv credits and asset terms
+
+# --- Future / policy ---
+- name: "future:agent-bus"
+  color: "E0E8F5"
+  description: External agent / event bus hooks (roadmap)
+
+- name: "future:keyword-triggers"
+  color: "E8F0E0"
+  description: Keyword → animation mapping (roadmap)
+
+- name: security-privacy
+  color: "E8D8E0"
+  description: Capture permissions, local-only audio, privacy copy

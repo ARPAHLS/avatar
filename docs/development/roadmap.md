@@ -16,8 +16,9 @@
 - [ ] Keyword → animation mapping table
 - [ ] Agent/event bus hook for external triggers
 - [ ] Optional idle VRMA loop
+- [x] Issue templates + label sync CI
 - [ ] Code-signed Windows installer
-- [ ] CI and issue templates
+- [ ] Broader CI (lint / build)
 - [ ] Asset license audit and manifest
 - [ ] Security review for capture permissions copy
 - [ ] Performance pass on dual Canvas avatar pickers
