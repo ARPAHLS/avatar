@@ -9,10 +9,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - GitHub issue templates (bug, feature, question, docs, installer, voice/lip-sync, avatar/VRMA, desktop window) and pastel label set with CI sync (`.github/labels.yml`).
+- **VRoid Hub account connection**: bring your own OAuth app, sign in, and use a character you own or have hearted from Settings → VRoid Hub. Opt-in, off by default, Electron-only. See [VRoid Hub connection](docs/vroid-hub.md).
 
 ### Changed
 
 - Expanded [CONTRIBUTING.md](CONTRIBUTING.md) with ripple-effect guidance (docs, changelog, catalogs, Electron vs browser, assets).
+
+### Fixed
+
+- Settings drawer no longer clips content taller than the visible window with no way to reach it (a `--stage-bar-height` CSS custom property wasn't inheriting to the drawer, so it never detected its own overflow).
 
 ## [0.2.0] — 2026-08-01
 
