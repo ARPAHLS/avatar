@@ -364,7 +364,7 @@ export function AvatarStage() {
       <div
         className={`avatar-hover-area ${avatarReady ? 'avatar-hover-area--ready' : ''}`}
         ref={hoverAreaRef}
-        style={{ width: STAGE.width, height: STAGE.height }}
+        style={{ width: STAGE.width, height: STAGE.height, '--stage-bar-height': `${STAGE.barHeight}px` }}
       >
         <AvatarStageShell
           environmentSelection={selectedBg}
