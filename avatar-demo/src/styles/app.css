@@ -675,6 +675,21 @@
   background: rgba(255, 214, 224, 0.98);
 }
 
+.glass-drawer .field-input {
+  background: rgba(255, 255, 255, 0.62);
+  color: #3f3458;
+  border-color: rgba(161, 138, 214, 0.45);
+}
+
+.glass-drawer .field-input::placeholder {
+  color: rgba(63, 52, 88, 0.45);
+}
+
+.glass-drawer .panel-note--mono {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
 .glass-drawer .slider-row__label,
 .glass-drawer .slider-row__value {
   color: #4f4068;
@@ -1269,4 +1284,102 @@
   width: 100%;
   font-size: 12px;
   color: var(--text-panel);
+}
+
+.field-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: var(--surface);
+  color: var(--text-panel);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.vroid-hub-error {
+  color: var(--error);
+}
+
+.vroid-hub-character-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.vroid-hub-character-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  /* Grid items default to min-width: auto, so a long character name's
+     nowrap text can force this column past its 1fr share, pushing later
+     cards past the drawer's overflow-x: hidden edge with no way to reach
+     them. min-width: 0 lets it shrink to the track width so the name's
+     own text-overflow: ellipsis actually applies instead. */
+  min-width: 0;
+}
+
+.vroid-hub-character-card:hover {
+  background: rgba(214, 200, 247, 0.45);
+}
+
+.vroid-hub-character-card--active {
+  border-color: var(--accent);
+  background: rgba(161, 138, 214, 0.35);
+}
+
+.vroid-hub-character-card img,
+.vroid-hub-character-card__placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  object-fit: cover;
+  background: rgba(120, 100, 170, 0.18);
+}
+
+.vroid-hub-character-card__name {
+  font-size: 11px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.vroid-hub-license-gate {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(180, 160, 220, 0.35);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.vroid-hub-license-list {
+  list-style: none;
+  margin: 6px 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vroid-hub-license-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.vroid-hub-license-list li span:first-child {
+  color: var(--text-panel);
+  opacity: 0.75;
 }

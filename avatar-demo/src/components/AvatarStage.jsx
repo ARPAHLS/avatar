@@ -14,10 +14,12 @@ import { VrmAvatar } from './avatar/VrmAvatar';
 import { AvatarStageShell } from './avatar/AvatarStageShell';
 import { CameraController } from './ui/CameraController';
 import { GlassDrawer } from './ui/GlassDrawer';
+import { Divider } from './ui/PanelPrimitives';
 import { PalettePanel } from './panels/PalettePanel';
 import { VoicePanel } from './panels/VoicePanel';
 import { CameraPanel } from './panels/CameraPanel';
 import { DesktopPanel } from './panels/DesktopPanel';
+import { VroidHubPanel } from './panels/VroidHubPanel';
 
 const desktopMode = isDesktopMode();
 const SAVE_DEBOUNCE_MS = 400;
@@ -44,6 +46,11 @@ export function AvatarStage() {
   const [windowSourceId, setWindowSourceId] = useState(null);
   const [audioSourceId, setAudioSourceId] = useState(getDefaultAudioSourceId);
   const [settingsPath, setSettingsPath] = useState(null);
+  // Session-only: a VRoid Hub character is never persisted to config.yaml
+  // (kept in memory only, per VRoid Hub's licensing rules for linked-app
+  // usage), so neither of these belongs in userSettings.js's schema.
+  const [hubAvatar, setHubAvatar] = useState(null); // { id, name, blobUrl } | null
+  const [hubActive, setHubActive] = useState(false);
   const panelRef = useRef(null);
   const drawerRef = useRef(null);
   const commandMenuRef = useRef(null);
@@ -238,6 +245,7 @@ export function AvatarStage() {
   const handleAvatarChange = useCallback(
     (avatarId) => {
       setAvatarReady(false);
+      setHubActive(false);
       setSelectedAvatarId(avatarId);
       const skins = listSkinsForAvatar(avatarId);
       const nextSkin =
@@ -252,10 +260,43 @@ export function AvatarStage() {
 
   const handleSkinChange = useCallback((skinId) => {
     setAvatarReady(false);
+    setHubActive(false);
     setSelectedSkinId(skinId);
   }, []);
 
-  const modelPath = resolveAvatarPath(selectedAvatarId, selectedSkinId);
+  const handleSelectHubCharacter = useCallback(
+    (arrayBuffer, character) => {
+      if (hubAvatar?.blobUrl) URL.revokeObjectURL(hubAvatar.blobUrl);
+      const blobUrl = URL.createObjectURL(
+        new Blob([arrayBuffer], { type: 'model/gltf-binary' }),
+      );
+      setAvatarReady(false);
+      setHubAvatar({ id: character.id, name: character.name, blobUrl });
+      setHubActive(true);
+    },
+    [hubAvatar],
+  );
+
+  const handleReactivateHubCharacter = useCallback(() => {
+    setHubActive(true);
+  }, []);
+
+  const handleHubCleared = useCallback(() => {
+    setHubActive(false);
+    setHubAvatar((previous) => {
+      if (previous?.blobUrl) URL.revokeObjectURL(previous.blobUrl);
+      return null;
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (hubAvatar?.blobUrl) URL.revokeObjectURL(hubAvatar.blobUrl);
+    };
+  }, [hubAvatar]);
+
+  const modelPath =
+    hubActive && hubAvatar ? hubAvatar.blobUrl : resolveAvatarPath(selectedAvatarId, selectedSkinId);
 
   async function handleOverlayModeToggle() {
     const next = !overlayMode;
@@ -428,6 +469,15 @@ export function AvatarStage() {
               {desktopMode && (
                 <DesktopPanel overlayMode={overlayMode} onOverlayModeToggle={handleOverlayModeToggle} />
               )}
+              <Divider />
+              <VroidHubPanel
+                onCharacterSelected={handleSelectHubCharacter}
+                onReactivateHub={handleReactivateHubCharacter}
+                onHubCleared={handleHubCleared}
+                loadedCharacterId={hubAvatar?.id ?? null}
+                loadedCharacterActive={hubActive}
+              />
+              <Divider />
               <button
                 type="button"
                 className="panel-button panel-button--danger"
