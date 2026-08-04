@@ -183,6 +183,8 @@ Bundled motions are the **7 free VRMA files** from the **VRoid Project** on [BOO
 > Animation credits to pixiv Inc.'s VRoid Project  
 > （キャラクターアニメーション: ピクシブ株式会社 VRoidプロジェクト）
 
+Built-in environment GIFs (Stars / Code / Bloom) are from [GIPHY](https://giphy.com/) — credits in [Assets & credits](docs/assets-and-credits.md#built-in-environment-gifs).
+
 Full terms: **[docs/assets-and-credits.md](docs/assets-and-credits.md)** · Rights holders: **input@arpacorp.net**
 
 Beyond the bundled samples, you can bring your own characters and backdrops: **Settings → Directories** (local `.vrm` / image folders) and **VRoid Hub** (linked characters, session-only). See [Avatars](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [VRoid Hub](docs/vroid-hub.md) · [Using the app](docs/using-the-app.md).

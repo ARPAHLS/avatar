@@ -21,6 +21,8 @@ Open Gear → **Appearance** → **Environments**.
 | — | None | — | No GIF / glow — desktop shows through in overlay |
 | — | Color fade | — | Soft radial glow from a hex color |
 
+Credits for the three GIFs (GIPHY): see [Assets & credits](assets-and-credits.md#built-in-environment-gifs).
+
 <p align="center">
   <img src="screenshots/35-env-stars.png" alt="Stars" height="200" />
   <img src="screenshots/36-env-code.png" alt="Code" height="200" />

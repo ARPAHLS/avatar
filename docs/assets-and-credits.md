@@ -1,6 +1,6 @@
 # Assets & credits
 
-This document covers third-party character and animation assets shipped with AVATAR. **AVATAR** (this software) is MIT-licensed; **bundled media retain their original rights holders’ terms**.
+This document covers third-party character, animation, and environment assets shipped with AVATAR. **AVATAR** (this software) is MIT-licensed; **bundled media retain their original rights holders’ terms**.
 
 ## Contact for rights / takedown
 
@@ -91,6 +91,20 @@ Project contact for this repository’s use of the pack: **input@arpacorp.net**
 
 ---
 
+## Built-in environment GIFs
+
+Path: `avatar-demo/src/assets/environments/`. Sourced from [GIPHY](https://giphy.com/) as free / publicly shared backgrounds for sample stage backdrops.
+
+| File | Label | Source / credit |
+| :--- | :--- | :--- |
+| `stars.gif` | Stars | [Stars Background](https://giphy.com/gifs/stars-U3qYN8S0j3bpK) — watermark **Lemat Works**; treated as copyright-free on GIPHY |
+| `code.gif` | Code | [Background Code](https://giphy.com/gifs/justin-hSLDN6zfh2Yy4ekMWi) by **Justin** (@justin) |
+| `bloom.gif` | Bloom | From GIPHY (copyright-free); original page link not recovered |
+
+Custom environment folders (Settings → Directories or `custom/`) are the user’s responsibility — see [Environments](environments.md).
+
+---
+
 ## Runtime libraries (not BOOTH assets)
 
 | Package | Role |
@@ -104,6 +118,6 @@ These are open-source libraries under their own licenses (see each package).
 
 ## Disclaimer
 
-AVATAR is an independent open-source ARPA project. It is **not** affiliated with, endorsed by, or sponsored by pixiv Inc., VRoid Project, or BOOTH, except that it uses publicly distributed free assets and open-source libraries according to their stated terms.
+AVATAR is an independent open-source ARPA project. It is **not** affiliated with, endorsed by, or sponsored by pixiv Inc., VRoid Project, BOOTH, or GIPHY, except that it uses publicly distributed free assets and open-source libraries according to their stated terms.
 
-Sample assets may be replaced at any time. Do not treat bundled characters or motions as permanent product branding.
+Sample assets may be replaced at any time. Do not treat bundled characters, motions, or environment GIFs as permanent product branding.
