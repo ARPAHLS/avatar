@@ -52,6 +52,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 
 - **Electron desktop overlay** — pin, snap, window scale, device loopback ([user guide](docs/using-the-app.md) · [settings](docs/user-settings.md))
 - **VRM avatars & skins** — drop-in `avatarN.vrm` / `avatarNB.vrm` ([avatars](docs/avatars-and-skins.md))
+- **VRoid Hub (optional)** — bring-your-own OAuth app; connect in Settings, pick characters in Appearance ([VRoid Hub](docs/vroid-hub.md))
 - **Environments** — built-ins, local Custom folder, color fade, or none ([environments](docs/environments.md))
 - **Persistent settings** — `config.yaml` across launches ([user settings](docs/user-settings.md))
 - **VRMA animations** — Default greeting + loop, plus clips ([VRMA](docs/animations/vrma.md))

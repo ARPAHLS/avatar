@@ -38,7 +38,14 @@ contextBridge.exposeInMainWorld('voxVroidHub', {
   connect: () => ipcRenderer.invoke('vroid:connect'),
   disconnect: () => ipcRenderer.invoke('vroid:disconnect'),
   listCharacters: () => ipcRenderer.invoke('vroid:list-characters'),
-  selectCharacter: (characterId) => ipcRenderer.invoke('vroid:select-character', characterId),
+  selectCharacter: async (characterId) => {
+    const result = await ipcRenderer.invoke('vroid:select-character', characterId);
+    if (result && typeof result === 'object' && 'ok' in result) {
+      if (result.ok) return result.data;
+      throw new Error(typeof result.error === 'string' ? result.error : 'Failed to load VRoid model.');
+    }
+    return result;
+  },
   subscribe: (listener) => {
     const handler = (_event, status) => listener(status);
     ipcRenderer.on('vroid:status-updated', handler);

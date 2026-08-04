@@ -593,15 +593,23 @@ ipcMain.handle('vroid:list-characters', async (event) => {
 ipcMain.handle('vroid:select-character', async (event, characterId) => {
   assertTrustedVroidSender(event);
   if (!vroidHubAuth?.isConnected()) {
-    throw new Error('Connect your VRoid Hub account first.');
+    return { ok: false, error: 'Connect your VRoid Hub account first.' };
   }
-  const token = await vroidHubAuth.getValidAccessToken();
-  // No re-fetch of the character list to check characterId is in it: that's
-  // not a real gate anyway, since /api/download_licenses below is VRoid
-  // Hub's own authority on whether this id is licensable, and the renderer
-  // already has this id from the list it just rendered.
-  const buffer = await vroidHubClient.loadCharacterModel(token, characterId);
-  return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+  try {
+    const token = await vroidHubAuth.getValidAccessToken();
+    // No re-fetch of the character list to check characterId is in it: that's
+    // not a real gate anyway, since /api/download_licenses below is VRoid
+    // Hub's own authority on whether this id is licensable, and the renderer
+    // already has this id from the list it just rendered.
+    const buffer = await vroidHubClient.loadCharacterModel(token, characterId);
+    return {
+      ok: true,
+      data: buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { ok: false, error: message };
+  }
 });
 
 app.whenReady().then(async () => {

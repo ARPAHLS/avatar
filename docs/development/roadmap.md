@@ -17,8 +17,10 @@
 - [ ] Agent/event bus hook for external triggers
 - [ ] Optional idle VRMA loop
 - [x] Issue templates + label sync CI
+- [x] VRoid Hub bring-your-own OAuth + Appearance picker (session-only models)
 - [ ] Code-signed Windows installer
 - [ ] Broader CI (lint / build)
 - [ ] Asset license audit and manifest
 - [ ] Security review for capture permissions copy
 - [ ] Performance pass on dual Canvas avatar pickers
+- [ ] Harden VRoid Hub VRM download for restrictive networks / CDN paths

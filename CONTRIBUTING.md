@@ -62,6 +62,7 @@ AVATAR is small but cross-cutting. When you change behavior, ask what else must 
 | Camera, lighting, transform | [Camera & lighting](docs/camera-and-lighting.md), reset-section behavior |
 | Animations / Default sequence | [VRMA](docs/animations/vrma.md), `config/animations.js`, manual testing notes if the Default loop changes |
 | Avatars / skins / drop-in naming | [Avatars & skins](docs/avatars-and-skins.md), README “Swap avatars” if user-facing |
+| VRoid Hub OAuth / Hub characters | [VRoid Hub](docs/vroid-hub.md), Appearance + Settings sections in [Using the app](docs/using-the-app.md), Electron `vroid-*.cjs` + preload `voxVroidHub`, session-only storage notes in [User settings](docs/user-settings.md) |
 | Settings schema or defaults | [User settings](docs/user-settings.md), `config/userSettings.js`, Electron `settingsStore.cjs` **and** browser `userSettingsStore` if both apply |
 | Window / overlay / snap / scale | Using-the-app Settings section, Electron `main.cjs` IPC + preload API |
 | Installer / packaging | [Installation](docs/getting-started/installation.md), [releases](docs/releases/README.md) if user-facing, `avatar-demo/build/` assets, `package.json` `build` field |

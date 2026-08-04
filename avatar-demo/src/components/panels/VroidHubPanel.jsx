@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { RefreshCw, Settings } from 'lucide-react';
 import { getVroidHubApi } from '../../lib/desktopMode';
 
 function errorMessage(err) {
@@ -79,11 +80,16 @@ function licenseRows(license) {
 }
 
 export function VroidHubPanel({
+  mode = 'settings',
   onCharacterSelected,
   onReactivateHub,
   onHubCleared,
   loadedCharacterId,
   loadedCharacterActive,
+  onOpenSettings,
+  hubSelectionState,
+  onHubSelectionStart,
+  onHubSelectionError,
 }) {
   const vroidApi = getVroidHubApi();
   const [status, setStatus] = useState(null);
@@ -93,10 +99,12 @@ export function VroidHubPanel({
   const [saving, setSaving] = useState(false);
   const [characters, setCharacters] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [notice, setNotice] = useState(null);
   const [redirectCopied, setRedirectCopied] = useState(false);
   const [pendingHeartedCharacter, setPendingHeartedCharacter] = useState(null);
+  const [refreshSuccess, setRefreshSuccess] = useState(false);
+  const selectingCharacterId = hubSelectionState?.loading ? hubSelectionState.characterId : null;
+  const error = hubSelectionState?.error ?? null;
+  const notice = hubSelectionState?.notice ?? null;
 
   useEffect(() => {
     if (!vroidApi) return undefined;
@@ -111,15 +119,17 @@ export function VroidHubPanel({
   const refreshCharacters = useCallback(async () => {
     if (!vroidApi) return;
     setLoading(true);
-    setError(null);
+    onHubSelectionError?.(null, null);
     try {
       setCharacters(await vroidApi.listCharacters());
+      setRefreshSuccess(true);
+      window.setTimeout(() => setRefreshSuccess(false), 1200);
     } catch (err) {
-      setError(errorMessage(err));
+      onHubSelectionError?.(null, errorMessage(err));
     } finally {
       setLoading(false);
     }
-  }, [vroidApi]);
+  }, [onHubSelectionError, vroidApi]);
 
   useEffect(() => {
     if (status?.connected) void refreshCharacters();
@@ -135,23 +145,22 @@ export function VroidHubPanel({
     const clientSecret = clientSecretInput.trim();
     if (!clientId || !clientSecret) return;
     setSaving(true);
-    setError(null);
+    onHubSelectionError?.(null, null);
     try {
       setStatus(await vroidApi.setCredentials(clientId, clientSecret));
       setCredentials(await vroidApi.getCredentials());
       setClientSecretInput('');
       setCharacters(null);
       onHubCleared();
-      setNotice('VRoid Hub app credentials saved.');
     } catch (err) {
-      setError(errorMessage(err));
+      onHubSelectionError?.(null, errorMessage(err));
     } finally {
       setSaving(false);
     }
   }
 
   async function clearCredentials() {
-    setError(null);
+    onHubSelectionError?.(null, null);
     try {
       setStatus(await vroidApi.clearCredentials());
       setCredentials({ clientId: null, hasClientSecret: false });
@@ -160,7 +169,7 @@ export function VroidHubPanel({
       setCharacters(null);
       onHubCleared();
     } catch (err) {
-      setError(errorMessage(err));
+      onHubSelectionError?.(null, errorMessage(err));
     }
   }
 
@@ -171,42 +180,44 @@ export function VroidHubPanel({
       setRedirectCopied(true);
       setTimeout(() => setRedirectCopied(false), 1500);
     } catch (err) {
-      setError(errorMessage(err));
+      onHubSelectionError?.(null, errorMessage(err));
     }
   }
 
   async function connect() {
-    setError(null);
+    onHubSelectionError?.(null, null);
     try {
       setStatus(await vroidApi.connect());
-      setNotice('Continue signing in to VRoid Hub in your browser.');
+      setRefreshSuccess(false);
     } catch (err) {
-      setError(errorMessage(err));
+      onHubSelectionError?.(null, errorMessage(err));
     }
   }
 
   async function disconnect() {
-    setError(null);
+    onHubSelectionError?.(null, null);
     try {
       setStatus(await vroidApi.disconnect());
       setCharacters(null);
       onHubCleared();
     } catch (err) {
-      setError(errorMessage(err));
+      onHubSelectionError?.(null, errorMessage(err));
     }
   }
 
   async function downloadCharacter(character) {
+    onHubSelectionStart?.(character);
     try {
       const bytes = await vroidApi.selectCharacter(character.id);
       onCharacterSelected(bytes, character);
     } catch (err) {
-      setError(errorMessage(err));
+      onHubSelectionError?.(character, errorMessage(err));
     }
   }
 
   function selectCharacter(character) {
-    setError(null);
+    if (selectingCharacterId) return;
+    onHubSelectionError?.(null, null);
     // Already downloaded and just not the active model (e.g. the user
     // switched to a built-in avatar and came back) — swap back to it
     // in-memory instead of re-downloading through VRoid Hub.
@@ -230,17 +241,92 @@ export function VroidHubPanel({
     if (character) void downloadCharacter(character);
   }
 
+  const isSettingsMode = mode === 'settings';
+  const isAppearanceMode = mode === 'appearance';
+
+  function renderCharacterGrid() {
+    return (
+      <>
+        {loading && <p className="panel-note panel-note--compact">Loading your characters…</p>}
+        {!loading && characters?.length === 0 && (
+          <p className="panel-note panel-note--compact">
+            No usable characters found. Own a character on VRoid Hub, or heart one already marked
+            available to other users.
+          </p>
+        )}
+        {characters && characters.length > 0 && (
+          <div className="vroid-hub-character-grid">
+            {characters.map((character) => (
+              <button
+                type="button"
+                key={character.id}
+                className={`vroid-hub-character-card ${
+                  loadedCharacterActive && loadedCharacterId === character.id
+                    ? 'vroid-hub-character-card--active'
+                    : ''
+                }`}
+                disabled={selectingCharacterId === character.id}
+                onClick={() => selectCharacter(character)}
+                title={character.name}
+              >
+                {character.portrait_url ? (
+                  <img src={character.portrait_url} alt={character.name} />
+                ) : (
+                  <span className="vroid-hub-character-card__placeholder" aria-hidden="true" />
+                )}
+                <span className="vroid-hub-character-card__name">{character.name}</span>
+                {selectingCharacterId === character.id && (
+                  <span className="vroid-hub-character-card__status">Loading…</span>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+        <div className="panel-actions vroid-actions-row">
+          <button
+            type="button"
+            className={`panel-button vroid-refresh-button ${
+              refreshSuccess ? 'vroid-refresh-button--success' : ''
+            }`}
+            disabled={loading}
+            onClick={() => void refreshCharacters()}
+            title="Refresh character list"
+          >
+            <RefreshCw
+              size={16}
+              className={loading ? 'vroid-refresh-icon vroid-refresh-icon--spin' : 'vroid-refresh-icon'}
+            />
+          </button>
+          <button
+            type="button"
+            className="panel-button panel-button--danger"
+            onClick={() => void disconnect()}
+          >
+            Disconnect
+          </button>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
-      <p className="panel-note panel-note--compact">
-        Advanced: use a character from your own VRoid Hub account without downloading it
-        yourself. Off by default — bring your own registered OAuth app.
-      </p>
+      {isSettingsMode && (
+        <p className="panel-note panel-note--compact">
+          Advanced: connect your own VRoid Hub OAuth app. After connecting, characters appear
+          under Appearance → Avatars.
+        </p>
+      )}
+      {isAppearanceMode && (
+        <p className="panel-note panel-note--compact">
+          VRoid Hub avatars appear here once connected in Settings.
+        </p>
+      )}
 
       {error && <p className="panel-note vroid-hub-error">{error}</p>}
       {notice && <p className="panel-note panel-note--compact">{notice}</p>}
 
-      {!status?.configured && (
+      {isSettingsMode && !status?.configured && (
         <>
           <p className="panel-hint">
             Register an application at <code>hub.vroid.com/oauth/applications</code>, then set
@@ -295,10 +381,42 @@ export function VroidHubPanel({
         </>
       )}
 
-      {status?.configured && !status.connected && (
+      {isSettingsMode && status?.configured && !status.connected && (
         <div className="panel-actions">
           <button type="button" className="panel-button" onClick={() => void connect()}>
             Connect VRoid Hub account
+          </button>
+        </div>
+      )}
+
+      {isAppearanceMode && !status?.configured && (
+        <div className="panel-actions">
+          <button
+            type="button"
+            className="panel-button vroid-settings-link"
+            onClick={() => {
+              onOpenSettings?.();
+            }}
+          >
+            <Settings size={15} />
+            Open Settings to connect
+          </button>
+        </div>
+      )}
+
+      {isAppearanceMode && status?.configured && !status.connected && (
+        <div className="panel-actions">
+          <button type="button" className="panel-button" onClick={() => void connect()}>
+            Connect VRoid Hub account
+          </button>
+          <button
+            type="button"
+            className="panel-button"
+            onClick={() => {
+              onOpenSettings?.();
+            }}
+          >
+            Open Settings
           </button>
         </div>
       )}
@@ -311,26 +429,38 @@ export function VroidHubPanel({
             Review its conditions of use before selecting it:
           </p>
           {pendingHeartedCharacter.license ? (
-            <ul className="vroid-hub-license-list">
+            <p className="panel-note panel-note--compact">
+              These terms come from the model author and define what you can do with this avatar.
+            </p>
+          ) : null}
+          {pendingHeartedCharacter.license ? (
+            <div className="vroid-hub-license-list" aria-label="VRoid Hub usage terms">
+              <div className="vroid-hub-license-list__head">Terms from the model author</div>
               {licenseRows(pendingHeartedCharacter.license).map((row) => (
-                <li key={row.label}>
-                  <span>{row.label}</span>
-                  <span>{row.value}</span>
-                </li>
+                <div key={row.label} className="vroid-hub-license-item">
+                  <div className="vroid-hub-license-list__label">{row.label}</div>
+                  <div className="vroid-hub-license-list__value">{row.value}</div>
+                </div>
               ))}
-            </ul>
+            </div>
           ) : (
             <p className="panel-note panel-note--compact">
               This model's author hasn't set explicit usage conditions in VRoid Hub.
             </p>
           )}
           <div className="panel-actions">
-            <button type="button" className="panel-button" onClick={confirmHeartedCharacter}>
-              Use this model
+            <button
+              type="button"
+              className="panel-button"
+              disabled={Boolean(selectingCharacterId)}
+              onClick={confirmHeartedCharacter}
+            >
+              {selectingCharacterId ? 'Loading model…' : 'Use this model'}
             </button>
             <button
               type="button"
               className="panel-button"
+              disabled={Boolean(selectingCharacterId)}
               onClick={() => setPendingHeartedCharacter(null)}
             >
               Cancel
@@ -339,48 +469,14 @@ export function VroidHubPanel({
         </div>
       )}
 
-      {status?.connected && (
+      {status?.connected && isAppearanceMode && renderCharacterGrid()}
+
+      {isSettingsMode && status?.connected && (
         <>
-          {loading && <p className="panel-note panel-note--compact">Loading your characters…</p>}
-          {!loading && characters?.length === 0 && (
-            <p className="panel-note panel-note--compact">
-              No usable characters found. Own a character on VRoid Hub, or heart one that's
-              already marked available to other users.
-            </p>
-          )}
-          {characters && characters.length > 0 && (
-            <div className="vroid-hub-character-grid">
-              {characters.map((character) => (
-                <button
-                  type="button"
-                  key={character.id}
-                  className={`vroid-hub-character-card ${
-                    loadedCharacterActive && loadedCharacterId === character.id
-                      ? 'vroid-hub-character-card--active'
-                      : ''
-                  }`}
-                  onClick={() => selectCharacter(character)}
-                  title={character.name}
-                >
-                  {character.portrait_url ? (
-                    <img src={character.portrait_url} alt={character.name} />
-                  ) : (
-                    <span className="vroid-hub-character-card__placeholder" aria-hidden="true" />
-                  )}
-                  <span className="vroid-hub-character-card__name">{character.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
+          <p className="panel-note panel-note--compact">
+            Connected. Your VRoid Hub character list is now available in Appearance → Avatars.
+          </p>
           <div className="panel-actions">
-            <button
-              type="button"
-              className="panel-button"
-              disabled={loading}
-              onClick={() => void refreshCharacters()}
-            >
-              Refresh
-            </button>
             <button type="button" className="panel-button panel-button--danger" onClick={() => void disconnect()}>
               Disconnect
             </button>
@@ -388,8 +484,12 @@ export function VroidHubPanel({
         </>
       )}
 
-      {status?.configured && (
-        <button type="button" className="panel-button panel-button--danger" onClick={() => void clearCredentials()}>
+      {isSettingsMode && status?.configured && (
+        <button
+          type="button"
+          className="panel-button panel-button--danger"
+          onClick={() => void clearCredentials()}
+        >
           Remove app credentials
         </button>
       )}

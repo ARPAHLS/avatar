@@ -26,7 +26,7 @@ export function MiniAvatar({ modelPath, selected, onClick }) {
             modelPath={modelPath}
             animationId="idle"
             avatarPosition={[0, -0.54, 0]}
-            avatarRotation={[0, Math.PI, 0]}
+            avatarRotation={[0, 0, 0]}
           />
         </Canvas>
       </div>

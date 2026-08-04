@@ -1328,6 +1328,11 @@
   min-width: 0;
 }
 
+.vroid-hub-character-card:disabled {
+  opacity: 0.82;
+  cursor: progress;
+}
+
 .vroid-hub-character-card:hover {
   background: rgba(214, 200, 247, 0.45);
 }
@@ -1355,6 +1360,75 @@
   width: 100%;
 }
 
+.vroid-hub-character-card__status {
+  font-size: 10px;
+  color: #6b5f86;
+}
+
+.vroid-hub-inline {
+  margin-top: 8px;
+}
+
+.vroid-refresh-button {
+  width: 36px;
+  height: 100%;
+  min-height: 34px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #8e6de7;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.vroid-refresh-button:hover {
+  background: rgba(214, 200, 247, 0.42);
+}
+
+.vroid-refresh-button--success {
+  color: #2e9f5f;
+  border-color: rgba(67, 178, 114, 0.5);
+  background: rgba(219, 249, 229, 0.7);
+}
+
+.vroid-refresh-icon {
+  transition: transform 200ms ease;
+}
+
+.vroid-refresh-icon--spin {
+  animation: vroid-refresh-spin 700ms linear infinite;
+}
+
+.vroid-settings-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.vroid-actions-row {
+  align-items: stretch;
+}
+
+.vroid-actions-row .panel-button {
+  min-height: 34px;
+}
+
+.vroid-actions-row .panel-button--danger {
+  width: auto;
+  margin-top: 0;
+  flex: 1;
+}
+
+@keyframes vroid-refresh-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .vroid-hub-license-gate {
   margin: 10px 0;
   padding: 10px;
@@ -1364,22 +1438,40 @@
 }
 
 .vroid-hub-license-list {
-  list-style: none;
   margin: 6px 0 8px;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-}
-
-.vroid-hub-license-list li {
-  display: flex;
-  justify-content: space-between;
   gap: 8px;
-  font-size: 12px;
+  border-top: 1px solid rgba(140, 120, 180, 0.28);
+  padding-top: 8px;
 }
 
-.vroid-hub-license-list li span:first-child {
-  color: var(--text-panel);
-  opacity: 0.75;
+.vroid-hub-license-list__head {
+  font-size: 11px;
+  color: #5f5280;
+  opacity: 0.9;
+}
+
+.vroid-hub-license-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(140, 120, 180, 0.2);
+}
+
+.vroid-hub-license-list__label {
+  color: #4e416a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.vroid-hub-license-list__value {
+  color: #3f3557;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.92;
 }

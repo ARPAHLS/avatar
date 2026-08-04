@@ -22,6 +22,14 @@ We will respond and remove or replace the asset promptly.
 
 Users who ship their own builds **must** use only assets they have rights to, and must obey each creator’s BOOTH / VRoid Hub terms of use (credit, redistribution, commercial use, streaming, etc.). Policies vary per item — always check the product page.
 
+### VRoid Hub linked characters (optional)
+
+When a user connects their own Hub OAuth app, AVATAR may load characters through
+VRoid Hub’s licensed download flow. Those bytes stay **in memory for the
+session only** and are not redistributed as repo assets. Hearted models show
+their Hub conditions of use in-app before selection. See
+[VRoid Hub connection](vroid-hub.md).
+
 Relevant links:
 
 - [VRoid](https://vroid.com/)

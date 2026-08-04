@@ -1,5 +1,8 @@
 "use strict";
 
+const http = require("node:http");
+const https = require("node:https");
+
 const DEFAULT_BASE_URL = "https://hub.vroid.com";
 // VRoid Hub's own API version header, unrelated to this app's version.
 const API_VERSION = "11";
@@ -14,6 +17,159 @@ const API_REQUEST_TIMEOUT_MS = 15 * 1000;
 // URL, not hub.vroid.com's own API, so it gets a longer allowance than the
 // JSON calls.
 const DOWNLOAD_TIMEOUT_MS = 120 * 1000;
+const TRANSIENT_RETRY_DELAYS_MS = [500, 1500, 3500];
+
+async function readApiErrorDetail(response) {
+  try {
+    const body = await response.json();
+    const detail =
+      body?.error_description ??
+      body?.error?.message ??
+      body?.errors?.[0]?.detail ??
+      body?.message;
+    if (typeof detail === "string" && detail.trim() !== "") return detail.trim();
+  } catch {
+    // Best effort; keep fallback status-only message.
+  }
+  return null;
+}
+
+function isTransientNetworkError(error) {
+  const code = error?.cause?.code ?? error?.code;
+  if (code === "ECONNRESET" || code === "ETIMEDOUT" || code === "EAI_AGAIN") return true;
+  const message = typeof error?.message === "string" ? error.message.toLowerCase() : "";
+  return (
+    message.includes("fetch failed") ||
+    message.includes("terminated") ||
+    message.includes("networkerror")
+  );
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function logVroid(message, extra = null) {
+  if (extra == null) {
+    console.log(`[vroid] ${message}`);
+    return;
+  }
+  console.log(`[vroid] ${message}`, extra);
+}
+
+async function withTransientRetries(task, label) {
+  let lastError = null;
+  for (let attempt = 0; attempt <= TRANSIENT_RETRY_DELAYS_MS.length; attempt += 1) {
+    try {
+      return await task();
+    } catch (error) {
+      lastError = error;
+      const shouldRetry = isTransientNetworkError(error) && attempt < TRANSIENT_RETRY_DELAYS_MS.length;
+      if (!shouldRetry) break;
+      await sleep(TRANSIENT_RETRY_DELAYS_MS[attempt]);
+    }
+  }
+  if (isTransientNetworkError(lastError)) {
+    throw new Error(
+      `${label} failed due to a temporary network interruption. Please retry in a moment.`,
+    );
+  }
+  throw lastError;
+}
+
+async function fetchModelBytesFromLicensedUrl(fetchImpl, downloadUrl) {
+  try {
+    const fileResponse = await withTransientRetries(
+      () =>
+        fetchImpl(downloadUrl, {
+          signal: AbortSignal.timeout(DOWNLOAD_TIMEOUT_MS),
+        }),
+      "VRM file download",
+    );
+    if (!fileResponse.ok) {
+      throw new Error(`Downloading the VRM file failed (${fileResponse.status}).`);
+    }
+    return Buffer.from(await fileResponse.arrayBuffer());
+  } catch (error) {
+    if (!isTransientNetworkError(error)) throw error;
+    logVroid("Fetch download failed, trying Node HTTPS fallback.", error?.message ?? error);
+    return downloadViaNodeRequest(downloadUrl);
+  }
+}
+
+async function downloadViaNodeRequest(url, redirectsRemaining = 5) {
+  const target = new URL(url);
+  const transport = target.protocol === "http:" ? http : https;
+  return new Promise((resolve, reject) => {
+    const request = transport.get(
+      target,
+      {
+        headers: {
+          "user-agent": "AVATAR/0.2.0",
+        },
+        timeout: DOWNLOAD_TIMEOUT_MS,
+      },
+      (response) => {
+        const status = response.statusCode ?? 0;
+        if (status >= 300 && status < 400 && response.headers.location) {
+          response.resume();
+          if (redirectsRemaining <= 0) {
+            reject(new Error("VRM download redirected too many times."));
+            return;
+          }
+          const nextUrl = new URL(response.headers.location, target).toString();
+          resolve(downloadViaNodeRequest(nextUrl, redirectsRemaining - 1));
+          return;
+        }
+        if (status < 200 || status >= 300) {
+          response.resume();
+          reject(new Error(`VRM fallback download failed (${status}).`));
+          return;
+        }
+        const chunks = [];
+        response.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+        response.on("end", () => resolve(Buffer.concat(chunks)));
+        response.on("error", reject);
+      },
+    );
+    request.on("timeout", () => {
+      request.destroy(new Error("VRM fallback download timed out."));
+    });
+    request.on("error", reject);
+  });
+}
+
+function describeError(error) {
+  const code = error?.cause?.code ?? error?.code;
+  const message = error instanceof Error ? error.message : String(error);
+  return code ? `${message} [${code}]` : message;
+}
+
+async function createDownloadLicense(baseUrl, token, characterId, fetchImpl) {
+  const licenseResponse = await fetchImpl(
+    new URL("/api/download_licenses", baseUrl).toString(),
+    {
+      method: "POST",
+      headers: authorizedHeaders(token, { "content-type": "application/json" }),
+      body: JSON.stringify({ character_model_id: characterId }),
+      signal: AbortSignal.timeout(API_REQUEST_TIMEOUT_MS),
+    },
+  );
+  if (!licenseResponse.ok) {
+    const detail = await readApiErrorDetail(licenseResponse);
+    throw new Error(
+      detail
+        ? `VRoid Hub declined this model (${licenseResponse.status}): ${detail}`
+        : `VRoid Hub declined to license this model for download (${licenseResponse.status}).`,
+    );
+  }
+  const license = await licenseResponse.json();
+  const licenseId = license?.data?.id;
+  if (typeof licenseId !== "string" || licenseId === "") {
+    throw new Error("VRoid Hub did not return a download license id.");
+  }
+  return licenseId;
+}
 
 function authorizedHeaders({ accessToken, tokenType = "Bearer" } = {}, extra = {}) {
   if (typeof accessToken !== "string" || accessToken === "") {
@@ -153,51 +309,46 @@ function createVroidHubClient({ baseUrl = DEFAULT_BASE_URL, fetchImpl = fetch, c
     if (typeof characterId !== "string" || characterId === "") {
       throw new Error("A character id is required.");
     }
-    const licenseResponse = await fetchImpl(
-      new URL("/api/download_licenses", baseUrl).toString(),
-      {
-        method: "POST",
-        headers: authorizedHeaders(token, { "content-type": "application/json" }),
-        body: JSON.stringify({ character_model_id: characterId }),
-        signal: AbortSignal.timeout(API_REQUEST_TIMEOUT_MS),
-      },
-    );
-    if (!licenseResponse.ok) {
-      throw new Error(
-        `VRoid Hub declined to license this model for download (${licenseResponse.status}).`,
-      );
-    }
-    const license = await licenseResponse.json();
-    const licenseId = license?.data?.id;
-    if (typeof licenseId !== "string" || licenseId === "") {
-      throw new Error("VRoid Hub did not return a download license id.");
-    }
+    let transientFailure = null;
+    for (let attempt = 0; attempt <= TRANSIENT_RETRY_DELAYS_MS.length; attempt += 1) {
+      const attemptNumber = attempt + 1;
+      try {
+        logVroid(`Loading character ${characterId}, attempt ${attemptNumber}.`);
+        const licenseId = await createDownloadLicense(baseUrl, token, characterId, fetchImpl);
+        logVroid(`License granted for ${characterId}.`, { licenseId, attempt: attemptNumber });
 
-    // The download endpoint 302s to a presigned, time-limited URL for the
-    // actual VRM binary; Node's fetch (unlike browser fetch) exposes the
-    // redirect Location header under redirect: "manual" instead of an
-    // opaque-redirect response, which is what makes this two-step flow work.
-    const downloadResponse = await fetchImpl(
-      new URL(`/api/download_licenses/${licenseId}/download`, baseUrl).toString(),
-      {
-        method: "GET",
-        redirect: "manual",
-        headers: authorizedHeaders(token),
-        signal: AbortSignal.timeout(API_REQUEST_TIMEOUT_MS),
-      },
-    );
-    const downloadUrl = downloadResponse.headers.get("location");
-    if (typeof downloadUrl !== "string" || downloadUrl === "") {
-      throw new Error("VRoid Hub did not return a model download URL.");
+        // The download endpoint 302s to a presigned, time-limited URL for the
+        // actual VRM binary; Node's fetch (unlike browser fetch) exposes the
+        // redirect Location header under redirect: "manual" instead of an
+        // opaque-redirect response, which is what makes this two-step flow work.
+        const downloadResponse = await withTransientRetries(
+          () =>
+            fetchImpl(new URL(`/api/download_licenses/${licenseId}/download`, baseUrl).toString(), {
+              method: "GET",
+              redirect: "manual",
+              headers: authorizedHeaders(token),
+              signal: AbortSignal.timeout(API_REQUEST_TIMEOUT_MS),
+            }),
+          "VRoid Hub download handshake",
+        );
+        const downloadUrl = downloadResponse.headers.get("location");
+        if (typeof downloadUrl !== "string" || downloadUrl === "") {
+          throw new Error("VRoid Hub did not return a model download URL.");
+        }
+        logVroid(`Resolved VRM download URL for ${characterId}.`, { attempt: attemptNumber });
+        const bytes = await fetchModelBytesFromLicensedUrl(fetchImpl, downloadUrl);
+        logVroid(`Downloaded character ${characterId}.`, { bytes: bytes.byteLength, attempt: attemptNumber });
+        return bytes;
+      } catch (error) {
+        logVroid(`Character load attempt ${attemptNumber} failed for ${characterId}.`, describeError(error));
+        if (!isTransientNetworkError(error) || attempt >= TRANSIENT_RETRY_DELAYS_MS.length) {
+          throw error;
+        }
+        transientFailure = error;
+        await sleep(TRANSIENT_RETRY_DELAYS_MS[attempt]);
+      }
     }
-
-    const fileResponse = await fetchImpl(downloadUrl, {
-      signal: AbortSignal.timeout(DOWNLOAD_TIMEOUT_MS),
-    });
-    if (!fileResponse.ok) {
-      throw new Error(`Downloading the VRM file failed (${fileResponse.status}).`);
-    }
-    return Buffer.from(await fileResponse.arrayBuffer());
+    throw transientFailure ?? new Error("VRM file download failed.");
   }
 
   return { listCharacters, loadCharacterModel };

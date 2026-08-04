@@ -5,7 +5,11 @@ avatar-demo/
 ├── electron/
 │   ├── main.cjs
 │   ├── preload.cjs
-│   └── settingsStore.cjs   # config.yaml in userData
+│   ├── settingsStore.cjs          # config.yaml in userData
+│   ├── vroid-oauth-server.cjs     # loopback OAuth callback
+│   ├── vroid-hub-auth.cjs         # PKCE + token persistence
+│   ├── vroid-hub-credentials.cjs  # encrypted client id/secret
+│   └── vroid-hub-client.cjs       # list + licensed VRM download
 ├── public/
 │   ├── AVATAR_LOGO_150.png
 │   └── AVATAR_SPLASH.png
@@ -19,7 +23,7 @@ avatar-demo/
     ├── components/
     ├── config/             # catalogs + userSettings schema
     ├── hooks/
-    ├── lib/                # chromeTone, userSettingsStore, …
+    ├── lib/                # chromeTone, userSettingsStore, desktopMode, …
     └── styles/
 ```
 
@@ -34,3 +38,5 @@ avatar-demo/
 | `npm run dist:win` | Contributors | Build Windows NSIS installer (local `desktop-setup/` output) |
 | `npm run build` | CI / web | Production Vite bundle |
 | `npm run lint` | Contributors | ESLint |
+
+Optional env: `AVATAR_VROID_OAUTH_PORT` overrides the default VRoid loopback port (`47901`). The redirect URI shown in Settings always reflects the port actually in use.

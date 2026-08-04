@@ -32,6 +32,17 @@ Autosave runs shortly after you change something (~400 ms debounce).
 - Which snap-pad cell is highlighted
 - Which drawer / accordion is open
 - Transient UI (menus open/closed)
+- **VRoid Hub characters** — session-only in memory; never written to `config.yaml` or as a local `.vrm` (see [VRoid Hub](vroid-hub.md))
+
+### Related files in Electron `userData` (not `config.yaml`)
+
+| File | Purpose |
+| :--- | :--- |
+| `vroid-hub-credentials.json` | Encrypted OAuth client ID / secret (`safeStorage`) |
+| `vroid-hub-auth.json` | Encrypted access / refresh tokens |
+| `window-state.json` | Window bounds (separate from YAML prefs) |
+
+**Reset all settings** clears `config.yaml` preferences only. Use **Disconnect** / **Remove app credentials** in Settings for Hub session / OAuth app data.
 
 ## Factory defaults (after reset / first run)
 

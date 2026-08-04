@@ -37,7 +37,8 @@ On first launch you get **Avatar 1**, **Default** animation (Greeting, then a lo
 2. Gear → **Voice** → leave **Device output (auto)** (or pick a window / mic). Play music or a video — watch the mouth and the green dot.  
 3. Gear → **Animations** → try **Peace Sign**, then back to **Default**.  
 4. Gear → **Settings** → click a **3×3** cell to snap; drag the bar afterward and notice the pad deselects.  
-5. Scale menu → try **×0.5** then back to **×1**.
+5. Scale menu → try **×0.5** then back to **×1**.  
+6. *(Optional, desktop)* Gear → **Settings** → set up VRoid Hub (own OAuth app), **Connect**, then Appearance → Avatars → pick a Hub character. Guide: [VRoid Hub](../vroid-hub.md).
 
 ## 4. Save / reset
 
@@ -49,4 +50,4 @@ Only framing wrong? **Camera & Lighting → Reset Camera**.
 
 - [Using the app](../using-the-app.md) — full walkthrough  
 - [Avatars & skins](../avatars-and-skins.md) · [Environments](../environments.md) · [Camera & lighting](../camera-and-lighting.md)  
-- [Voice](../voice/audio-sources.md) · [Animations](../animations/vrma.md) · [User settings](../user-settings.md)
+- [Voice](../voice/audio-sources.md) · [Animations](../animations/vrma.md) · [User settings](../user-settings.md) · [VRoid Hub](../vroid-hub.md)

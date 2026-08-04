@@ -67,6 +67,23 @@ function migrateAvatarRotation(rotation, rawVersion, rawRotation) {
   return [rotation[0], rotation[1] - Math.PI, rotation[2]];
 }
 
+/**
+ * The UI currently has no avatar rotation controls; the only "rotated to back"
+ * state we see in practice is stale persisted data from older builds. Normalize
+ * that known-facing inversion to the default forward-facing orientation.
+ * @param {number[]} rotation
+ */
+function normalizeFacingRotation(rotation) {
+  const epsilon = 0.01;
+  const y = rotation[1];
+  const isInvertedY = Math.abs(Math.abs(y) - Math.PI) < epsilon;
+  const hasNoOtherTilt = Math.abs(rotation[0]) < epsilon && Math.abs(rotation[2]) < epsilon;
+  if (isInvertedY && hasNoOtherTilt) {
+    return [...defaultAvatar.rotation];
+  }
+  return rotation;
+}
+
 /** @param {unknown} value */
 function asNumber(value, fallback) {
   const num = Number(value);
@@ -131,10 +148,12 @@ export function normalizeUserSettings(raw) {
     },
     avatarTransform: {
       position: asNumberArray(avatarRaw.position, defaults.avatarTransform.position),
-      rotation: migrateAvatarRotation(
-        asNumberArray(avatarRaw.rotation, defaults.avatarTransform.rotation),
-        data.version,
-        avatarRaw.rotation,
+      rotation: normalizeFacingRotation(
+        migrateAvatarRotation(
+          asNumberArray(avatarRaw.rotation, defaults.avatarTransform.rotation),
+          data.version,
+          avatarRaw.rotation,
+        ),
       ),
     },
     audioSourceId: asString(data.audioSourceId, defaults.audioSourceId),
