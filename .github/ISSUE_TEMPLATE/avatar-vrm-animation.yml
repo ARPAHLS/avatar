@@ -1,21 +1,21 @@
 name: Avatar / VRM / animation
-description: Models, skins, drop-in naming, VRMA clips, Default sequence
+description: Models, drop-in naming, VRMA clips, Default sequence
 title: "[Avatar]: "
 labels: ["bug", "stack:vrm"]
 body:
   - type: markdown
     attributes:
       value: |
-        Drop-in naming: avatarN.vrm / avatarNB.vrm. Motions use the bundled VRMA pack. See docs/avatars-and-skins.md and docs/animations/vrma.md.
+        Drop-in naming: avatarN.vrm. Motions use the bundled VRMA pack. See docs/avatars-and-skins.md and docs/animations/vrma.md.
 
   - type: dropdown
     id: topic
     attributes:
       label: Topic
       options:
-        - Bundled avatar / skin display
+        - Bundled avatar display
         - Custom drop-in VRM not appearing
-        - Skin picker / avatarNB naming
+        - Custom Directories folder
         - Default animation sequence
         - Individual VRMA clip
         - Load / parse error

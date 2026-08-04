@@ -33,21 +33,34 @@ export function VrmAvatar({
   useEffect(() => {
     let disposed = false;
 
-    loader.load(modelPath, (gltf) => {
-      if (disposed) return;
-      const vrmData = gltf.userData.vrm;
-      VRMUtils.combineSkeletons(vrmData.scene);
-      // Owns vrm.scene.rotation outright: it flips VRM 0.0 models (which face
-      // -Z) by 180° and leaves VRM 1.0 (already +Z) alone. Nothing else may
-      // write vrm.scene's transform, or that per-model correction is lost and
-      // one of the two spec versions ends up facing away from the camera —
-      // the user's framing transform lives on the wrapper group below instead.
-      VRMUtils.rotateVRM0(vrmData);
+    if (!modelPath) {
+      setVrm(null);
+      return undefined;
+    }
 
-      group.current?.add(vrmData.scene);
-      setVrm(vrmData);
-      onLoaded?.();
-    });
+    loader.load(
+      modelPath,
+      (gltf) => {
+        if (disposed) return;
+        const vrmData = gltf.userData.vrm;
+        VRMUtils.combineSkeletons(vrmData.scene);
+        // Owns vrm.scene.rotation outright: it flips VRM 0.0 models (which face
+        // -Z) by 180° and leaves VRM 1.0 (already +Z) alone. Nothing else may
+        // write vrm.scene's transform, or that per-model correction is lost and
+        // one of the two spec versions ends up facing away from the camera —
+        // the user's framing transform lives on the wrapper group below instead.
+        VRMUtils.rotateVRM0(vrmData);
+
+        group.current?.add(vrmData.scene);
+        setVrm(vrmData);
+        onLoaded?.();
+      },
+      undefined,
+      () => {
+        // Keep the shell usable if a library/bundled file fails to parse.
+        if (!disposed) onLoaded?.();
+      },
+    );
 
     return () => {
       disposed = true;

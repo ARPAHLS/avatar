@@ -77,12 +77,12 @@ A **green pulsing dot** appears when lip sync is actively capturing (`Audio sour
 
 | Item | Opens / does |
 | :--- | :--- |
-| **Appearance** | Avatars (built-ins + optional VRoid Hub), skins, environments |
+| **Appearance** | Avatars (built-ins or custom folder + VRoid Hub), environments |
 | **Voice** | Audio source / lip sync |
 | **Camera & Lighting** | Camera, lights, avatar transform |
 | **Animations** | Submenu of clips (no drawer) |
 | **Pinned / Windowed** | Toggle overlay vs opaque window (desktop) |
-| **Settings** | Overlay, snap pad, VRoid Hub link, reset all, config path |
+| **Settings** | Overlay mode, Snap to screen, **Directories**, **VRoid Hub**, **System** (reset / config path) |
 | **Close** | Quit the companion window (desktop) |
 
 <p align="center">
@@ -98,8 +98,8 @@ Gear → **Appearance**.
 
 ### Avatars
 
-Pick **Avatar 1 / 2 / 3** (files `avatar1.vrm`, `avatar2.vrm`, `avatar3.vrm`).  
-Drop more models named `avatar4.vrm`, … — they appear automatically. Details: [Avatars & skins](avatars-and-skins.md).
+Pick **Avatar 1 / 2 / 3** when Directories → Avatars is **Default**.  
+On desktop you can point Settings → Directories → Avatars at a folder of `.vrm` files — Appearance then shows **those instead** of the bundled list. **VRoid Hub** stays under Avatars either way. Details: [Avatars](avatars-and-skins.md).
 
 On **desktop**, when VRoid Hub is connected, a **VRoid Hub** block appears
 under the built-in thumbnails so you can pick Hub characters here (setup
@@ -107,7 +107,7 @@ still lives under Settings). See [VRoid Hub connection](vroid-hub.md).
 
 <p align="center">
   <img src="screenshots/30-appearance-avatars.png" alt="Appearance Avatars section" height="240" />
-  <img src="screenshots/31-appearance-skins.png" alt="Appearance Skins section" height="240" />
+  <img src="screenshots/31-appearance-avatars-custom-dir.png" alt="Appearance Avatars from a custom folder" height="240" />
 </p>
 
 <p align="center">
@@ -119,11 +119,6 @@ still lives under Settings). See [VRoid Hub connection](vroid-hub.md).
   <img src="screenshots/76-vroid-license-gate.png" alt="Hearted model conditions of use" height="240" />
 </p>
 
-### Skins
-
-Variants for the **currently selected** avatar. Today each ships with **Default**.  
-Add `avatar1B.vrm`, `avatar1C.vrm`, … for Skin B / C on Avatar 1.
-
 ### Environments
 
 | Option | What you get |
@@ -132,13 +127,14 @@ Add `avatar1B.vrm`, `avatar1C.vrm`, … for Skin B / C on Avatar 1.
 | **Code** | Code-rain GIF |
 | **Bloom** | Bright pastel GIF (bar often switches to “light” chrome) |
 | **None** | No stage backdrop — desktop shows through (overlay) |
-| **Custom** | Local GIFs/images in `src/assets/environments/custom/` (dev only; **not** shipped in the Windows installer). Opening Custom hides built-ins until closed; Color fade stays pinned under the list |
+| **Custom** | Desktop: Settings → Directories → Environments (`.gif` / `.png` / `.jpg` / `.jpeg`). Dev with Directories Default: also `src/assets/environments/custom/`. Opening Custom hides built-ins until closed; Color fade stays pinned under the list |
 | **Color fade** | Soft glow from a color you pick → **Use color** |
 | **Reset** | Back to lavender `#e9e1fa` |
 
 <p align="center">
   <img src="screenshots/32-appearance-env-builtin.png" alt="Built-in environments" height="220" />
   <img src="screenshots/33-appearance-env-custom.png" alt="Custom environments open" height="220" />
+  <img src="screenshots/34-appearance-env-custom-dir.png" alt="Custom environments from Directories folder" height="220" />
 </p>
 
 Full detail: [Environments](environments.md).
@@ -276,7 +272,7 @@ Catalog: [VRMA](animations/vrma.md).
 
 ## 7. Settings
 
-Gear → **Settings**.
+Gear → **Settings**. Section titles share one style: **Overlay mode**, **Snap to screen**, **Directories**, **VRoid Hub**, **System**.
 
 ### Overlay mode (desktop)
 
@@ -285,14 +281,9 @@ Gear → **Settings**.
 
 Also toggle from the gear **Pinned / Windowed** item.
 
-<p align="center">
-  <img src="screenshots/80-settings-panel.png" alt="Settings panel" height="240" />
-  <img src="screenshots/85-windowed-mode.png" alt="Windowed mode" height="240" />
-</p>
-
 ### Snap to screen
 
-Tap a cell in the **3×3 pad**:
+Tap a cell in the **3×3 pad** (divider separates this from Overlay mode):
 
 ```text
 Top left     | Top center     | Top right
@@ -303,12 +294,27 @@ Bottom left  | Bottom center  | Bottom right
 The active cell stays **highlighted**. If you **drag** the glass bar by hand, the highlight clears (no cell selected).
 
 <p align="center">
+  <img src="screenshots/80-settings-panel.png" alt="Settings — Overlay, Snap, Directories, VRoid Hub, System" height="260" />
+  <img src="screenshots/82-settings-directories.png" alt="Settings Directories section" height="260" />
   <img src="screenshots/81-snap-pad-selected.png" alt="Snap pad with a cell selected" height="240" />
+  <img src="screenshots/85-windowed-mode.png" alt="Windowed mode" height="240" />
 </p>
 
-### VRoid Hub (desktop, optional)
+### Directories (desktop)
 
-Advanced: register your own VRoid Hub OAuth app, paste Client ID / secret,
+Three rows — **Avatars**, **Animations**, **Environments**:
+
+| Row | Behavior |
+| :--- | :--- |
+| **Avatars** | `Default` (bundled) or `Custom` folder of `.vrm` files — **replaces** the Appearance avatar strip |
+| **Environments** | `Default` or `Custom` folder of images — **adds** the Appearance Custom expander; built-ins stay |
+| **Animations** | `Default` only; Custom is greyed out (*coming soon*) |
+
+A folder with no matching files is **not** applied (error notice; previous source kept). Reset a row (or **System → Reset all settings**) returns that source to Default. Choices persist in `config.yaml` under `directories` (mode + path).
+
+### VRoid Hub (desktop)
+
+Register your own VRoid Hub OAuth app, paste Client ID / secret,
 then **Connect VRoid Hub account**. After connecting, pick characters under
 **Appearance → Avatars**. Hub models are **not** stored on disk — they last
 for the current session only.
@@ -325,9 +331,9 @@ troubleshooting): [VRoid Hub connection](vroid-hub.md).
   <img src="screenshots/72-vroid-browser-authorize.png" alt="Browser connected page and Settings connected state" width="100%" />
 </p>
 
-### Reset all settings
+### System
 
-**Reset all settings** wipes saved preferences and restores factory defaults (avatar, skin, animation, environment, camera, light, avatar transform, audio source, overlay, window scale). It does **not** remove encrypted VRoid Hub credentials — use **Remove app credentials** / **Disconnect** in the VRoid Hub block for that.
+**Reset all settings** wipes saved preferences (including Directories paths) and restores factory defaults (avatar, animation, environment, camera, light, avatar transform, audio source, overlay, window scale, directories). It does **not** remove encrypted VRoid Hub credentials — use **Remove app credentials** / **Disconnect** in the VRoid Hub block for that.
 
 ### Per-control resets (not “all”)
 
@@ -347,7 +353,7 @@ Persistence details: [User settings](user-settings.md).
 
 1. Place the companion with drag or the snap pad.  
 2. Set scale ×0.5 / ×1 / ×2.  
-3. Appearance → pick avatar (+ skin) and environment. Optional: Settings → connect VRoid Hub, then Appearance → pick a Hub character.  
+3. Appearance → pick avatar and environment. Optional: Settings → Directories for local folders, and/or Settings → connect VRoid Hub then Appearance → pick a Hub character.  
 4. Voice → Device output (or window/mic) until the green dot appears when sound plays.  
 5. Leave **Default** animation running, or pick a single clip.  
 6. Nudge Camera if framing feels off; use section resets or **Reset all** if you want a clean slate.

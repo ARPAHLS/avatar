@@ -62,7 +62,7 @@ export const environments = [
   },
 ];
 
-const customModules = import.meta.glob('../assets/environments/custom/*.{gif,webp,png,jpg,jpeg,jfif}', {
+const customModules = import.meta.glob('../assets/environments/custom/*.{gif,png,jpg,jpeg}', {
   eager: true,
   import: 'default',
 });
@@ -91,11 +91,27 @@ export const customEnvironments = Object.entries(customModules)
   })
   .sort((a, b) => a.label.localeCompare(b.label));
 
+/** Runtime custom envs from a user-picked folder (Electron). */
+let libraryCustomEnvironments = /** @type {EnvironmentEntry[]} */ ([]);
+
+/**
+ * @param {EnvironmentEntry[]} entries
+ */
+export function setLibraryCustomEnvironments(entries) {
+  libraryCustomEnvironments = Array.isArray(entries) ? entries : [];
+}
+
+/** @returns {EnvironmentEntry[]} */
+export function getLibraryCustomEnvironments() {
+  return libraryCustomEnvironments;
+}
+
 /** @param {string} id */
 export function getEnvironmentById(id) {
   return (
     environments.find((entry) => entry.id === id) ??
     customEnvironments.find((entry) => entry.id === id) ??
+    libraryCustomEnvironments.find((entry) => entry.id === id) ??
     environments[0]
   );
 }

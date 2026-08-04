@@ -113,7 +113,7 @@ disconnect — you must paste them again to reconnect.
 
 1. Gear → **Appearance** → **Avatars**.
 2. Built-in avatars (Avatar 1 / 2 / 3) appear as before.
-3. Below them, **VRoid Hub (optional)** lists your Hub characters (name +
+3. Below them, **VRoid Hub** lists your Hub characters (name +
    portrait) when connected.
 4. Click a character you **own** — AVATAR downloads and loads it on the stage.
 5. Click a **hearted** (someone else’s) character — review its conditions of
@@ -151,7 +151,7 @@ and finish setup.
 | OAuth client ID / secret | Encrypted `vroid-hub-credentials.json` in Electron `userData` | Yes |
 | Access / refresh tokens | Encrypted `vroid-hub-auth.json` in Electron `userData` | Yes (until disconnect / expiry) |
 | Hub character VRM bytes | **Memory only** (`blob:` URL for the session) | **No** |
-| Built-in avatar / skin choice | `config.yaml` | Yes |
+| Built-in avatar choice | `config.yaml` | Yes |
 
 AVATAR does **not** write a Hub-sourced model to disk as a reusable local
 `.vrm`. That matches VRoid Hub’s linked-app rules. After quit, pick the Hub
@@ -197,5 +197,5 @@ the Hub website even when Chrome can browse Hub normally.
 - **Settings vs Appearance** — Settings is for link/account; Appearance is
   where you choose what is on stage (built-ins + Hub).
 
-See also: [Avatars & skins](avatars-and-skins.md) · [Using the app](using-the-app.md) ·
+See also: [Avatars](avatars-and-skins.md) · [Using the app](using-the-app.md) ·
 [User settings](user-settings.md).

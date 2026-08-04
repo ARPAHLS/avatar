@@ -5,11 +5,12 @@ avatar-demo/
 ├── electron/
 │   ├── main.cjs
 │   ├── preload.cjs
-│   ├── settingsStore.cjs          # config.yaml in userData
-│   ├── vroid-oauth-server.cjs     # loopback OAuth callback
-│   ├── vroid-hub-auth.cjs         # PKCE + token persistence
-│   ├── vroid-hub-credentials.cjs  # encrypted client id/secret
-│   └── vroid-hub-client.cjs       # list + licensed VRM download
+│   ├── settingsStore.cjs
+│   ├── user-library.cjs
+│   ├── vroid-oauth-server.cjs
+│   ├── vroid-hub-auth.cjs
+│   ├── vroid-hub-credentials.cjs
+│   └── vroid-hub-client.cjs
 ├── public/
 │   ├── AVATAR_LOGO_150.png
 │   └── AVATAR_SPLASH.png
@@ -18,14 +19,16 @@ avatar-demo/
     │   ├── avatars/
     │   │   └── VRMA/
     │   └── environments/
-    │       ├── stars.gif / code.gif / bloom.gif   # bundled built-ins
-    │       └── custom/                            # local trials only (.gitkeep; media gitignored)
+    │       ├── stars.gif / code.gif / bloom.gif
+    │       └── custom/
     ├── components/
-    ├── config/             # catalogs + userSettings schema
+    ├── config/
     ├── hooks/
-    ├── lib/                # chromeTone, userSettingsStore, desktopMode, …
+    ├── lib/
     └── styles/
 ```
+
+End users personalize via **Settings → Directories** and **VRoid Hub** (see [Using the app](../using-the-app.md)). The `environments/custom/` folder is a contributor convenience when Directories is still Default.
 
 ## Scripts
 
@@ -38,5 +41,4 @@ avatar-demo/
 | `npm run dist:win` | Contributors | Build Windows NSIS installer (local `desktop-setup/` output) |
 | `npm run build` | CI / web | Production Vite bundle |
 | `npm run lint` | Contributors | ESLint |
-
-Optional env: `AVATAR_VROID_OAUTH_PORT` overrides the default VRoid loopback port (`47901`). The redirect URI shown in Settings always reflects the port actually in use.
+| `npm test` | Contributors | Electron unit tests |

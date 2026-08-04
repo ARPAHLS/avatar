@@ -12,6 +12,20 @@ import { defaultWindowScale, normalizeWindowScale } from './windowScale';
 export const SETTINGS_VERSION = 2;
 export const LOCAL_SETTINGS_KEY = 'avatar.config.yaml';
 
+/** @returns {{ mode: 'default' | 'custom', path: string | null }} */
+export function createDefaultDirectorySource() {
+  return { mode: 'default', path: null };
+}
+
+/** @returns {{ avatars: ReturnType<typeof createDefaultDirectorySource>, animations: ReturnType<typeof createDefaultDirectorySource>, environments: ReturnType<typeof createDefaultDirectorySource> }} */
+export function createDefaultDirectories() {
+  return {
+    avatars: createDefaultDirectorySource(),
+    animations: createDefaultDirectorySource(),
+    environments: createDefaultDirectorySource(),
+  };
+}
+
 /** @returns {object} */
 export function createDefaultUserSettings() {
   return {
@@ -38,6 +52,7 @@ export function createDefaultUserSettings() {
     windowSourceId: null,
     overlayMode: true,
     windowScale: defaultWindowScale,
+    directories: createDefaultDirectories(),
   };
 }
 
@@ -97,6 +112,38 @@ function asString(value, fallback) {
 
 /**
  * @param {unknown} raw
+ * @returns {ReturnType<typeof createDefaultDirectorySource>}
+ */
+function normalizeDirectorySource(raw) {
+  const defaults = createDefaultDirectorySource();
+  if (!raw || typeof raw !== 'object') return defaults;
+  const data = /** @type {Record<string, unknown>} */ (raw);
+  const mode = data.mode === 'custom' ? 'custom' : 'default';
+  const pathValue = typeof data.path === 'string' && data.path.trim() !== '' ? data.path.trim() : null;
+  if (mode === 'custom' && pathValue) {
+    return { mode: 'custom', path: pathValue };
+  }
+  return defaults;
+}
+
+/**
+ * @param {unknown} raw
+ * @returns {ReturnType<typeof createDefaultDirectories>}
+ */
+function normalizeDirectories(raw) {
+  const defaults = createDefaultDirectories();
+  if (!raw || typeof raw !== 'object') return defaults;
+  const data = /** @type {Record<string, unknown>} */ (raw);
+  return {
+    avatars: normalizeDirectorySource(data.avatars),
+    // Animations custom is not implemented yet — always persist as default.
+    animations: createDefaultDirectorySource(),
+    environments: normalizeDirectorySource(data.environments),
+  };
+}
+
+/**
+ * @param {unknown} raw
  * @returns {ReturnType<typeof createDefaultUserSettings>}
  */
 export function normalizeUserSettings(raw) {
@@ -133,7 +180,8 @@ export function normalizeUserSettings(raw) {
   return {
     version: SETTINGS_VERSION,
     avatarId: asString(data.avatarId, defaults.avatarId),
-    skinId: asString(data.skinId, defaults.skinId),
+    // Skins UI removed; always the default skin for path resolution.
+    skinId: defaultSkinId,
     animationId: asString(data.animationId, defaults.animationId),
     environment,
     camera: {
@@ -160,6 +208,7 @@ export function normalizeUserSettings(raw) {
     windowSourceId: typeof data.windowSourceId === 'string' ? data.windowSourceId : null,
     overlayMode: data.overlayMode !== false,
     windowScale: normalizeWindowScale(asNumber(data.windowScale, defaults.windowScale)),
+    directories: normalizeDirectories(data.directories),
   };
 }
 
@@ -184,5 +233,6 @@ export function snapshotUserSettings(state) {
     windowSourceId: state.windowSourceId ?? null,
     overlayMode: state.overlayMode,
     windowScale: state.windowScale,
+    directories: state.directories,
   });
 }

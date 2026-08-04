@@ -1,6 +1,7 @@
 const {
   app,
   BrowserWindow,
+  dialog,
   ipcMain,
   safeStorage,
   screen,
@@ -28,6 +29,12 @@ const {
   DEFAULT_VROID_OAUTH_PORT,
   OAUTH_CALLBACK_PATH,
 } = require('./vroid-oauth-server.cjs');
+const {
+  pathExists,
+  readLibraryFile,
+  scanAvatars,
+  scanEnvironments,
+} = require('./user-library.cjs');
 
 const WINDOW_STATE_FILE = 'window-state.json';
 const DEFAULT_WIDTH = 420;
@@ -215,6 +222,12 @@ async function completeVroidHubLogin({ code, state, error }) {
 function assertTrustedVroidSender(event) {
   if (!mainWindow || mainWindow.isDestroyed() || event.senderFrame !== mainWindow.webContents.mainFrame) {
     throw new Error('Rejected VRoid Hub IPC call from an untrusted sender.');
+  }
+}
+
+function assertTrustedLibrarySender(event) {
+  if (!mainWindow || mainWindow.isDestroyed() || event.senderFrame !== mainWindow.webContents.mainFrame) {
+    throw new Error('Rejected library IPC call from an untrusted sender.');
   }
 }
 
@@ -513,6 +526,48 @@ ipcMain.handle('settings:save', (_event, settings) => saveSettings(app, settings
 ipcMain.handle('settings:reset', () => resetSettings(app));
 
 ipcMain.handle('settings:info', () => getSettingsInfo(app));
+
+ipcMain.handle('library:pick-folder', async (event) => {
+  assertTrustedLibrarySender(event);
+  if (!mainWindow || mainWindow.isDestroyed()) return null;
+  const result = await dialog.showOpenDialog(mainWindow, {
+    title: 'Choose folder',
+    properties: ['openDirectory'],
+  });
+  if (result.canceled || !result.filePaths?.[0]) return null;
+  return result.filePaths[0];
+});
+
+ipcMain.handle('library:path-exists', (event, dirPath) => {
+  assertTrustedLibrarySender(event);
+  return pathExists(dirPath);
+});
+
+ipcMain.handle('library:open-folder', async (event, dirPath) => {
+  assertTrustedLibrarySender(event);
+  if (!pathExists(dirPath)) {
+    throw new Error('Folder not found.');
+  }
+  const err = await shell.openPath(dirPath);
+  if (err) throw new Error(err);
+  return true;
+});
+
+ipcMain.handle('library:scan-avatars', (event, dirPath) => {
+  assertTrustedLibrarySender(event);
+  return scanAvatars(dirPath);
+});
+
+ipcMain.handle('library:scan-environments', (event, dirPath) => {
+  assertTrustedLibrarySender(event);
+  return scanEnvironments(dirPath);
+});
+
+ipcMain.handle('library:read-file', (event, id) => {
+  assertTrustedLibrarySender(event);
+  const buffer = readLibraryFile(id);
+  return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
+});
 
 ipcMain.handle('vroid:get-status', (event) => {
   assertTrustedVroidSender(event);

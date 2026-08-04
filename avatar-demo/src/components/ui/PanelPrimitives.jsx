@@ -40,7 +40,7 @@ export function SliderRow({ label, min, max, step, value, onChange, onDoubleClic
 const SELECT_MENU_MAX_HEIGHT = 148;
 
 /** App-themed select — portals a fixed popup so the drawer never gains scroll/width. */
-export function PanelSelect({ id, value, onChange, options, placeholder = 'Select…' }) {
+export function PanelSelect({ id, value, onChange, options, placeholder = 'Select…', disabled = false }) {
   const [open, setOpen] = useState(false);
   const [menuStyle, setMenuStyle] = useState(null);
   const rootRef = useRef(null);
@@ -101,8 +101,12 @@ export function PanelSelect({ id, value, onChange, options, placeholder = 'Selec
     };
   }, [open]);
 
+  useEffect(() => {
+    if (disabled) setOpen(false);
+  }, [disabled]);
+
   const menu =
-    open && menuStyle
+    open && menuStyle && !disabled
       ? createPortal(
           <ul
             ref={listRef}
@@ -119,16 +123,22 @@ export function PanelSelect({ id, value, onChange, options, placeholder = 'Selec
           >
             {options.map((option) => {
               const active = option.value === value;
+              const optionDisabled = Boolean(option.disabled);
               return (
                 <li key={option.value === '' ? '__empty' : option.value} role="presentation">
                   <button
                     type="button"
                     role="option"
                     aria-selected={active}
-                    className={`panel-select-menu__option ${active ? 'panel-select-menu__option--active' : ''}`}
+                    aria-disabled={optionDisabled}
+                    disabled={optionDisabled}
+                    className={`panel-select-menu__option ${active ? 'panel-select-menu__option--active' : ''} ${
+                      optionDisabled ? 'panel-select-menu__option--disabled' : ''
+                    }`}
                     onPointerDown={(event) => {
                       event.preventDefault();
                       event.stopPropagation();
+                      if (optionDisabled) return;
                       onChange(option.value);
                       setOpen(false);
                     }}
@@ -146,7 +156,9 @@ export function PanelSelect({ id, value, onChange, options, placeholder = 'Selec
   return (
     <div
       ref={rootRef}
-      className={`panel-select-menu ${open ? 'panel-select-menu--open' : ''}`}
+      className={`panel-select-menu ${open ? 'panel-select-menu--open' : ''} ${
+        disabled ? 'panel-select-menu--disabled' : ''
+      }`}
     >
       <button
         ref={triggerRef}
@@ -156,7 +168,11 @@ export function PanelSelect({ id, value, onChange, options, placeholder = 'Selec
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listId}
-        onClick={() => setOpen((prev) => !prev)}
+        disabled={disabled}
+        onClick={() => {
+          if (disabled) return;
+          setOpen((prev) => !prev);
+        }}
       >
         <span>{selected?.label ?? placeholder}</span>
         <ChevronDown size={14} strokeWidth={2} />

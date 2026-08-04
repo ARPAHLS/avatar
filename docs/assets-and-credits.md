@@ -30,6 +30,10 @@ session only** and are not redistributed as repo assets. Hearted models show
 their Hub conditions of use in-app before selection. See
 [VRoid Hub connection](vroid-hub.md).
 
+### Your own files (self-serve)
+
+Beyond bundled samples, desktop users can point **Settings → Directories** at local folders (`.vrm` avatars; `.gif` / `.png` / `.jpg` / `.jpeg` environments) or connect **VRoid Hub**. You are responsible for rights to any files or Hub characters you load. Guides: [Avatars](avatars-and-skins.md) · [Environments](environments.md) · [Using the app](using-the-app.md).
+
 Relevant links:
 
 - [VRoid](https://vroid.com/)

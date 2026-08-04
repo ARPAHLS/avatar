@@ -1,13 +1,13 @@
 /**
- * Avatar + skin catalog.
+ * Avatar catalog.
  *
- * Drop `.vrm` files in `src/assets/avatars/` using this naming:
- *   avatar1.vrm      → Avatar 1, default skin
- *   avatar1B.vrm     → Avatar 1, skin B
- *   avatar1C.vrm     → Avatar 1, skin C
- *   avatar2.vrm      → Avatar 2, default skin
+ * Drop `.vrm` files in `src/assets/avatars/` using:
+ *   avatar1.vrm      → Avatar 1
+ *   avatar2.vrm      → Avatar 2
  *
- * Restart / refresh the Vite/Electron process after adding files so imports are picked up.
+ * Letter suffixes like `avatar1B.vrm` are ignored (no separate Skins UI).
+ * Restart / refresh after adding files so imports are picked up.
+ * Desktop users can also point Settings → Directories at any folder of `.vrm` files.
  */
 
 const vrmModules = import.meta.glob('../assets/avatars/avatar*.vrm', {
@@ -17,15 +17,15 @@ const vrmModules = import.meta.glob('../assets/avatars/avatar*.vrm', {
 
 /**
  * @typedef {Object} AvatarSkin
- * @property {string} id          e.g. 'default' | 'B' | 'C'
+ * @property {string} id
  * @property {string} label
- * @property {string} file        Filename on disk
- * @property {string} path        Vite-resolved URL
+ * @property {string} file
+ * @property {string} path
  */
 
 /**
  * @typedef {Object} AvatarEntry
- * @property {string} id          e.g. 'avatar1'
+ * @property {string} id
  * @property {string} label
  * @property {number} index
  * @property {AvatarSkin[]} skins
@@ -36,41 +36,29 @@ const byIndex = new Map();
 
 for (const [modulePath, src] of Object.entries(vrmModules)) {
   const file = modulePath.split('/').pop() ?? '';
-  const match = /^avatar(\d+)([A-Za-z])?\.vrm$/i.exec(file);
+  const match = /^avatar(\d+)\.vrm$/i.exec(file);
   if (!match) continue;
 
   const index = Number.parseInt(match[1], 10);
-  const skinKey = match[2] ? match[2].toUpperCase() : 'default';
   const id = `avatar${index}`;
 
-  if (!byIndex.has(index)) {
-    byIndex.set(index, {
-      id,
-      label: `Avatar ${index}`,
-      index,
-      skins: [],
-    });
-  }
-
-  byIndex.get(index).skins.push({
-    id: skinKey,
-    label: skinKey === 'default' ? 'Default' : `Skin ${skinKey}`,
-    file,
-    path: /** @type {string} */ (src),
+  byIndex.set(index, {
+    id,
+    label: `Avatar ${index}`,
+    index,
+    skins: [
+      {
+        id: 'default',
+        label: 'Default',
+        file,
+        path: /** @type {string} */ (src),
+      },
+    ],
   });
 }
 
 /** @type {AvatarEntry[]} */
-export const avatars = [...byIndex.values()]
-  .sort((a, b) => a.index - b.index)
-  .map((entry) => ({
-    ...entry,
-    skins: entry.skins.sort((a, b) => {
-      if (a.id === 'default') return -1;
-      if (b.id === 'default') return 1;
-      return a.id.localeCompare(b.id);
-    }),
-  }));
+export const avatars = [...byIndex.values()].sort((a, b) => a.index - b.index);
 
 export const defaultAvatarId = avatars[0]?.id ?? 'avatar1';
 export const defaultSkinId = 'default';
@@ -96,9 +84,4 @@ export function getSkin(avatarId, skinId = defaultSkinId) {
  */
 export function resolveAvatarPath(avatarId, skinId = defaultSkinId) {
   return getSkin(avatarId, skinId)?.path ?? null;
-}
-
-/** @param {string} avatarId */
-export function listSkinsForAvatar(avatarId) {
-  return getAvatarById(avatarId)?.skins ?? [];
 }

@@ -17,7 +17,7 @@ Autosave runs shortly after you change something (~400 ms debounce).
 
 | Area | Fields |
 | :--- | :--- |
-| Character | `avatarId`, `skinId` |
+| Character | `avatarId` (and reserved `skinId: default`) |
 | Motion | `animationId` |
 | Backdrop | `environment` (`env` + id, `color` + hex, or `none`) |
 | Camera | `position`, `lookAt`, `fov` |
@@ -25,6 +25,7 @@ Autosave runs shortly after you change something (~400 ms debounce).
 | Avatar transform | `position`, `rotation` |
 | Voice | `audioSourceId`, `windowSourceId` (when picking a window) |
 | Desktop | `overlayMode`, `windowScale` |
+| Directories (desktop) | `directories.avatars` / `environments` (`mode` + `path`); animations reserved as default-only |
 
 ### Not saved
 
@@ -49,7 +50,6 @@ Autosave runs shortly after you change something (~400 ms debounce).
 | Setting | Default |
 | :--- | :--- |
 | Avatar | `avatar1` (**Avatar 1**) |
-| Skin | `default` |
 | Animation | `default` (Greeting once, then model pose → full body → peace → squat → shoot) |
 | Environment | Color fade `#e9e1fa` |
 | Camera | position `[-0.01, 0.59, 1.69]`, lookAt `[0, 0.5, 0]`, FOV `26.8` |
@@ -58,6 +58,7 @@ Autosave runs shortly after you change something (~400 ms debounce).
 | Audio | Desktop: **Device output (auto)** (`system`); Browser: **Off** (`none`) |
 | Overlay | On |
 | Window scale | ×1 |
+| Directories | Avatars / Animations / Environments → `default` (no custom paths) |
 
 ## How to reset
 
@@ -66,7 +67,8 @@ Autosave runs shortly after you change something (~400 ms debounce).
 **Settings → Reset all settings** deletes the YAML file (or clears localStorage) and reapplies the factory defaults above.
 
 <p align="center">
-  <img src="screenshots/80-settings-panel.png" alt="Settings with Reset all" height="260" />
+  <img src="screenshots/80-settings-panel.png" alt="Settings — Overlay, Snap, Directories, VRoid Hub, System" height="260" />
+  <img src="screenshots/82-settings-directories.png" alt="Settings Directories section" height="260" />
 </p>
 
 ### One area only
@@ -77,7 +79,7 @@ Autosave runs shortly after you change something (~400 ms debounce).
 | Lights only | **Reset Light** |
 | Avatar pose offset only | **Reset Avatar** |
 | Environment color only | Appearance → Environments → **Reset** |
-| Audio pipeline glitch | Voice → **Restart audio capture** (keeps the selected source) |
+| Directories (desktop) | Reset that row to **Default**, or Reset all |
 
 ## Example `config.yaml` shape
 
@@ -119,6 +121,16 @@ audioSourceId: system
 windowSourceId: null
 overlayMode: true
 windowScale: 1
+directories:
+  avatars:
+    mode: default
+    path: null
+  animations:
+    mode: default
+    path: null
+  environments:
+    mode: default
+    path: null
 ```
 
 You normally never edit this by hand — use the UI. Hand-edits are fine if the app is closed; invalid values fall back to defaults on load.
