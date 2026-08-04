@@ -28,3 +28,27 @@ contextBridge.exposeInMainWorld('voxDesktop', {
   resetSettings: () => ipcRenderer.invoke('settings:reset'),
   getSettingsInfo: () => ipcRenderer.invoke('settings:info'),
 });
+
+contextBridge.exposeInMainWorld('voxVroidHub', {
+  getStatus: () => ipcRenderer.invoke('vroid:get-status'),
+  getCredentials: () => ipcRenderer.invoke('vroid:get-credentials'),
+  setCredentials: (clientId, clientSecret) =>
+    ipcRenderer.invoke('vroid:set-credentials', clientId, clientSecret),
+  clearCredentials: () => ipcRenderer.invoke('vroid:clear-credentials'),
+  connect: () => ipcRenderer.invoke('vroid:connect'),
+  disconnect: () => ipcRenderer.invoke('vroid:disconnect'),
+  listCharacters: () => ipcRenderer.invoke('vroid:list-characters'),
+  selectCharacter: async (characterId) => {
+    const result = await ipcRenderer.invoke('vroid:select-character', characterId);
+    if (result && typeof result === 'object' && 'ok' in result) {
+      if (result.ok) return result.data;
+      throw new Error(typeof result.error === 'string' ? result.error : 'Failed to load VRoid model.');
+    }
+    return result;
+  },
+  subscribe: (listener) => {
+    const handler = (_event, status) => listener(status);
+    ipcRenderer.on('vroid:status-updated', handler);
+    return () => ipcRenderer.removeListener('vroid:status-updated', handler);
+  },
+});

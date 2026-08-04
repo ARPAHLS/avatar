@@ -12,3 +12,7 @@ export function enableDesktopMode() {
 export function getDesktopApi() {
   return window.voxDesktop ?? null;
 }
+
+export function getVroidHubApi() {
+  return window.voxVroidHub ?? null;
+}

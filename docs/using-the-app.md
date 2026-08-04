@@ -77,12 +77,12 @@ A **green pulsing dot** appears when lip sync is actively capturing (`Audio sour
 
 | Item | Opens / does |
 | :--- | :--- |
-| **Appearance** | Avatars, skins, environments |
+| **Appearance** | Avatars (built-ins + optional VRoid Hub), skins, environments |
 | **Voice** | Audio source / lip sync |
 | **Camera & Lighting** | Camera, lights, avatar transform |
 | **Animations** | Submenu of clips (no drawer) |
 | **Pinned / Windowed** | Toggle overlay vs opaque window (desktop) |
-| **Settings** | Overlay, snap pad, reset all, config path |
+| **Settings** | Overlay, snap pad, VRoid Hub link, reset all, config path |
 | **Close** | Quit the companion window (desktop) |
 
 <p align="center">
@@ -101,9 +101,22 @@ Gear → **Appearance**.
 Pick **Avatar 1 / 2 / 3** (files `avatar1.vrm`, `avatar2.vrm`, `avatar3.vrm`).  
 Drop more models named `avatar4.vrm`, … — they appear automatically. Details: [Avatars & skins](avatars-and-skins.md).
 
+On **desktop**, when VRoid Hub is connected, a **VRoid Hub** block appears
+under the built-in thumbnails so you can pick Hub characters here (setup
+still lives under Settings). See [VRoid Hub connection](vroid-hub.md).
+
 <p align="center">
   <img src="screenshots/30-appearance-avatars.png" alt="Appearance Avatars section" height="240" />
   <img src="screenshots/31-appearance-skins.png" alt="Appearance Skins section" height="240" />
+</p>
+
+<p align="center">
+  <img src="screenshots/74-vroid-appearance-avatars-hub.png" alt="Appearance with VRoid Hub list" height="280" />
+</p>
+
+<p align="center">
+  <img src="screenshots/75-vroid-appearance-loading.png" alt="Hub character loading" height="200" />
+  <img src="screenshots/76-vroid-license-gate.png" alt="Hearted model conditions of use" height="240" />
 </p>
 
 ### Skins
@@ -293,9 +306,28 @@ The active cell stays **highlighted**. If you **drag** the glass bar by hand, th
   <img src="screenshots/81-snap-pad-selected.png" alt="Snap pad with a cell selected" height="240" />
 </p>
 
+### VRoid Hub (desktop, optional)
+
+Advanced: register your own VRoid Hub OAuth app, paste Client ID / secret,
+then **Connect VRoid Hub account**. After connecting, pick characters under
+**Appearance → Avatars**. Hub models are **not** stored on disk — they last
+for the current session only.
+
+Full steps (redirect URI, app form fields, hearted-model license gate,
+troubleshooting): [VRoid Hub connection](vroid-hub.md).
+
+<p align="center">
+  <img src="screenshots/70-vroid-settings-setup.png" alt="VRoid Hub setup in Settings" height="240" />
+  <img src="screenshots/71-vroid-settings-connect.png" alt="Connect VRoid Hub account" height="240" />
+</p>
+
+<p align="center">
+  <img src="screenshots/72-vroid-browser-authorize.png" alt="Browser connected page and Settings connected state" width="100%" />
+</p>
+
 ### Reset all settings
 
-**Reset all settings** wipes saved preferences and restores factory defaults (avatar, skin, animation, environment, camera, light, avatar transform, audio source, overlay, window scale).
+**Reset all settings** wipes saved preferences and restores factory defaults (avatar, skin, animation, environment, camera, light, avatar transform, audio source, overlay, window scale). It does **not** remove encrypted VRoid Hub credentials — use **Remove app credentials** / **Disconnect** in the VRoid Hub block for that.
 
 ### Per-control resets (not “all”)
 
@@ -315,7 +347,7 @@ Persistence details: [User settings](user-settings.md).
 
 1. Place the companion with drag or the snap pad.  
 2. Set scale ×0.5 / ×1 / ×2.  
-3. Appearance → pick avatar (+ skin) and environment.  
+3. Appearance → pick avatar (+ skin) and environment. Optional: Settings → connect VRoid Hub, then Appearance → pick a Hub character.  
 4. Voice → Device output (or window/mic) until the green dot appears when sound plays.  
 5. Leave **Default** animation running, or pick a single clip.  
 6. Nudge Camera if framing feels off; use section resets or **Reset all** if you want a clean slate.

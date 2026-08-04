@@ -14,10 +14,12 @@ import { VrmAvatar } from './avatar/VrmAvatar';
 import { AvatarStageShell } from './avatar/AvatarStageShell';
 import { CameraController } from './ui/CameraController';
 import { GlassDrawer } from './ui/GlassDrawer';
+import { Divider } from './ui/PanelPrimitives';
 import { PalettePanel } from './panels/PalettePanel';
 import { VoicePanel } from './panels/VoicePanel';
 import { CameraPanel } from './panels/CameraPanel';
 import { DesktopPanel } from './panels/DesktopPanel';
+import { VroidHubPanel } from './panels/VroidHubPanel';
 
 const desktopMode = isDesktopMode();
 const SAVE_DEBOUNCE_MS = 400;
@@ -44,6 +46,17 @@ export function AvatarStage() {
   const [windowSourceId, setWindowSourceId] = useState(null);
   const [audioSourceId, setAudioSourceId] = useState(getDefaultAudioSourceId);
   const [settingsPath, setSettingsPath] = useState(null);
+  // Session-only: a VRoid Hub character is never persisted to config.yaml
+  // (kept in memory only, per VRoid Hub's licensing rules for linked-app
+  // usage), so neither of these belongs in userSettings.js's schema.
+  const [hubAvatar, setHubAvatar] = useState(null); // { id, name, blobUrl } | null
+  const [hubActive, setHubActive] = useState(false);
+  const [hubSelectionState, setHubSelectionState] = useState({
+    characterId: null,
+    loading: false,
+    error: null,
+    notice: null,
+  });
   const panelRef = useRef(null);
   const drawerRef = useRef(null);
   const commandMenuRef = useRef(null);
@@ -238,6 +251,7 @@ export function AvatarStage() {
   const handleAvatarChange = useCallback(
     (avatarId) => {
       setAvatarReady(false);
+      setHubActive(false);
       setSelectedAvatarId(avatarId);
       const skins = listSkinsForAvatar(avatarId);
       const nextSkin =
@@ -252,10 +266,73 @@ export function AvatarStage() {
 
   const handleSkinChange = useCallback((skinId) => {
     setAvatarReady(false);
+    setHubActive(false);
     setSelectedSkinId(skinId);
   }, []);
 
-  const modelPath = resolveAvatarPath(selectedAvatarId, selectedSkinId);
+  const handleSelectHubCharacter = useCallback(
+    (arrayBuffer, character) => {
+      if (hubAvatar?.blobUrl) URL.revokeObjectURL(hubAvatar.blobUrl);
+      const blobUrl = URL.createObjectURL(
+        new Blob([arrayBuffer], { type: 'model/gltf-binary' }),
+      );
+      setAvatarReady(false);
+      setHubAvatar({ id: character.id, name: character.name, blobUrl });
+      setHubActive(true);
+      setHubSelectionState({
+        characterId: character.id,
+        loading: false,
+        error: null,
+        notice: `Loaded ${character.name}.`,
+      });
+    },
+    [hubAvatar],
+  );
+
+  const handleReactivateHubCharacter = useCallback(() => {
+    setHubActive(true);
+  }, []);
+
+  const handleHubCleared = useCallback(() => {
+    setHubActive(false);
+    setHubSelectionState({
+      characterId: null,
+      loading: false,
+      error: null,
+      notice: null,
+    });
+    setHubAvatar((previous) => {
+      if (previous?.blobUrl) URL.revokeObjectURL(previous.blobUrl);
+      return null;
+    });
+  }, []);
+
+  const handleHubSelectionStart = useCallback((character) => {
+    setHubSelectionState({
+      characterId: character.id,
+      loading: true,
+      error: null,
+      notice: `Loading ${character.name}...`,
+    });
+  }, []);
+
+  const handleHubSelectionError = useCallback((character, message) => {
+    setHubSelectionState({
+      characterId: character?.id ?? null,
+      loading: false,
+      error: message,
+      notice: null,
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (hubAvatar?.blobUrl) URL.revokeObjectURL(hubAvatar.blobUrl);
+    };
+  }, [hubAvatar]);
+
+  const modelPath =
+    hubActive && hubAvatar ? hubAvatar.blobUrl : resolveAvatarPath(selectedAvatarId, selectedSkinId);
 
   async function handleOverlayModeToggle() {
     const next = !overlayMode;
@@ -323,7 +400,7 @@ export function AvatarStage() {
       <div
         className={`avatar-hover-area ${avatarReady ? 'avatar-hover-area--ready' : ''}`}
         ref={hoverAreaRef}
-        style={{ width: STAGE.width, height: STAGE.height }}
+        style={{ width: STAGE.width, height: STAGE.height, '--stage-bar-height': `${STAGE.barHeight}px` }}
       >
         <AvatarStageShell
           environmentSelection={selectedBg}
@@ -383,6 +460,15 @@ export function AvatarStage() {
               onSkinChange={handleSkinChange}
               selectedBg={selectedBg}
               setSelectedBg={setSelectedBg}
+              onSelectHubCharacter={handleSelectHubCharacter}
+              onReactivateHubCharacter={handleReactivateHubCharacter}
+              onHubCleared={handleHubCleared}
+              hubAvatarId={hubAvatar?.id ?? null}
+              hubAvatarActive={hubActive}
+              onOpenSettingsForHub={() => setOpenPanel('settings')}
+              hubSelectionState={hubSelectionState}
+              onHubSelectionStart={handleHubSelectionStart}
+              onHubSelectionError={handleHubSelectionError}
             />
           )}
 
@@ -428,6 +514,19 @@ export function AvatarStage() {
               {desktopMode && (
                 <DesktopPanel overlayMode={overlayMode} onOverlayModeToggle={handleOverlayModeToggle} />
               )}
+              <Divider />
+              <VroidHubPanel
+                mode="settings"
+                onCharacterSelected={handleSelectHubCharacter}
+                onReactivateHub={handleReactivateHubCharacter}
+                onHubCleared={handleHubCleared}
+                loadedCharacterId={hubAvatar?.id ?? null}
+                loadedCharacterActive={hubActive}
+                hubSelectionState={hubSelectionState}
+                onHubSelectionStart={handleHubSelectionStart}
+                onHubSelectionError={handleHubSelectionError}
+              />
+              <Divider />
               <button
                 type="button"
                 className="panel-button panel-button--danger"

@@ -4,6 +4,7 @@ import { environments, customEnvironments, defaultColor } from '../../config/env
 import { avatars, listSkinsForAvatar } from '../../config/avatars';
 import { MiniAvatar } from '../avatar/MiniAvatar';
 import { AccordionSection, Divider } from '../ui/PanelPrimitives';
+import { VroidHubPanel } from './VroidHubPanel';
 
 export function PalettePanel({
   openAccordion,
@@ -14,6 +15,15 @@ export function PalettePanel({
   onSkinChange,
   selectedBg,
   setSelectedBg,
+  onSelectHubCharacter,
+  onReactivateHubCharacter,
+  onHubCleared,
+  hubAvatarId,
+  hubAvatarActive,
+  onOpenSettingsForHub,
+  hubSelectionState,
+  onHubSelectionStart,
+  onHubSelectionError,
 }) {
   const [customOpen, setCustomOpen] = useState(
     () => selectedBg.type === 'env' && selectedBg.id?.startsWith('custom-'),
@@ -72,6 +82,22 @@ export function PalettePanel({
               />
             );
           })}
+        </div>
+        <div className="vroid-hub-inline">
+          <Divider />
+          <p className="panel-note panel-note--compact">VRoid Hub (optional)</p>
+          <VroidHubPanel
+            mode="appearance"
+            onCharacterSelected={onSelectHubCharacter}
+            onReactivateHub={onReactivateHubCharacter}
+            onHubCleared={onHubCleared}
+            loadedCharacterId={hubAvatarId}
+            loadedCharacterActive={hubAvatarActive}
+            onOpenSettings={onOpenSettingsForHub}
+            hubSelectionState={hubSelectionState}
+            onHubSelectionStart={onHubSelectionStart}
+            onHubSelectionError={onHubSelectionError}
+          />
         </div>
       </AccordionSection>
 

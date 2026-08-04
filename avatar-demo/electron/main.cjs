@@ -1,4 +1,13 @@
-const { app, BrowserWindow, ipcMain, screen, session, desktopCapturer } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  safeStorage,
+  screen,
+  session,
+  shell,
+  desktopCapturer,
+} = require('electron');
 const path = require('path');
 const fs = require('fs');
 const {
@@ -7,6 +16,18 @@ const {
   resetSettings,
   getSettingsInfo,
 } = require('./settingsStore.cjs');
+const { createVroidHubAuth } = require('./vroid-hub-auth.cjs');
+const { createVroidHubClient } = require('./vroid-hub-client.cjs');
+const {
+  clearVroidHubCredentials,
+  readVroidHubCredentials,
+  writeVroidHubCredentials,
+} = require('./vroid-hub-credentials.cjs');
+const {
+  createVroidOauthServer,
+  DEFAULT_VROID_OAUTH_PORT,
+  OAUTH_CALLBACK_PATH,
+} = require('./vroid-oauth-server.cjs');
 
 const WINDOW_STATE_FILE = 'window-state.json';
 const DEFAULT_WIDTH = 420;
@@ -120,6 +141,82 @@ function defaultBounds() {
 /** @type {import('electron').BrowserWindow | null} */
 let mainWindow = null;
 let overlayMode = true;
+
+let vroidHubAuth = null;
+let vroidHubClient = null;
+let vroidCredentialsFilePath = null;
+let vroidOauthServer = null;
+let vroidOauthPort = Number(process.env.AVATAR_VROID_OAUTH_PORT) || DEFAULT_VROID_OAUTH_PORT;
+
+function vroidHubRedirectUri() {
+  return `http://127.0.0.1:${vroidOauthPort}${OAUTH_CALLBACK_PATH}`;
+}
+
+// Builds vroidHubAuth/vroidHubClient from a VRoid Hub OAuth app's client
+// id/secret (the user's own, saved via Settings). Requires OS-backed
+// encryption to be available, since the resulting session tokens are
+// persisted through it.
+function configureVroidHub(clientId, clientSecret) {
+  vroidHubAuth = createVroidHubAuth({
+    clientId,
+    clientSecret,
+    redirectUri: vroidHubRedirectUri(),
+    authFilePath: path.join(app.getPath('userData'), 'vroid-hub-auth.json'),
+    encrypt: (buffer) => safeStorage.encryptString(buffer.toString('utf8')),
+    decrypt: (buffer) => Buffer.from(safeStorage.decryptString(buffer), 'utf8'),
+  });
+  vroidHubClient = createVroidHubClient({ clientId });
+}
+
+// safeStorage.isEncryptionAvailable() alone isn't enough on Linux: without a
+// keyring (KWallet/GNOME Secret Service), Electron silently falls back to
+// "basic_text" — a hardcoded plaintext password, not real OS encryption —
+// while still reporting encryption as "available". Treat that fallback the
+// same as no secure storage at all.
+function hasSecureVroidStorage() {
+  if (!safeStorage.isEncryptionAvailable()) return false;
+  if (process.platform === 'linux' && safeStorage.getSelectedStorageBackend() === 'basic_text') {
+    return false;
+  }
+  return true;
+}
+
+function vroidHubStatus() {
+  return {
+    configured: vroidHubAuth != null,
+    connected: vroidHubAuth?.isConnected() ?? false,
+    redirect_uri: vroidHubRedirectUri(),
+  };
+}
+
+function broadcastVroidHubStatus() {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('vroid:status-updated', vroidHubStatus());
+  }
+}
+
+// Invoked once VRoid Hub redirects back to vroid-oauth-server.cjs's
+// /vroid-oauth-callback route with an authorization code. Throwing here
+// surfaces a failure page to the system browser without exposing any
+// Electron internals to it.
+async function completeVroidHubLogin({ code, state, error }) {
+  if (!vroidHubAuth) throw new Error('VRoid Hub is not configured.');
+  if (error) {
+    throw new Error(`VRoid Hub sign-in was cancelled or denied (${error}).`);
+  }
+  await vroidHubAuth.exchangeCode(code, state);
+  broadcastVroidHubStatus();
+}
+
+// Defense in depth for the VRoid Hub handlers specifically: they touch
+// encrypted secrets, an OAuth session, and shell.openExternal, so verify the
+// call actually came from this app's own window/frame rather than trusting
+// any renderer that can reach ipcMain (see Electron's IPC security guidance).
+function assertTrustedVroidSender(event) {
+  if (!mainWindow || mainWindow.isDestroyed() || event.senderFrame !== mainWindow.webContents.mainFrame) {
+    throw new Error('Rejected VRoid Hub IPC call from an untrusted sender.');
+  }
+}
 
 function getLogoPath() {
   return path.join(__dirname, '../public/AVATAR_LOGO_150.png');
@@ -417,9 +514,149 @@ ipcMain.handle('settings:reset', () => resetSettings(app));
 
 ipcMain.handle('settings:info', () => getSettingsInfo(app));
 
-app.whenReady().then(() => {
+ipcMain.handle('vroid:get-status', (event) => {
+  assertTrustedVroidSender(event);
+  return vroidHubStatus();
+});
+
+ipcMain.handle('vroid:get-credentials', (event) => {
+  assertTrustedVroidSender(event);
+  if (!hasSecureVroidStorage()) {
+    return { clientId: null, hasClientSecret: false };
+  }
+  const credentials = readVroidHubCredentials({
+    credentialsFilePath: vroidCredentialsFilePath,
+    decrypt: (buffer) => Buffer.from(safeStorage.decryptString(buffer), 'utf8'),
+  });
+  return {
+    clientId: credentials?.clientId ?? null,
+    hasClientSecret: credentials != null,
+  };
+});
+
+ipcMain.handle('vroid:set-credentials', (event, clientId, clientSecret) => {
+  assertTrustedVroidSender(event);
+  if (!hasSecureVroidStorage()) {
+    throw new Error(
+      'This OS has no secure credential storage available (on Linux, install a keyring such as ' +
+        'GNOME Keyring or KWallet), so VRoid Hub credentials cannot be saved.',
+    );
+  }
+  writeVroidHubCredentials(
+    {
+      credentialsFilePath: vroidCredentialsFilePath,
+      encrypt: (buffer) => safeStorage.encryptString(buffer.toString('utf8')),
+    },
+    { clientId, clientSecret },
+  );
+  // A new OAuth app means any existing session belongs to the old one.
+  vroidHubAuth?.disconnect();
+  configureVroidHub(clientId.trim(), clientSecret.trim());
+  broadcastVroidHubStatus();
+  return vroidHubStatus();
+});
+
+ipcMain.handle('vroid:clear-credentials', (event) => {
+  assertTrustedVroidSender(event);
+  clearVroidHubCredentials({ credentialsFilePath: vroidCredentialsFilePath });
+  vroidHubAuth?.disconnect();
+  vroidHubAuth = null;
+  vroidHubClient = null;
+  broadcastVroidHubStatus();
+  return vroidHubStatus();
+});
+
+ipcMain.handle('vroid:connect', (event) => {
+  assertTrustedVroidSender(event);
+  if (!vroidHubAuth) {
+    throw new Error('VRoid Hub is not configured. Add your VRoid Hub app credentials in Settings first.');
+  }
+  void shell.openExternal(vroidHubAuth.buildAuthorizeUrl());
+  return vroidHubStatus();
+});
+
+ipcMain.handle('vroid:disconnect', (event) => {
+  assertTrustedVroidSender(event);
+  vroidHubAuth?.disconnect();
+  return vroidHubStatus();
+});
+
+ipcMain.handle('vroid:list-characters', async (event) => {
+  assertTrustedVroidSender(event);
+  if (!vroidHubAuth?.isConnected()) {
+    throw new Error('Connect your VRoid Hub account first.');
+  }
+  const token = await vroidHubAuth.getValidAccessToken();
+  return vroidHubClient.listCharacters(token);
+});
+
+ipcMain.handle('vroid:select-character', async (event, characterId) => {
+  assertTrustedVroidSender(event);
+  if (!vroidHubAuth?.isConnected()) {
+    return { ok: false, error: 'Connect your VRoid Hub account first.' };
+  }
+  try {
+    const token = await vroidHubAuth.getValidAccessToken();
+    // No re-fetch of the character list to check characterId is in it: that's
+    // not a real gate anyway, since /api/download_licenses below is VRoid
+    // Hub's own authority on whether this id is licensable, and the renderer
+    // already has this id from the list it just rendered.
+    const buffer = await vroidHubClient.loadCharacterModel(token, characterId);
+    return {
+      ok: true,
+      data: buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { ok: false, error: message };
+  }
+});
+
+app.whenReady().then(async () => {
   setupDisplayMediaHandler();
   createWindow();
+
+  // VRoid Hub OAuth is opt-in and advanced: it's off until the user
+  // registers their own OAuth app at hub.vroid.com/oauth/applications and
+  // pastes its client id/secret into Settings (see docs/vroid-hub.md).
+  // Dev-only convenience: safeStorage needs a real OS keychain backend on
+  // Linux (KWallet or GNOME Secret Service over D-Bus). Contributors running
+  // avatar-demo from source without one would otherwise have the VRoid Hub
+  // feature silently disabled. Packaged builds never call this, so a
+  // distributed build still requires real OS-backed encryption.
+  if (!app.isPackaged) {
+    safeStorage.setUsePlainTextEncryption(true);
+  }
+  vroidCredentialsFilePath = path.join(app.getPath('userData'), 'vroid-hub-credentials.json');
+  if (hasSecureVroidStorage()) {
+    const vroidCredentials = readVroidHubCredentials({
+      credentialsFilePath: vroidCredentialsFilePath,
+      decrypt: (buffer) => Buffer.from(safeStorage.decryptString(buffer), 'utf8'),
+    });
+    if (vroidCredentials) {
+      configureVroidHub(vroidCredentials.clientId, vroidCredentials.clientSecret);
+    }
+  }
+
+  vroidOauthServer = createVroidOauthServer({
+    port: vroidOauthPort,
+    // Always wired in, not gated on vroidHubAuth at creation time: the user
+    // can configure VRoid Hub credentials from Settings at any point after
+    // the server starts, and completeVroidHubLogin itself already rejects if
+    // vroidHubAuth still isn't set by the time a callback lands.
+    onOauthCallback: completeVroidHubLogin,
+  });
+  try {
+    const address = await vroidOauthServer.listen();
+    if (address && typeof address === 'object') {
+      vroidOauthPort = address.port;
+    }
+  } catch {
+    // A real OAuth flow can't complete without this server, but the rest of
+    // the app (avatar, voice, environments) works fine without it — the
+    // VRoid Hub Settings panel will simply show Connect failing.
+    vroidOauthServer = null;
+  }
 });
 
 app.on('window-all-closed', () => {

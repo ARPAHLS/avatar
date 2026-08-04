@@ -56,6 +56,30 @@ Example: `avatar1B.vrm` → while Avatar 1 is selected, Skins lists Default + Sk
 
 ---
 
+## VRoid Hub characters (optional)
+
+On the **desktop** app you can connect your own VRoid Hub OAuth app and load
+characters you own (or hearted models available to other users) without
+dropping a `.vrm` into `src/assets/avatars/`.
+
+| Where | What |
+| :--- | :--- |
+| Gear → **Settings** | Register / paste OAuth credentials, Connect / Disconnect |
+| Gear → **Appearance** → **Avatars** | Built-ins **plus** Hub portraits once connected |
+
+Hub characters are **session-only** (held in memory, not saved to
+`config.yaml` or disk). Full walkthrough: [VRoid Hub connection](vroid-hub.md).
+
+<p align="center">
+  <img src="screenshots/74-vroid-appearance-avatars-hub.png" alt="Appearance with VRoid Hub characters" height="280" />
+</p>
+
+<p align="center">
+  <img src="screenshots/77-vroid-hub-on-stage.png" alt="VRoid Hub character on stage" height="280" />
+</p>
+
+---
+
 ## Framing
 
 All avatars share the same default camera (`X = -0.01`, `Y = 0.59`, …). If a new model sits high/low, use **Camera & Lighting** or that model’s own VRM ground offset. See [Camera & lighting](camera-and-lighting.md).
@@ -65,3 +89,6 @@ All avatars share the same default camera (`X = -0.01`, `Y = 0.59`, …). If a n
 ## Credits & licenses
 
 Third-party VRM / texture licenses: [Assets & credits](assets-and-credits.md). Contact `input@arpacorp.net` for contribution questions.
+
+Linked Hub models keep their authors’ VRoid Hub conditions of use — review
+them in-app before using a hearted character.

@@ -23,6 +23,7 @@ Electron desktop companion first; browser localhost for development.
 | [Manual animation testing](animations/manual-testing.md) | QA checklist for Default sequence |
 | [Audio sources](voice/audio-sources.md) | Desktop loopback, window, mic, file — full Voice panel reference |
 | [Lip sync](voice/lip-sync.md) | Amplitude visemes, live green dot, troubleshooting |
+| [VRoid Hub connection](vroid-hub.md) | Opt-in OAuth (Settings), pick characters in Appearance, session-only Hub VRMs |
 
 ## Project
 

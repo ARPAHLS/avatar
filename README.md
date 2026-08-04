@@ -34,6 +34,7 @@
   <a href="docs/avatars-and-skins.md">Avatars</a> ·
   <a href="docs/environments.md">Environments</a> ·
   <a href="docs/voice/audio-sources.md">Voice</a> ·
+  <a href="docs/vroid-hub.md">VRoid Hub</a> ·
   <a href="docs/animations/vrma.md">Animations</a> ·
   <a href="docs/user-settings.md">Settings</a> ·
   <a href="docs/assets-and-credits.md">Assets & Credits</a> ·
@@ -51,6 +52,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 
 - **Electron desktop overlay** — pin, snap, window scale, device loopback ([user guide](docs/using-the-app.md) · [settings](docs/user-settings.md))
 - **VRM avatars & skins** — drop-in `avatarN.vrm` / `avatarNB.vrm` ([avatars](docs/avatars-and-skins.md))
+- **VRoid Hub (optional)** — bring-your-own OAuth app; connect in Settings, pick characters in Appearance ([VRoid Hub](docs/vroid-hub.md))
 - **Environments** — built-ins, local Custom folder, color fade, or none ([environments](docs/environments.md))
 - **Persistent settings** — `config.yaml` across launches ([user settings](docs/user-settings.md))
 - **VRMA animations** — Default greeting + loop, plus clips ([VRMA](docs/animations/vrma.md))
@@ -136,6 +138,7 @@ Drop trial GIFs into `avatar-demo/src/assets/environments/custom/` (gitignored �
 | **Download** | [AVATAR-Setup-0.2.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) · [v0.2.0 release](https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0) |
 | **Characters & stage** | [Avatars & skins](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [Camera & lighting](docs/camera-and-lighting.md) |
 | **Motion & voice** | [VRMA](docs/animations/vrma.md) · [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-sync.md) |
+| **VRoid Hub** | [Opt-in OAuth connection](docs/vroid-hub.md) — bring your own OAuth app, sign in, use a licensed character |
 | **Settings** | [config.yaml & resets](docs/user-settings.md) |
 | **Architecture** | [Overview](docs/architecture/overview.md) · [Layout](docs/development/project-layout.md) |
 | **Assets** | [Assets & credits](docs/assets-and-credits.md) |
