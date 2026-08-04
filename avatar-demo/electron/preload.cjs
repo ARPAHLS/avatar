@@ -27,6 +27,12 @@ contextBridge.exposeInMainWorld('voxDesktop', {
   saveSettings: (settings) => ipcRenderer.invoke('settings:save', settings),
   resetSettings: () => ipcRenderer.invoke('settings:reset'),
   getSettingsInfo: () => ipcRenderer.invoke('settings:info'),
+  pickLibraryFolder: () => ipcRenderer.invoke('library:pick-folder'),
+  libraryPathExists: (dirPath) => ipcRenderer.invoke('library:path-exists', dirPath),
+  openLibraryFolder: (dirPath) => ipcRenderer.invoke('library:open-folder', dirPath),
+  scanLibraryAvatars: (dirPath) => ipcRenderer.invoke('library:scan-avatars', dirPath),
+  scanLibraryEnvironments: (dirPath) => ipcRenderer.invoke('library:scan-environments', dirPath),
+  readLibraryFile: (id) => ipcRenderer.invoke('library:read-file', id),
 });
 
 contextBridge.exposeInMainWorld('voxVroidHub', {

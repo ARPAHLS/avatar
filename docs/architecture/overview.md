@@ -28,12 +28,13 @@ flowchart TB
 
 | Panel | Contents |
 | :--- | :--- |
-| `PalettePanel` | Avatar picker (built-ins + optional VRoid Hub grid), Skins, Environments |
+| `PalettePanel` | Avatar picker (built-ins + optional VRoid Hub grid), Environments |
 | `VoicePanel` | Audio source / lip sync controls |
 | `CameraPanel` | Camera, light, avatar transform |
 | `DesktopPanel` | Overlay toggle + 3×3 snap pad |
+| `DirectoriesPanel` | Custom avatar / environment folders (desktop) |
 | `VroidHubPanel` | OAuth credentials / connect (Settings) and Hub character pick (Appearance) |
-| Settings drawer | Desktop controls + VRoid Hub setup + **Reset all settings** |
+| Settings drawer | Overlay, Snap, Directories, VRoid Hub, System (**Reset all settings**) |
 
 ### Configuration (`config/`)
 
@@ -56,8 +57,8 @@ Frameless transparent window, always-on-top overlay, snap, scale presets, system
 
 - **Electron first** — desktop overlay, scale, and device loopback are the primary product path; browser is for development.
 - **VRMA first** — skeletal clips (and sequences) drive the body while active.
-- **Drop-in avatars** — `avatarN.vrm` / `avatarNB.vrm` naming auto-registers models and skins.
+- **Drop-in avatars** — `avatarN.vrm` naming auto-registers models.
 - **VRoid Hub optional** — bring-your-own OAuth app; Hub VRMs are session-only in memory (not in `config.yaml`).
-- **Persistent prefs** — avatar, skin, camera, lighting, environment, animation, audio source, overlay, and scale survive restarts; reset from Settings.
+- **Persistent prefs** — avatar, camera, lighting, environment, animation, audio source, overlay, scale, and directories survive restarts; reset from Settings.
 - **Chrome contrast** — whitish bar/buttons on dark backdrops; silver only when the region behind the bar is clearly light.
 - **Future triggers** — keyword/event mapping will reuse the same animation catalog.

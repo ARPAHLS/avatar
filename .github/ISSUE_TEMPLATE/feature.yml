@@ -43,7 +43,7 @@ body:
     attributes:
       label: Primary surface
       options:
-        - Appearance (avatars / skins / environments)
+        - Appearance (avatars / environments)
         - Voice / lip sync
         - Camera & lighting
         - Animations

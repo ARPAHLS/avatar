@@ -10,8 +10,10 @@
 
 <div align="center">
   <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe"><img src="https://img.shields.io/badge/Version-0.3.0-b8d4f0?style=flat-square" alt="Version 0.3.0" /></a>
+  <a href="https://doi.org/10.5281/zenodo.21791157"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21791157-b8d4f0?style=flat-square" alt="DOI 10.5281/zenodo.21791157" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-ffb38a?style=flat-square" alt="License MIT" /></a>
   <a href="https://vrm.dev/ja/"><img src="https://img.shields.io/badge/BOOTH-VRM-f87171?style=flat-square" alt="BOOTH VRM" /></a>
+  <a href="https://hub.vroid.com/en/"><img src="https://img.shields.io/badge/VRoid-Hub-f0d78c?style=flat-square" alt="VRoid Hub" /></a>
 </div>
 
 <p align="center">&nbsp;</p>
@@ -22,7 +24,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/91-multi-avatar-strip.png" alt="Avatar 1, 2, and 3" height="260" />
+  <img src="docs/screenshots/91-multi-avatar-strip.png" alt="Avatar 1, 2, 3, and 4" height="260" />
 </p>
 
 <p align="center">
@@ -51,12 +53,12 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 ## What this is
 
 - **Electron desktop overlay** — pin, snap, window scale, device loopback ([user guide](docs/using-the-app.md) · [settings](docs/user-settings.md))
-- **VRM avatars & skins** — drop-in `avatarN.vrm` / `avatarNB.vrm` ([avatars](docs/avatars-and-skins.md))
-- **VRoid Hub (optional)** — bring-your-own OAuth app; connect in Settings, pick characters in Appearance ([VRoid Hub](docs/vroid-hub.md))
-- **Environments** — built-ins, local Custom folder, color fade, or none ([environments](docs/environments.md))
+- **VRM avatars** — bundled samples, plus your own `.vrm` folder from Settings → Directories ([avatars](docs/avatars-and-skins.md))
+- **VRoid Hub** — bring-your-own OAuth app; connect in Settings, pick characters in Appearance ([VRoid Hub](docs/vroid-hub.md))
+- **Environments** — built-ins, Custom folder from Settings → Directories, color fade, or none ([environments](docs/environments.md))
 - **Persistent settings** — `config.yaml` across launches ([user settings](docs/user-settings.md))
 - **VRMA animations** — Default greeting + loop, plus clips ([VRMA](docs/animations/vrma.md))
-- **Browser / localhost** — optional for contributors ([install](docs/getting-started/installation.md))
+- **Browser / localhost** — for contributors ([install](docs/getting-started/installation.md))
 
 <p align="center">
   <img src="docs/screenshots/01-hero-overlay-dark-ide.png" alt="AVATAR overlay on a dark IDE" width="100%" />
@@ -92,7 +94,7 @@ Open [http://localhost:5173](http://localhost:5173). Prefer Electron when testin
 
 ---
 
-Gear menu: Appearance (Avatars · Skins · Environments) · Voice · Camera · Animations · Settings. Scale control sits next to the gear.
+Gear menu: Appearance (Avatars · Environments) · Voice · Camera · Animations · Settings. Scale control sits next to the gear.
 
 **First launch behavior:** Greeting once, then a looping motion set; desktop audio defaults to device output; preferences restore from `config.yaml` on later launches. Full walkthrough: [Using the app](docs/using-the-app.md) · [First session](docs/getting-started/first-session.md).
 
@@ -123,22 +125,26 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 
 ### Swap avatars
 
-Drop `avatar4.vrm` (or `avatar1B.vrm` for a skin) into `avatar-demo/src/assets/avatars/`, restart desktop, pick it under Appearance. See [Avatars & skins](docs/avatars-and-skins.md).
+**Desktop / installer:** Gear → **Settings** → **Directories** → **Avatars** → **Custom**, pick a folder of `.vrm` files. Appearance then shows that list. You can also use **VRoid Hub** under Appearance. Guide: [Avatars](docs/avatars-and-skins.md) · [VRoid Hub](docs/vroid-hub.md).
 
-### Custom environments (local)
+**From source (contributors):** drop `avatar4.vrm` into `avatar-demo/src/assets/avatars/` and restart — naming is covered in the avatars guide.
 
-Drop trial GIFs into `avatar-demo/src/assets/environments/custom/` (gitignored — local only; not shipped in the Windows installer). Restart, open Appearance → Environments → **Custom**. Details: [Environments](docs/environments.md).
+### Custom environments
+
+**Desktop / installer:** Gear → **Settings** → **Directories** → **Environments** → **Custom**, pick a folder of `.gif` / `.png` / `.jpg` / `.jpeg`. Built-ins stay; Appearance → Environments gains a **Custom** expander. Guide: [Environments](docs/environments.md).
+
+**From source (contributors):** trial files can also go in `avatar-demo/src/assets/environments/custom/` while Directories is Default (local only; not shipped in the installer).
 
 ## Documentation
 
 | Topic | Links |
 | :--- | :--- |
-| **User guide** | [Using the app](docs/using-the-app.md) — every menu, default, and reset |
+| **User guide** | [Using the app](docs/using-the-app.md) |
 | **Getting started** | [Install](docs/getting-started/installation.md) · [First session](docs/getting-started/first-session.md) |
 | **Download** | [AVATAR-Setup-0.3.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe) · [v0.3.0 release](https://github.com/ARPAHLS/avatar/releases/tag/v0.3.0) |
-| **Characters & stage** | [Avatars & skins](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [Camera & lighting](docs/camera-and-lighting.md) |
+| **Characters & stage** | [Avatars](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [Camera & lighting](docs/camera-and-lighting.md) |
 | **Motion & voice** | [VRMA](docs/animations/vrma.md) · [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-sync.md) |
-| **VRoid Hub** | [Opt-in OAuth connection](docs/vroid-hub.md) — bring your own OAuth app, sign in, use a licensed character |
+| **VRoid Hub** | [VRoid Hub connection](docs/vroid-hub.md) |
 | **Settings** | [config.yaml & resets](docs/user-settings.md) |
 | **Architecture** | [Overview](docs/architecture/overview.md) · [Layout](docs/development/project-layout.md) |
 | **Assets** | [Assets & credits](docs/assets-and-credits.md) |
@@ -150,7 +156,7 @@ Drop trial GIFs into `avatar-demo/src/assets/environments/custom/` (gitignored �
 avatar/
 ├── docs/
 │   ├── using-the-app.md
-│   ├── screenshots/          # product media for README & guides
+│   ├── screenshots/
 │   └── …
 ├── avatar-demo/
 │   ├── electron/
@@ -159,7 +165,7 @@ avatar/
 │       ├── assets/avatars/
 │       └── assets/environments/
 │           ├── stars.gif / code.gif / bloom.gif
-│           └── custom/         # local trials only (gitignored media)
+│           └── custom/
 ├── CHANGELOG.md
 ├── CITATION.cff
 └── README.md
@@ -175,6 +181,8 @@ Bundled motions are the **7 free VRMA files** from the **VRoid Project** on [BOO
 > （キャラクターアニメーション: ピクシブ株式会社 VRoidプロジェクト）
 
 Full terms: **[docs/assets-and-credits.md](docs/assets-and-credits.md)** · Rights holders: **input@arpacorp.net**
+
+Beyond the bundled samples, you can bring your own characters and backdrops: **Settings → Directories** (local `.vrm` / image folders) and **VRoid Hub** (linked characters, session-only). See [Avatars](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [VRoid Hub](docs/vroid-hub.md) · [Using the app](docs/using-the-app.md).
 
 ## Privacy
 

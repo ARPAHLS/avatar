@@ -2,13 +2,33 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { defaultAnimationId } from '../config/animations';
 import { getDefaultAudioSourceId } from '../config/audioSources';
-import { defaultColor } from '../config/environments';
-import { defaultAvatarId, defaultSkinId, resolveAvatarPath, listSkinsForAvatar } from '../config/avatars';
+import {
+  customEnvironments,
+  defaultColor,
+  setLibraryCustomEnvironments,
+} from '../config/environments';
+import {
+  avatars as bundledAvatars,
+  defaultAvatarId,
+  defaultSkinId,
+  resolveAvatarPath,
+} from '../config/avatars';
 import { defaultAvatar, defaultCamera, defaultLight, STAGE } from '../config/defaults';
 import { defaultWindowScale, normalizeWindowScale } from '../config/windowScale';
-import { createDefaultUserSettings, snapshotUserSettings } from '../config/userSettings';
+import {
+  createDefaultDirectories,
+  createDefaultDirectorySource,
+  createDefaultUserSettings,
+  snapshotUserSettings,
+} from '../config/userSettings';
 import { useAudioSource } from '../hooks/useAudioSource';
-import { getDesktopApi, isDesktopMode } from '../lib/desktopMode';
+import { getDesktopApi, getLibraryApi, isDesktopMode } from '../lib/desktopMode';
+import {
+  loadLibraryAvatars,
+  loadLibraryEnvironments,
+  revokeAvatarBlobUrls,
+  revokeEnvironmentBlobUrls,
+} from '../lib/userLibrary';
 import { loadUserSettings, resetUserSettings, saveUserSettings } from '../lib/userSettingsStore';
 import { VrmAvatar } from './avatar/VrmAvatar';
 import { AvatarStageShell } from './avatar/AvatarStageShell';
@@ -19,6 +39,7 @@ import { PalettePanel } from './panels/PalettePanel';
 import { VoicePanel } from './panels/VoicePanel';
 import { CameraPanel } from './panels/CameraPanel';
 import { DesktopPanel } from './panels/DesktopPanel';
+import { DirectoriesPanel } from './panels/DirectoriesPanel';
 import { VroidHubPanel } from './panels/VroidHubPanel';
 
 const desktopMode = isDesktopMode();
@@ -57,6 +78,12 @@ export function AvatarStage() {
     error: null,
     notice: null,
   });
+  const [directories, setDirectories] = useState(createDefaultDirectories);
+  const [libraryAvatars, setLibraryAvatars] = useState([]);
+  const [libraryEnvironments, setLibraryEnvironments] = useState([]);
+  const [directoriesNotice, setDirectoriesNotice] = useState(null);
+  const libraryAvatarsRef = useRef([]);
+  const libraryEnvironmentsRef = useRef([]);
   const panelRef = useRef(null);
   const drawerRef = useRef(null);
   const commandMenuRef = useRef(null);
@@ -98,6 +125,7 @@ export function AvatarStage() {
     setOverlayMode(settings.overlayMode);
     document.documentElement.classList.toggle('vox-desktop-windowed', !settings.overlayMode);
     setWindowScale(normalizeWindowScale(settings.windowScale));
+    setDirectories(settings.directories ?? createDefaultDirectories());
   }, []);
 
   useEffect(() => {
@@ -179,6 +207,7 @@ export function AvatarStage() {
         windowSourceId,
         overlayMode,
         windowScale,
+        directories,
       });
       void saveUserSettings(snapshot);
     }, SAVE_DEBOUNCE_MS);
@@ -197,6 +226,7 @@ export function AvatarStage() {
     windowSourceId,
     overlayMode,
     windowScale,
+    directories,
   ]);
 
   useEffect(() => {
@@ -248,26 +278,240 @@ export function AvatarStage() {
     void getDesktopApi()?.notifyReady?.();
   }, []);
 
-  const handleAvatarChange = useCallback(
-    (avatarId) => {
+  const customAvatarMode =
+    desktopMode && directories.avatars.mode === 'custom' && Boolean(directories.avatars.path);
+  const avatarCatalog = customAvatarMode ? libraryAvatars : bundledAvatars;
+  const appearanceCustomEnvironments =
+    desktopMode && directories.environments.mode === 'custom' && Boolean(directories.environments.path)
+      ? libraryEnvironments
+      : customEnvironments;
+
+  useEffect(() => {
+    libraryAvatarsRef.current = libraryAvatars;
+  }, [libraryAvatars]);
+
+  useEffect(() => {
+    libraryEnvironmentsRef.current = libraryEnvironments;
+  }, [libraryEnvironments]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function refreshAvatarLibrary() {
+      revokeAvatarBlobUrls(libraryAvatarsRef.current);
+      if (!customAvatarMode || !directories.avatars.path) {
+        if (!cancelled) {
+          setLibraryAvatars([]);
+        }
+        return;
+      }
+
+      const { avatars: next, error } = await loadLibraryAvatars(directories.avatars.path);
+      if (cancelled) {
+        revokeAvatarBlobUrls(next);
+        return;
+      }
+      setLibraryAvatars(next);
+      if (error) {
+        setDirectoriesNotice(error);
+        setDirectories((prev) => ({
+          ...prev,
+          avatars: createDefaultDirectorySource(),
+        }));
+        setSelectedAvatarId(defaultAvatarId);
+        setSelectedSkinId(defaultSkinId);
+        // Same bundled path may not re-fire onLoaded — force the stage visible again.
+        setAvatarReady(true);
+        return;
+      }
+      setDirectoriesNotice((prev) =>
+        prev && prev.toLowerCase().includes('avatar') ? null : prev,
+      );
+      if (next.length === 0) {
+        setDirectoriesNotice(
+          'No .vrm files in that folder. Keeping the default avatar list.',
+        );
+        setDirectories((prev) => ({
+          ...prev,
+          avatars: createDefaultDirectorySource(),
+        }));
+        setLibraryAvatars([]);
+        setSelectedAvatarId(defaultAvatarId);
+        setSelectedSkinId(defaultSkinId);
+        setAvatarReady(true);
+        return;
+      }
+      setSelectedAvatarId((current) =>
+        next.some((entry) => entry.id === current) ? current : next[0].id,
+      );
+      setSelectedSkinId(defaultSkinId);
       setAvatarReady(false);
+    }
+
+    void refreshAvatarLibrary();
+    return () => {
+      cancelled = true;
+    };
+  }, [customAvatarMode, directories.avatars.path]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function refreshEnvLibrary() {
+      revokeEnvironmentBlobUrls(libraryEnvironmentsRef.current);
+      const useLibrary =
+        desktopMode &&
+        directories.environments.mode === 'custom' &&
+        Boolean(directories.environments.path);
+
+      if (!useLibrary) {
+        setLibraryCustomEnvironments([]);
+        if (!cancelled) setLibraryEnvironments([]);
+        return;
+      }
+
+      const { environments: next, error } = await loadLibraryEnvironments(
+        directories.environments.path,
+      );
+      if (cancelled) {
+        revokeEnvironmentBlobUrls(next);
+        return;
+      }
+      setLibraryEnvironments(next);
+      setLibraryCustomEnvironments(next);
+      if (error) {
+        setDirectoriesNotice(error);
+        setDirectories((prev) => ({
+          ...prev,
+          environments: createDefaultDirectorySource(),
+        }));
+        setLibraryEnvironments([]);
+        setLibraryCustomEnvironments([]);
+        setSelectedBg((prev) =>
+          prev.type === 'env' && String(prev.id).startsWith('lib-env-')
+            ? { type: 'color', value: defaultColor }
+            : prev,
+        );
+        return;
+      }
+      if (next.length === 0) {
+        setDirectoriesNotice(
+          'No .gif / .png / .jpg / .jpeg files in that folder. Keeping the default environment source.',
+        );
+        setDirectories((prev) => ({
+          ...prev,
+          environments: createDefaultDirectorySource(),
+        }));
+        setLibraryEnvironments([]);
+        setLibraryCustomEnvironments([]);
+        setSelectedBg((prev) =>
+          prev.type === 'env' && String(prev.id).startsWith('lib-env-')
+            ? { type: 'color', value: defaultColor }
+            : prev,
+        );
+        return;
+      }
+      setDirectoriesNotice((prev) =>
+        prev && prev.toLowerCase().includes('environment') ? null : prev,
+      );
+    }
+
+    void refreshEnvLibrary();
+    return () => {
+      cancelled = true;
+    };
+  }, [directories.environments.mode, directories.environments.path]);
+
+  useEffect(() => {
+    return () => {
+      revokeAvatarBlobUrls(libraryAvatarsRef.current);
+      revokeEnvironmentBlobUrls(libraryEnvironmentsRef.current);
+      setLibraryCustomEnvironments([]);
+    };
+  }, []);
+
+  const handleBrowseDirectory = useCallback(async (kind) => {
+    const api = getLibraryApi();
+    if (!api) return;
+    const picked = await api.pickFolder();
+    if (!picked) return;
+
+    try {
+      if (kind === 'avatars') {
+        const scanned = await api.scanAvatars(picked);
+        if (!scanned.length) {
+          setDirectoriesNotice(
+            'No .vrm files in that folder. Keeping the current avatar source.',
+          );
+          return;
+        }
+      } else if (kind === 'environments') {
+        const scanned = await api.scanEnvironments(picked);
+        if (!scanned.length) {
+          setDirectoriesNotice(
+            'No .gif / .png / .jpg / .jpeg files in that folder. Keeping the current environment source.',
+          );
+          return;
+        }
+      }
+    } catch (error) {
+      setDirectoriesNotice(
+        error instanceof Error ? error.message : 'Could not read that folder.',
+      );
+      return;
+    }
+
+    setDirectoriesNotice(null);
+    setDirectories((prev) => ({
+      ...prev,
+      [kind]: { mode: 'custom', path: picked },
+    }));
+    if (kind === 'avatars') {
       setHubActive(false);
-      setSelectedAvatarId(avatarId);
-      const skins = listSkinsForAvatar(avatarId);
-      const nextSkin =
-        skins.find((skin) => skin.id === selectedSkinId)?.id ??
-        skins.find((skin) => skin.id === defaultSkinId)?.id ??
-        skins[0]?.id ??
-        defaultSkinId;
-      setSelectedSkinId(nextSkin);
+      setAvatarReady(false);
+    }
+  }, []);
+
+  const handleOpenDirectory = useCallback(
+    async (kind) => {
+      const api = getLibraryApi();
+      const pathValue = directories[kind]?.path;
+      if (!api || !pathValue) return;
+      try {
+        await api.openFolder(pathValue);
+      } catch (error) {
+        setDirectoriesNotice(error instanceof Error ? error.message : 'Could not open folder.');
+      }
     },
-    [selectedSkinId],
+    [directories],
   );
 
-  const handleSkinChange = useCallback((skinId) => {
+  const handleClearDirectory = useCallback((kind) => {
+    setDirectoriesNotice(null);
+    setDirectories((prev) => ({
+      ...prev,
+      [kind]: createDefaultDirectorySource(),
+    }));
+    if (kind === 'avatars') {
+      setSelectedAvatarId(defaultAvatarId);
+      setSelectedSkinId(defaultSkinId);
+      setAvatarReady(false);
+      setHubActive(false);
+    }
+    if (kind === 'environments') {
+      setSelectedBg((prev) =>
+        prev.type === 'env' && String(prev.id).startsWith('lib-env-')
+          ? { type: 'color', value: defaultColor }
+          : prev,
+      );
+    }
+  }, []);
+
+  const handleAvatarChange = useCallback((avatarId) => {
     setAvatarReady(false);
     setHubActive(false);
-    setSelectedSkinId(skinId);
+    setSelectedAvatarId(avatarId);
+    setSelectedSkinId(defaultSkinId);
   }, []);
 
   const handleSelectHubCharacter = useCallback(
@@ -332,7 +576,20 @@ export function AvatarStage() {
   }, [hubAvatar]);
 
   const modelPath =
-    hubActive && hubAvatar ? hubAvatar.blobUrl : resolveAvatarPath(selectedAvatarId, selectedSkinId);
+    hubActive && hubAvatar
+      ? hubAvatar.blobUrl
+      : customAvatarMode
+        ? libraryAvatars.find((entry) => entry.id === selectedAvatarId)?.skins?.[0]?.path ??
+          libraryAvatars[0]?.skins?.[0]?.path ??
+          null
+        : resolveAvatarPath(selectedAvatarId, selectedSkinId);
+
+  // Avoid a blank companion shell when there is no model to load (e.g. mid-reject).
+  useEffect(() => {
+    if (!modelPath && !hubActive) {
+      setAvatarReady(true);
+    }
+  }, [modelPath, hubActive]);
 
   async function handleOverlayModeToggle() {
     const next = !overlayMode;
@@ -377,6 +634,13 @@ export function AvatarStage() {
     }
 
     applySettings(defaults);
+    setDirectories(createDefaultDirectories());
+    setDirectoriesNotice(null);
+    setLibraryCustomEnvironments([]);
+    revokeAvatarBlobUrls(libraryAvatarsRef.current);
+    revokeEnvironmentBlobUrls(libraryEnvironmentsRef.current);
+    setLibraryAvatars([]);
+    setLibraryEnvironments([]);
     setAudioFile(null);
     setAnimationRequest((count) => count + 1);
 
@@ -454,12 +718,13 @@ export function AvatarStage() {
             <PalettePanel
               openAccordion={openAccordion}
               setOpenAccordion={setOpenAccordion}
+              avatarCatalog={avatarCatalog}
+              customAvatarMode={customAvatarMode}
               selectedAvatarId={selectedAvatarId}
               onAvatarChange={handleAvatarChange}
-              selectedSkinId={selectedSkinId}
-              onSkinChange={handleSkinChange}
               selectedBg={selectedBg}
               setSelectedBg={setSelectedBg}
+              customEnvironmentList={appearanceCustomEnvironments}
               onSelectHubCharacter={handleSelectHubCharacter}
               onReactivateHubCharacter={handleReactivateHubCharacter}
               onHubCleared={handleHubCleared}
@@ -514,7 +779,21 @@ export function AvatarStage() {
               {desktopMode && (
                 <DesktopPanel overlayMode={overlayMode} onOverlayModeToggle={handleOverlayModeToggle} />
               )}
+              {desktopMode && (
+                <>
+                  <Divider />
+                  <p className="settings-section-title">Directories</p>
+                  <DirectoriesPanel
+                    directories={directories}
+                    onBrowse={handleBrowseDirectory}
+                    onOpenFolder={handleOpenDirectory}
+                    onClear={handleClearDirectory}
+                    notice={directoriesNotice}
+                  />
+                </>
+              )}
               <Divider />
+              <p className="settings-section-title">VRoid Hub</p>
               <VroidHubPanel
                 mode="settings"
                 onCharacterSelected={handleSelectHubCharacter}
@@ -527,6 +806,7 @@ export function AvatarStage() {
                 onHubSelectionError={handleHubSelectionError}
               />
               <Divider />
+              <p className="settings-section-title">System</p>
               <button
                 type="button"
                 className="panel-button panel-button--danger"

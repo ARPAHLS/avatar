@@ -16,7 +16,7 @@ Electron desktop companion first; browser localhost for development.
 
 | Doc | Description |
 | :--- | :--- |
-| [Avatars & skins](avatars-and-skins.md) | `avatarN.vrm` / `avatarNB.vrm` drop-in naming |
+| [Avatars](avatars-and-skins.md) | `avatarN.vrm` drop-in naming, custom folders, VRoid Hub |
 | [Environments](environments.md) | Built-in, Custom, color, none, chrome contrast |
 | [Camera & lighting](camera-and-lighting.md) | Framing, lights, avatar transform, resets |
 | [VRMA animations](animations/vrma.md) | Default greeting + loop, individual clips |

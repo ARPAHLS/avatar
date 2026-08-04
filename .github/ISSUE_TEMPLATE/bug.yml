@@ -47,7 +47,7 @@ body:
     attributes:
       label: Primary area
       options:
-        - Appearance (avatars / skins)
+        - Appearance (avatars / environments)
         - Environments
         - Voice / audio capture
         - Lip sync

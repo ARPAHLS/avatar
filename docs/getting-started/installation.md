@@ -61,6 +61,6 @@ Produces `AVATAR-Setup-*.exe` under `desktop-setup/` at the repo root (local bui
 | :--- | :--- |
 | SmartScreen warning | Unsigned installer — More info → Run anyway |
 | Blank stage | Confirm `avatar1.vrm` (etc.) under `src/assets/avatars/` |
-| New VRM missing | Match `avatarN.vrm` / `avatarNB.vrm` naming; restart |
+| New VRM missing | Match `avatarN.vrm` naming; restart |
 | Desktop audio missing | Voice → **Device output** or pick a window |
 | Tab audio (browser) | Share tab with **Share tab audio** enabled |

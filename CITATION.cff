@@ -18,6 +18,10 @@ license: MIT
 repository-code: "https://github.com/ARPAHLS/avatar"
 url: "https://github.com/ARPAHLS/avatar"
 repository-artifact: "https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21791157
+    description: Concept DOI (all versions) — https://doi.org/10.5281/zenodo.21791157
 authors:
   - family-names: Peilivanidis
     given-names: Vladimiros
@@ -50,4 +54,5 @@ preferred-citation:
       alias: Ross Peili
     - name: "ARPA Hellenic Logical Systems"
   year: 2026
-  url: "https://github.com/ARPAHLS/avatar"
+  doi: "10.5281/zenodo.21791157"
+  url: "https://doi.org/10.5281/zenodo.21791157"

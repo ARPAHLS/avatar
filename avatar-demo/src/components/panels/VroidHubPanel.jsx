@@ -313,8 +313,8 @@ export function VroidHubPanel({
     <>
       {isSettingsMode && (
         <p className="panel-note panel-note--compact">
-          Advanced: connect your own VRoid Hub OAuth app. After connecting, characters appear
-          under Appearance → Avatars.
+          Connect your own VRoid Hub OAuth app. After connecting, characters appear under Appearance →
+          Avatars.
         </p>
       )}
       {isAppearanceMode && (

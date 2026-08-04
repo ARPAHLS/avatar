@@ -1,4 +1,4 @@
-# Avatars & skins
+# Avatars
 
 ## Bundled characters
 
@@ -13,7 +13,7 @@ Path: `avatar-demo/src/assets/avatars/`.
 Gear → **Appearance** → **Avatars**. Selection persists as `avatarId` in [config.yaml](user-settings.md).
 
 <p align="center">
-  <img src="screenshots/91-multi-avatar-strip.png" alt="Avatar 1, 2, and 3" height="240" />
+  <img src="screenshots/91-multi-avatar-strip.png" alt="Avatar 1, 2, 3, and 4" height="240" />
 </p>
 
 <p align="center">
@@ -28,31 +28,27 @@ Gear → **Appearance** → **Avatars**. Selection persists as `avatarId` in [co
 
 ---
 
-## Drop-in naming
+## Custom avatar folder (desktop)
+
+Gear → **Settings** → **Directories** → **Avatars** → **Custom**, pick a folder of `.vrm` files.
+
+- Appearance → Avatars shows **those files instead of** bundled Avatar 1/2/3.
+- Optional **VRoid Hub** block still appears under the strip.
+- Reset the directory (or Reset all settings) to restore bundled avatars.
+
+<p align="center">
+  <img src="screenshots/31-appearance-avatars-custom-dir.png" alt="Appearance Avatars from a custom folder" height="240" />
+</p>
+
+---
+
+## Drop-in naming (bundled / contributor)
 
 | Pattern | Meaning |
 | :--- | :--- |
 | `avatarN.vrm` | New character **Avatar N** (N = 1, 2, 3, …) |
-| `avatarNB.vrm` | Skin **B** for Avatar N |
-| `avatarNC.vrm` | Skin **C**, and so on |
 
-Vite’s glob picks them up after restart. No manual registry edit for basic drop-ins.
-
----
-
-## Skins
-
-Gear → **Appearance** → **Skins**.
-
-- Shows skins for the **currently selected** avatar only.  
-- Each avatar has at least **Default** (the base `avatarN.vrm`).  
-- Extra lettered files unlock Skin B / C / …  
-
-<p align="center">
-  <img src="screenshots/31-appearance-skins.png" alt="Skins section" height="240" />
-</p>
-
-Example: `avatar1B.vrm` → while Avatar 1 is selected, Skins lists Default + Skin B.
+Vite’s glob picks them up after restart. No manual registry edit for basic drop-ins. Letter-suffixed files like `avatar1B.vrm` are ignored.
 
 ---
 

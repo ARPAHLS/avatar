@@ -12,7 +12,7 @@
 - [x] Electron desktop overlay (snap, pin/windowed, window scale, device loopback)
 - [x] VRMA playback + Default greeting/loop sequence
 - [x] Gear menus: Appearance / Voice / Camera / Animations / Settings
-- [x] Drop-in `avatarN.vrm` / `avatarNB.vrm` catalog
+- [x] Drop-in `avatarN.vrm` catalog
 - [x] Persisted `config.yaml` settings + reset
 - [x] Documentation, screenshots, asset credits
 - [x] Windows NSIS installer (`npm run dist:win`)
@@ -23,9 +23,11 @@
 - [ ] Keyword → animation mapping table
 - [ ] Agent/event bus hook for external triggers
 - [ ] Optional idle VRMA loop
+- [ ] Custom animation directories (`.vrma`) — Settings row reserved
 - [ ] Code-signed Windows installer
 - [ ] Broader CI (lint / build)
 - [ ] Asset license audit and manifest
 - [ ] Security review for capture permissions copy
 - [ ] Performance pass on dual Canvas avatar pickers
 - [ ] Harden VRoid Hub VRM download for restrictive networks / CDN paths
+- [x] User Directories for avatars / environments (issue #2 redesign)

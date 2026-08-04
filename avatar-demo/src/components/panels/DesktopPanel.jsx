@@ -46,7 +46,7 @@ export function DesktopPanel({ overlayMode, onOverlayModeToggle }) {
       </p>
 
       <div className="desktop-toggle-row">
-        <span>Overlay mode</span>
+        <span className="settings-section-title">Overlay mode</span>
         <input
           type="checkbox"
           className="panel-checkbox"
@@ -55,7 +55,9 @@ export function DesktopPanel({ overlayMode, onOverlayModeToggle }) {
         />
       </div>
 
-      <p className="panel-note panel-note--compact">Snap to screen</p>
+      <div className="panel-divider" />
+
+      <p className="settings-section-title">Snap to screen</p>
       <div className="desktop-snap-pad" role="group" aria-label="Snap to screen position">
         {SNAP_CELLS.map((cell) => {
           const active = selectedSnap === cell.id;

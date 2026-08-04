@@ -42,16 +42,27 @@ The Color fade row stays pinned under the environment list (**Use color** + **Re
 
 ---
 
-## Custom GIFs (local only)
+## Custom environments
 
-The `custom/` folder is for **your** trial media. Files inside it are **not** committed to git (the empty folder is kept via `.gitkeep`).
+### Desktop — Settings → Directories
 
-**Shipped Windows builds** (`npm run dist:win`) intentionally leave Custom empty — local trial GIFs are not packaged into the installer. Dev (`npm run dev` / `dev:desktop`) still picks up anything you drop in `custom/`.
+1. Gear → **Settings** → **Directories** → **Environments** → **Custom**.
+2. Pick a folder of `.gif`, `.png`, `.jpg`, or `.jpeg` files.
+3. Appearance → Environments keeps **Stars / Code / Bloom / None**, and shows a **Custom** expander when the folder has files.
 
-### How to use
+Built-ins are **never** replaced by a custom env directory (unlike avatars).
 
-1. Drop media into `avatar-demo/src/assets/environments/custom/`  
-   (`.gif`, `.webp`, `.png`, `.jpg`, `.jpeg`, `.jfif`).  
+<p align="center">
+  <img src="screenshots/34-appearance-env-custom-dir.png" alt="Custom environments from a Directories folder" height="260" />
+</p>
+
+### Contributor — Vite `custom/` folder (dev)
+
+The `custom/` folder is for **local trial media** when Directories is still Default. Files inside it are **not** committed to git (the empty folder is kept via `.gitkeep`).
+
+**Shipped Windows builds** do not pack local Custom media. Prefer Settings → Directories for installer users.
+
+1. Drop media into `avatar-demo/src/assets/environments/custom/` (`.gif`, `.png`, `.jpg`, `.jpeg`).  
 2. Restart Vite / Electron so Vite’s glob picks them up.  
 3. Gear → Appearance → Environments → open **Custom**.
 

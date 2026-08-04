@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { environments, customEnvironments, defaultColor } from '../../config/environments';
-import { avatars, listSkinsForAvatar } from '../../config/avatars';
+import { environments, defaultColor } from '../../config/environments';
 import { MiniAvatar } from '../avatar/MiniAvatar';
 import { AccordionSection, Divider } from '../ui/PanelPrimitives';
 import { VroidHubPanel } from './VroidHubPanel';
@@ -9,12 +8,13 @@ import { VroidHubPanel } from './VroidHubPanel';
 export function PalettePanel({
   openAccordion,
   setOpenAccordion,
+  avatarCatalog,
+  customAvatarMode = false,
   selectedAvatarId,
   onAvatarChange,
-  selectedSkinId,
-  onSkinChange,
   selectedBg,
   setSelectedBg,
+  customEnvironmentList = [],
   onSelectHubCharacter,
   onReactivateHubCharacter,
   onHubCleared,
@@ -25,13 +25,11 @@ export function PalettePanel({
   onHubSelectionStart,
   onHubSelectionError,
 }) {
-  const [customOpen, setCustomOpen] = useState(
-    () => selectedBg.type === 'env' && selectedBg.id?.startsWith('custom-'),
-  );
+  const [customOpen, setCustomOpen] = useState(() => {
+    if (selectedBg.type !== 'env' || typeof selectedBg.id !== 'string') return false;
+    return selectedBg.id.startsWith('custom-') || selectedBg.id.startsWith('lib-env-');
+  });
   const environmentPanelRef = useRef(null);
-
-  const skins = listSkinsForAvatar(selectedAvatarId);
-  const selectedAvatar = avatars.find((entry) => entry.id === selectedAvatarId) ?? avatars[0];
 
   const colorValue =
     selectedBg.type === 'color'
@@ -41,7 +39,7 @@ export function PalettePanel({
       : defaultColor;
 
   const customSelected =
-    selectedBg.type === 'env' && customEnvironments.some((env) => env.id === selectedBg.id);
+    selectedBg.type === 'env' && customEnvironmentList.some((env) => env.id === selectedBg.id);
 
   // Electron drag-region parents often drop wheel events; drive scrollTop directly.
   useLayoutEffect(() => {
@@ -68,24 +66,34 @@ export function PalettePanel({
         onClick={() => setOpenAccordion(openAccordion === 'avatars' ? null : 'avatars')}
         label="Avatars"
       >
-        <p className="panel-note panel-note--compact">Choose a character model.</p>
-        <div className="avatar-picker">
-          {avatars.map((entry) => {
-            const previewPath =
-              entry.skins.find((skin) => skin.id === 'default')?.path ?? entry.skins[0]?.path;
-            return (
-              <MiniAvatar
-                key={entry.id}
-                modelPath={previewPath}
-                selected={selectedAvatarId === entry.id}
-                onClick={() => onAvatarChange(entry.id)}
-              />
-            );
-          })}
-        </div>
+        <p className="panel-note panel-note--compact">
+          {customAvatarMode
+            ? 'Characters from your custom avatar folder (.vrm).'
+            : 'Choose a character model.'}
+        </p>
+        {avatarCatalog.length === 0 ? (
+          <p className="panel-note panel-note--compact">
+            No avatars found. Add `.vrm` files to your folder, or reset Directories in Settings.
+          </p>
+        ) : (
+          <div className="avatar-picker">
+            {avatarCatalog.map((entry) => {
+              const previewPath =
+                entry.skins.find((skin) => skin.id === 'default')?.path ?? entry.skins[0]?.path;
+              return (
+                <MiniAvatar
+                  key={entry.id}
+                  modelPath={previewPath}
+                  selected={selectedAvatarId === entry.id}
+                  onClick={() => onAvatarChange(entry.id)}
+                />
+              );
+            })}
+          </div>
+        )}
         <div className="vroid-hub-inline">
           <Divider />
-          <p className="panel-note panel-note--compact">VRoid Hub (optional)</p>
+          <p className="panel-note panel-note--compact">VRoid Hub</p>
           <VroidHubPanel
             mode="appearance"
             onCharacterSelected={onSelectHubCharacter}
@@ -99,35 +107,6 @@ export function PalettePanel({
             onHubSelectionError={onHubSelectionError}
           />
         </div>
-      </AccordionSection>
-
-      <Divider />
-
-      <AccordionSection
-        open={openAccordion === 'skins'}
-        onClick={() => setOpenAccordion(openAccordion === 'skins' ? null : 'skins')}
-        label="Skins"
-      >
-        <p className="panel-note panel-note--compact">
-          Variants for {selectedAvatar?.label ?? 'this avatar'}. Name files like{' '}
-          <code>avatar1B.vrm</code> to add more.
-        </p>
-        {skins.length === 0 ? (
-          <p className="panel-note">No skins found.</p>
-        ) : (
-          <div className="skin-picker">
-            {skins.map((skin) => (
-              <div key={skin.id} className="skin-chip">
-                <MiniAvatar
-                  modelPath={skin.path}
-                  selected={selectedSkinId === skin.id}
-                  onClick={() => onSkinChange(skin.id)}
-                />
-                <span className="skin-chip__label">{skin.label}</span>
-              </div>
-            ))}
-          </div>
-        )}
       </AccordionSection>
 
       <Divider />
@@ -179,7 +158,7 @@ export function PalettePanel({
               </div>
             )}
 
-            {customEnvironments.length > 0 && (
+            {customEnvironmentList.length > 0 && (
               <div className="environment-custom">
                 <button
                   type="button"
@@ -191,7 +170,7 @@ export function PalettePanel({
                 >
                   <span>
                     Custom
-                    <span className="environment-custom__count">{customEnvironments.length}</span>
+                    <span className="environment-custom__count">{customEnvironmentList.length}</span>
                   </span>
                   <ChevronDown size={14} strokeWidth={2} />
                 </button>
@@ -202,7 +181,7 @@ export function PalettePanel({
                       Close Custom to show Stars / Code / Bloom / None again.
                     </p>
                     <div className="environment-custom__grid">
-                      {customEnvironments.map((env) => (
+                      {customEnvironmentList.map((env) => (
                         <button
                           type="button"
                           key={env.id}

@@ -3,7 +3,9 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 
 const SETTINGS_FILE = 'config.yaml';
-const SETTINGS_VERSION = 1;
+// Fallback only when the renderer omits version. Prefer the schema version
+// from normalizeUserSettings / snapshotUserSettings (currently 2).
+const SETTINGS_VERSION = 2;
 
 /**
  * @param {import('electron').App} app
@@ -32,12 +34,11 @@ function loadSettings(app) {
  * @param {object} settings
  */
 function saveSettings(app, settings) {
-  const payload = {
-    version: SETTINGS_VERSION,
-    ...(settings && typeof settings === 'object' ? settings : {}),
-  };
-  delete payload.version;
-  const doc = { version: SETTINGS_VERSION, ...payload };
+  const incoming = settings && typeof settings === 'object' ? { ...settings } : {};
+  const parsedVersion = Number(incoming.version);
+  const version =
+    Number.isFinite(parsedVersion) && parsedVersion >= 1 ? parsedVersion : SETTINGS_VERSION;
+  const doc = { ...incoming, version };
   const text = yaml.dump(doc, {
     indent: 2,
     lineWidth: 100,

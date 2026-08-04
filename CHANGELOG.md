@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **Settings → Directories** (Electron): choose **Default** or **Custom** folders for avatars (`.vrm`, replaces built-in list) and environments (`.gif` / `.png` / `.jpg` / `.jpeg`, additive Custom expander). Animations Custom is reserved as coming soon. Empty folders are rejected with an in-panel error (defaults stay). Choices persist in `config.yaml` under `directories`. See [User settings](docs/user-settings.md).
+- Zenodo concept DOI [`10.5281/zenodo.21791157`](https://doi.org/10.5281/zenodo.21791157) in [`CITATION.cff`](CITATION.cff) and README badge.
+
+### Changed
+
+- End-user personalization path: bundled samples → VRoid Hub and/or local directories (dev `environments/custom/` remains contributor-only).
+- Settings layout: shared section titles (**Overlay mode**, **Snap to screen**, **Directories**, **VRoid Hub**, **System**); Appearance Hub block labeled **VRoid Hub** (no “(optional)”).
+- Docs and screenshots updated for Directories, custom avatar/env folders, and a four-avatar strip (`91-multi-avatar-strip.png`).
+
+### Removed
+
+- Appearance → **Skins** (lettered `avatarNB.vrm` variants). Extra characters come from Settings → Directories or VRoid Hub instead.
+
 ## [0.3.0] — 2026-08-04
 
 ### Added
