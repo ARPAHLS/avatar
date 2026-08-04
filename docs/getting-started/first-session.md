@@ -1,6 +1,6 @@
 # First session
 
-New to AVATAR? Prefer the [Windows installer](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) when you can. Otherwise see [Installation](installation.md).
+New to AVATAR? Prefer the [Windows installer](https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe) when you can. Otherwise see [Installation](installation.md).
 
 For every control in depth: **[Using the app](../using-the-app.md)**.
 

@@ -6,14 +6,14 @@ body:
   - type: markdown
     attributes:
       value: |
-        For the published build, use [v0.2.0](https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0). Unsigned installers may trigger SmartScreen — that alone is expected for now.
+        For the published build, use [v0.3.0](https://github.com/ARPAHLS/avatar/releases/tag/v0.3.0). Unsigned installers may trigger SmartScreen — that alone is expected for now.
 
   - type: dropdown
     id: version
     attributes:
       label: Installer / app version
       options:
-        - AVATAR-Setup-0.2.0.exe
+        - AVATAR-Setup-0.3.0.exe
         - Built locally (`npm run dist:win`)
         - Not sure
     validations:

@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-08-04
+
 ### Added
 
 - GitHub issue templates (bug, feature, question, docs, installer, voice/lip-sync, avatar/VRMA, desktop window) and pastel label set with CI sync (`.github/labels.yml`).
@@ -17,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Expanded [CONTRIBUTING.md](CONTRIBUTING.md) with ripple-effect guidance (docs, changelog, catalogs, Electron vs browser, assets).
 - VRoid Hub UX: Settings is account/credentials only; character grid and selection live in Appearance → Avatars (with connect deep-link when not set up).
 - Hub model download path: clearer in-app loading/error status, transient-network retries, and terminal `[vroid]` progress logs.
+- Windows installer art is unversioned (generic **AVATAR Installer** header / sidebar) so assets can ship across releases until a major redesign.
+- Installer wizard welcome/finish copy branded as **AVATAR Installer**.
 
 ### Fixed
 

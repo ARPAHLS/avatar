@@ -10,7 +10,7 @@ Electron desktop companion first; browser localhost for development.
 | [First session](getting-started/first-session.md) | 2-minute onboarding |
 | [**Using the app**](using-the-app.md) | **Full user guide — every menu and option** |
 | [User settings](user-settings.md) | `config.yaml`, what persists, reset all / per-section |
-| [Releases](releases/README.md) | Version notes · [v0.2.0](releases/v0.2.0.md) · [Changelog](../CHANGELOG.md) |
+| [Releases](releases/README.md) | Version notes · [v0.3.0](releases/v0.3.0.md) · [Changelog](../CHANGELOG.md) |
 
 ## Features in depth
 

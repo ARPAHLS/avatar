@@ -13,8 +13,9 @@ body:
     attributes:
       label: AVATAR version
       options:
+        - v0.3.0 (Windows installer)
+        - v0.3.0 (from source)
         - v0.2.0 (Windows installer)
-        - v0.2.0 (from source)
         - From source (main / other commit)
         - Not sure
     validations:

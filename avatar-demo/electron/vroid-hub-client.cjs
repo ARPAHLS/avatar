@@ -105,7 +105,7 @@ async function downloadViaNodeRequest(url, redirectsRemaining = 5) {
       target,
       {
         headers: {
-          "user-agent": "AVATAR/0.2.0",
+          "user-agent": "AVATAR/0.3.0",
         },
         timeout: DOWNLOAD_TIMEOUT_MS,
       },

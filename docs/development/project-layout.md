@@ -31,7 +31,7 @@ avatar-demo/
 
 | Command | Audience | Action |
 | :--- | :--- | :--- |
-| Windows [`.exe`](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) | End users | Installer — no Node |
+| Windows [`.exe`](https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe) | End users | Installer — no Node |
 | `npm run desktop` | From source | Build + Electron on `dist/` |
 | `npm run dev` | Contributors | Browser localhost only |
 | `npm run dev:desktop` | Contributors | Vite + Electron (hot reload) |

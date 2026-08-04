@@ -1,7 +1,7 @@
 {
   "name": "avatar",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "AVATAR — VRM companion with VRMA motion and real-time lip sync",
   "author": "ARPA Hellenic Logical Systems <input@arpacorp.net>",
   "homepage": "https://github.com/ARPAHLS/avatar",
@@ -87,6 +87,7 @@
       "installerSidebar": "build/installer_side.bmp",
       "uninstallerSidebar": "build/installer_side.bmp",
       "license": "build/installer-license.txt",
+      "include": "build/installer.nsh",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "AVATAR",

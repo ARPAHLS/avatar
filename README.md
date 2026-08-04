@@ -9,7 +9,7 @@
 <p align="center">&nbsp;</p>
 
 <div align="center">
-  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe"><img src="https://img.shields.io/badge/Version-0.2.0-b8d4f0?style=flat-square" alt="Version 0.2.0" /></a>
+  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe"><img src="https://img.shields.io/badge/Version-0.3.0-b8d4f0?style=flat-square" alt="Version 0.3.0" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-ffb38a?style=flat-square" alt="License MIT" /></a>
   <a href="https://vrm.dev/ja/"><img src="https://img.shields.io/badge/BOOTH-VRM-f87171?style=flat-square" alt="BOOTH VRM" /></a>
 </div>
@@ -27,7 +27,7 @@
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> ·
-  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe">Download .exe</a> ·
+  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe">Download .exe</a> ·
   <a href="docs/using-the-app.md">User guide</a> ·
   <a href="docs/README.md">Documentation</a> ·
   <a href="docs/getting-started/installation.md">Install</a> ·
@@ -44,7 +44,7 @@
 
 ---
 
-**AVATAR** is an open-source **desktop companion** from ARPA. The primary experience is the **Electron** transparent always-on-top overlay. A Windows **[`.exe` installer](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe)** is available for end users. The browser / localhost Vite app is for **development and contributors**.
+**AVATAR** is an open-source **desktop companion** from ARPA. The primary experience is the **Electron** transparent always-on-top overlay. A Windows **[`.exe` installer](https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe)** is available for end users. The browser / localhost Vite app is for **development and contributors**.
 
 It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from live audio — including system / device output on desktop.
 
@@ -66,7 +66,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 
 ### 1. Windows installer (easiest)
 
-Download **[AVATAR-Setup-0.2.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe)** — no Node.js. Run the installer, accept the EULA, launch **AVATAR**.
+Download **[AVATAR-Setup-0.3.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe)** — no Node.js. Run the installer, accept the EULA, launch **AVATAR**.
 
 ([All releases](https://github.com/ARPAHLS/avatar/releases) · [install notes](docs/getting-started/installation.md))
 
@@ -135,7 +135,7 @@ Drop trial GIFs into `avatar-demo/src/assets/environments/custom/` (gitignored �
 | :--- | :--- |
 | **User guide** | [Using the app](docs/using-the-app.md) — every menu, default, and reset |
 | **Getting started** | [Install](docs/getting-started/installation.md) · [First session](docs/getting-started/first-session.md) |
-| **Download** | [AVATAR-Setup-0.2.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) · [v0.2.0 release](https://github.com/ARPAHLS/avatar/releases/tag/v0.2.0) |
+| **Download** | [AVATAR-Setup-0.3.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe) · [v0.3.0 release](https://github.com/ARPAHLS/avatar/releases/tag/v0.3.0) |
 | **Characters & stage** | [Avatars & skins](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [Camera & lighting](docs/camera-and-lighting.md) |
 | **Motion & voice** | [VRMA](docs/animations/vrma.md) · [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-sync.md) |
 | **VRoid Hub** | [Opt-in OAuth connection](docs/vroid-hub.md) — bring your own OAuth app, sign in, use a licensed character |

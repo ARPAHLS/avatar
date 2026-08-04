@@ -67,3 +67,50 @@ const pngSizes = [16, 24, 32, 48, 64, 128, 256].map((s) =>
 const ico = await pngToIco(pngSizes);
 fs.writeFileSync(path.join(buildDir, 'icon.ico'), ico);
 console.log('wrote build/icon.ico', ico.length, 'bytes');
+
+// NSIS assets: copy public PNGs into build/ and emit the BMPs electron-builder expects.
+// Sizes are already NSIS-correct (top 150×57, side 164×314); keep them unversioned.
+const installerAssets = [
+  { name: 'installer_top', width: 150, height: 57 },
+  { name: 'installer_side', width: 164, height: 314 },
+];
+
+const installerPs = `
+Add-Type -AssemblyName System.Drawing
+$public = '${path.join(root, 'public').replace(/'/g, "''")}'
+$build = '${buildDir.replace(/'/g, "''")}'
+$assets = @(
+  @{ Name = 'installer_top'; Width = 150; Height = 57 },
+  @{ Name = 'installer_side'; Width = 164; Height = 314 }
+)
+foreach ($asset in $assets) {
+  $srcPath = Join-Path $public ($asset.Name + '.png')
+  if (-not (Test-Path $srcPath)) { throw "Missing $srcPath" }
+  $src = [System.Drawing.Bitmap]::FromFile($srcPath)
+  $bmp = New-Object System.Drawing.Bitmap $asset.Width, $asset.Height, ([System.Drawing.Imaging.PixelFormat]::Format24bppRgb)
+  $bmp.SetResolution(72, 72)
+  $g = [System.Drawing.Graphics]::FromImage($bmp)
+  $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+  $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
+  $g.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+  $g.DrawImage($src, 0, 0, $asset.Width, $asset.Height)
+  $g.Dispose()
+  $src.Dispose()
+  $pngOut = Join-Path $build ($asset.Name + '.png')
+  $bmpOut = Join-Path $build ($asset.Name + '.bmp')
+  Copy-Item $srcPath $pngOut -Force
+  $bmp.Save($bmpOut, [System.Drawing.Imaging.ImageFormat]::Bmp)
+  $bmp.Dispose()
+  Write-Host ("wrote " + $asset.Name + " png+bmp")
+}
+`;
+
+const installerResult = spawnSync('powershell', ['-NoProfile', '-Command', installerPs], {
+  encoding: 'utf8',
+  maxBuffer: 10 * 1024 * 1024,
+});
+if (installerResult.status !== 0) {
+  console.error(installerResult.stderr || installerResult.stdout);
+  process.exit(installerResult.status ?? 1);
+}
+console.log(installerResult.stdout.trim());

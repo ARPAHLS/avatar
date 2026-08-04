@@ -34,7 +34,7 @@ npm install
 | Vite production build | `npm run build` |
 | Windows installer (local output under `desktop-setup/`) | `npm run dist:win` |
 
-End users can use [AVATAR-Setup-0.2.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.2.0/AVATAR-Setup-0.2.0.exe) without Node.
+End users can use [AVATAR-Setup-0.3.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe) without Node.
 
 ---
 
