@@ -5,7 +5,11 @@ import { defaultAvatar, defaultCamera, defaultLight } from './defaults';
 import { defaultColor } from './environments';
 import { defaultWindowScale, normalizeWindowScale } from './windowScale';
 
-export const SETTINGS_VERSION = 1;
+// 2: avatarTransform.rotation is the user's framing rotation only. Version 1
+// seeded it from a default that had the VRM 0.0 180° facing flip baked in, so
+// a v1 value carries that flip and must have it removed on read — otherwise
+// it now compounds with the per-model flip and every avatar faces backwards.
+export const SETTINGS_VERSION = 2;
 export const LOCAL_SETTINGS_KEY = 'avatar.config.yaml';
 
 /** @returns {object} */
@@ -44,6 +48,23 @@ function asNumberArray(value, fallback) {
     const num = Number(entry);
     return Number.isFinite(num) ? num : fallback[index];
   });
+}
+
+/**
+ * Strip the VRM 0.0 facing flip that version 1 stored inside the user's own
+ * rotation. Deliberately narrow: it only fires for a file that both declares
+ * a pre-2 version and actually carries a stored rotation, so a fresh config
+ * (which already uses the new flip-free default) and a live snapshot (which
+ * passes the current version) are never shifted.
+ * @param {number[]} rotation
+ * @param {unknown} rawVersion
+ * @param {unknown} rawRotation
+ */
+function migrateAvatarRotation(rotation, rawVersion, rawRotation) {
+  const version = Number(rawVersion);
+  if (!Number.isFinite(version) || version < 1 || version >= 2) return rotation;
+  if (!Array.isArray(rawRotation)) return rotation;
+  return [rotation[0], rotation[1] - Math.PI, rotation[2]];
 }
 
 /** @param {unknown} value */
@@ -110,7 +131,11 @@ export function normalizeUserSettings(raw) {
     },
     avatarTransform: {
       position: asNumberArray(avatarRaw.position, defaults.avatarTransform.position),
-      rotation: asNumberArray(avatarRaw.rotation, defaults.avatarTransform.rotation),
+      rotation: migrateAvatarRotation(
+        asNumberArray(avatarRaw.rotation, defaults.avatarTransform.rotation),
+        data.version,
+        avatarRaw.rotation,
+      ),
     },
     audioSourceId: asString(data.audioSourceId, defaults.audioSourceId),
     windowSourceId: typeof data.windowSourceId === 'string' ? data.windowSourceId : null,
@@ -125,6 +150,10 @@ export function normalizeUserSettings(raw) {
  */
 export function snapshotUserSettings(state) {
   return normalizeUserSettings({
+    // Live state is already in the current schema — say so explicitly, so the
+    // rotation migration can never mistake a save for a legacy read and shift
+    // the value again on every write.
+    version: SETTINGS_VERSION,
     avatarId: state.avatarId,
     skinId: state.skinId,
     animationId: state.animationId,

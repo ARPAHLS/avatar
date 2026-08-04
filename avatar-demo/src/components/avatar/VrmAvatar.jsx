@@ -25,11 +25,6 @@ export function VrmAvatar({
   const group = useRef(null);
   const [vrm, setVrm] = useState(null);
   const activeAnimationRef = useRef(animationId);
-  const avatarPositionRef = useRef(avatarPosition);
-  const avatarRotationRef = useRef(avatarRotation);
-
-  avatarPositionRef.current = avatarPosition;
-  avatarRotationRef.current = avatarRotation;
 
   const { play, playSequence, cancel, returnToRest, update: updateMixer } = useVrmAnimation(vrm);
   const updateLipSync = useAmplitudeLipSync(vrm);
@@ -42,12 +37,12 @@ export function VrmAvatar({
       if (disposed) return;
       const vrmData = gltf.userData.vrm;
       VRMUtils.combineSkeletons(vrmData.scene);
+      // Owns vrm.scene.rotation outright: it flips VRM 0.0 models (which face
+      // -Z) by 180° and leaves VRM 1.0 (already +Z) alone. Nothing else may
+      // write vrm.scene's transform, or that per-model correction is lost and
+      // one of the two spec versions ends up facing away from the camera —
+      // the user's framing transform lives on the wrapper group below instead.
       VRMUtils.rotateVRM0(vrmData);
-
-      const position = avatarPositionRef.current ?? defaultAvatar.position;
-      const rotation = avatarRotationRef.current ?? defaultAvatar.rotation;
-      vrmData.scene.position.set(...position);
-      vrmData.scene.rotation.set(...rotation);
 
       group.current?.add(vrmData.scene);
       setVrm(vrmData);
@@ -89,13 +84,6 @@ export function VrmAvatar({
   useFrame((_, delta) => {
     if (!vrm) return;
 
-    if (avatarPosition) {
-      vrm.scene.position.set(...avatarPosition);
-    }
-    if (avatarRotation) {
-      vrm.scene.rotation.set(...avatarRotation);
-    }
-
     updateMixer(delta);
     updateBlink(delta);
 
@@ -108,5 +96,15 @@ export function VrmAvatar({
     vrm.update(delta);
   });
 
-  return <group ref={group} />;
+  // The user's framing transform belongs here, not on vrm.scene, so it can
+  // never clobber rotateVRM0's per-spec-version facing correction. Declaring
+  // it as props also means a settings change (or the async settings hydrate
+  // completing after the model has already loaded) reapplies on its own.
+  return (
+    <group
+      ref={group}
+      position={avatarPosition ?? defaultAvatar.position}
+      rotation={avatarRotation ?? defaultAvatar.rotation}
+    />
+  );
 }

@@ -71,7 +71,7 @@ Autosave runs shortly after you change something (~400 ms debounce).
 ## Example `config.yaml` shape
 
 ```yaml
-version: 1
+version: 2
 avatarId: avatar1
 skinId: default
 animationId: default
@@ -102,7 +102,7 @@ avatarTransform:
     - -1.48
   rotation:
     - 0
-    - 3.141592653589793
+    - 0
     - 0
 audioSourceId: system
 windowSourceId: null
@@ -111,3 +111,9 @@ windowScale: 1
 ```
 
 You normally never edit this by hand — use the UI. Hand-edits are fine if the app is closed; invalid values fall back to defaults on load.
+
+`avatarTransform.rotation` is your own framing rotation only. Whether a model
+needs turning to face the camera is decided per model from its VRM spec version
+(VRM 0.0 faces away and is flipped automatically; VRM 1.0 already faces you), so
+it is not — and must not be — part of this value. Version 1 configs did store
+that flip here; they are converted automatically on first load under version 2.

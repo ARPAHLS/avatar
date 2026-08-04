@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Settings drawer no longer clips content taller than the visible window with no way to reach it (a `--stage-bar-height` CSS custom property wasn't inheriting to the drawer, so it never detected its own overflow).
+- VRM 1.0 avatars no longer face away from the camera. The avatar's own transform was overwriting the per-model facing correction every frame, so every model got the 180° turn only VRM 0.0 needs. Existing `config.yaml` files are migrated automatically (settings version 2).
 
 ## [0.2.0] — 2026-08-01
 
