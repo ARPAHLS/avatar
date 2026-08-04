@@ -1,5 +1,11 @@
 # Roadmap
 
+## v0.4.0 — Shipped
+
+- [x] User Directories for avatars / environments (issue #2 redesign)
+- [x] Appearance Skins removed (Directories / VRoid Hub instead)
+- [x] Zenodo concept DOI + README citation badge
+
 ## v0.3.0 — Shipped
 
 - [x] VRoid Hub bring-your-own OAuth + Appearance picker (session-only models)
@@ -30,4 +36,3 @@
 - [ ] Security review for capture permissions copy
 - [ ] Performance pass on dual Canvas avatar pickers
 - [ ] Harden VRoid Hub VRM download for restrictive networks / CDN paths
-- [x] User Directories for avatars / environments (issue #2 redesign)

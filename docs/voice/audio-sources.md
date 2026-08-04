@@ -43,7 +43,7 @@ This is the full reference for every lip-sync input. Mouth shapes themselves are
 | **Tab or window audio** | `tab` | Browser display-media / tab capture |
 | **Audio file** | `file` | Same as desktop |
 
-System-wide **device output** loopback is an Electron feature — use the [Windows installer](https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe) or `npm run desktop` / `npm run dev:desktop`.
+System-wide **device output** loopback is an Electron feature — use the [Windows installer](https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe) or `npm run desktop` / `npm run dev:desktop`.
 
 ---
 

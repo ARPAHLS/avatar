@@ -1,7 +1,7 @@
 {
   "name": "avatar",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "AVATAR — VRM companion with VRMA motion and real-time lip sync",
   "author": "ARPA Hellenic Logical Systems <input@arpacorp.net>",
   "homepage": "https://github.com/ARPAHLS/avatar",
