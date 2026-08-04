@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - **Settings → Directories** (Electron): choose **Default** or **Custom** folders for avatars (`.vrm`, replaces built-in list) and environments (`.gif` / `.png` / `.jpg` / `.jpeg`, additive Custom expander). Animations Custom is reserved as coming soon. Empty folders are rejected with an in-panel error (defaults stay). Choices persist in `config.yaml` under `directories`. See [User settings](docs/user-settings.md).
+- Zenodo concept DOI [`10.5281/zenodo.21791157`](https://doi.org/10.5281/zenodo.21791157) in [`CITATION.cff`](CITATION.cff) and README badge.
 
 ### Changed
 

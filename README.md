@@ -10,6 +10,7 @@
 
 <div align="center">
   <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.3.0/AVATAR-Setup-0.3.0.exe"><img src="https://img.shields.io/badge/Version-0.3.0-b8d4f0?style=flat-square" alt="Version 0.3.0" /></a>
+  <a href="https://doi.org/10.5281/zenodo.21791157"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21791157-b8d4f0?style=flat-square" alt="DOI 10.5281/zenodo.21791157" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-ffb38a?style=flat-square" alt="License MIT" /></a>
   <a href="https://vrm.dev/ja/"><img src="https://img.shields.io/badge/BOOTH-VRM-f87171?style=flat-square" alt="BOOTH VRM" /></a>
   <a href="https://hub.vroid.com/en/"><img src="https://img.shields.io/badge/VRoid-Hub-f0d78c?style=flat-square" alt="VRoid Hub" /></a>
