@@ -216,6 +216,19 @@ function characterLicense(model) {
   return { spec_version: "0.0", ...model.license };
 }
 
+// The model's public page, for the conditions-of-use gate to attribute where a
+// model came from. Always the real site rather than the injected baseUrl (which
+// only redirects API calls in tests). A model page lives under its character,
+// so without character.id there's nothing to link to.
+function characterModelUrl(model) {
+  const characterId = model.character?.id;
+  if (typeof characterId !== "string" || characterId === "") return null;
+  return new URL(
+    `/characters/${encodeURIComponent(characterId)}/models/${encodeURIComponent(model.id)}`,
+    DEFAULT_BASE_URL,
+  ).toString();
+}
+
 function toCharacterSummary(model, source) {
   return {
     id: model.id,
@@ -231,6 +244,7 @@ function toCharacterSummary(model, source) {
     // VRoid Hub's third-party integration rules.
     source,
     author_name: model.character?.user?.name ?? null,
+    hub_url: characterModelUrl(model),
     license: characterLicense(model),
   };
 }

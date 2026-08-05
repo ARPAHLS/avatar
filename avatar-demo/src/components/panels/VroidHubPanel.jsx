@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { RefreshCw, Settings } from 'lucide-react';
+import { ExternalLink, RefreshCw, Settings } from 'lucide-react';
 import { getVroidHubApi } from '../../lib/desktopMode';
 
 function errorMessage(err) {
@@ -235,6 +235,14 @@ export function VroidHubPanel({
     void downloadCharacter(character);
   }
 
+  async function openModelPage(modelUrl) {
+    try {
+      await vroidApi.openModelPage(modelUrl);
+    } catch (err) {
+      onHubSelectionError?.(null, errorMessage(err));
+    }
+  }
+
   function confirmHeartedCharacter() {
     const character = pendingHeartedCharacter;
     setPendingHeartedCharacter(null);
@@ -424,15 +432,20 @@ export function VroidHubPanel({
       {pendingHeartedCharacter && (
         <div className="vroid-hub-license-gate">
           <p className="panel-note panel-note--compact">
-            <strong>{pendingHeartedCharacter.name}</strong> belongs to another VRoid Hub user
-            {pendingHeartedCharacter.author_name ? ` (${pendingHeartedCharacter.author_name})` : ''}.
+            <strong>{pendingHeartedCharacter.name}</strong> belongs to another VRoid Hub user.
             Review its conditions of use before selecting it:
           </p>
-          {pendingHeartedCharacter.license ? (
-            <p className="panel-note panel-note--compact">
-              These terms come from the model author and define what you can do with this avatar.
-            </p>
-          ) : null}
+          {pendingHeartedCharacter.hub_url && (
+            <button
+              type="button"
+              className="vroid-hub-license-link"
+              onClick={() => void openModelPage(pendingHeartedCharacter.hub_url)}
+              title={pendingHeartedCharacter.hub_url}
+            >
+              View on VRoid Hub
+              <ExternalLink size={13} aria-hidden="true" />
+            </button>
+          )}
           {pendingHeartedCharacter.license ? (
             <div className="vroid-hub-license-list" aria-label="VRoid Hub usage terms">
               <div className="vroid-hub-license-list__head">Terms from the model author</div>

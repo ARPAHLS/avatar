@@ -117,7 +117,8 @@ disconnect — you must paste them again to reconnect.
    portrait) when connected.
 4. Click a character you **own** — AVATAR downloads and loads it on the stage.
 5. Click a **hearted** (someone else’s) character — review its conditions of
-   use first, then **Use this model**.
+   use, with **View on VRoid Hub** linking to the model’s source page in your
+   browser, then **Use this model**.
 
 While a download is in progress, the card shows **Loading…**. You can switch
 drawers; when the load finishes (or fails), status returns under Appearance /

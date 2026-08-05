@@ -44,6 +44,7 @@ contextBridge.exposeInMainWorld('voxVroidHub', {
   connect: () => ipcRenderer.invoke('vroid:connect'),
   disconnect: () => ipcRenderer.invoke('vroid:disconnect'),
   listCharacters: () => ipcRenderer.invoke('vroid:list-characters'),
+  openModelPage: (modelUrl) => ipcRenderer.invoke('vroid:open-model-page', modelUrl),
   selectCharacter: async (characterId) => {
     const result = await ipcRenderer.invoke('vroid:select-character', characterId);
     if (result && typeof result === 'object' && 'ok' in result) {

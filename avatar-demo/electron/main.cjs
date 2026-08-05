@@ -225,6 +225,14 @@ function assertTrustedVroidSender(event) {
   }
 }
 
+function isVroidHubUrl(value) {
+  try {
+    return new URL(String(value)).origin === 'https://hub.vroid.com';
+  } catch {
+    return false;
+  }
+}
+
 function assertTrustedLibrarySender(event) {
   if (!mainWindow || mainWindow.isDestroyed() || event.senderFrame !== mainWindow.webContents.mainFrame) {
     throw new Error('Rejected library IPC call from an untrusted sender.');
@@ -643,6 +651,17 @@ ipcMain.handle('vroid:list-characters', async (event) => {
   }
   const token = await vroidHubAuth.getValidAccessToken();
   return vroidHubClient.listCharacters(token);
+});
+
+// The URL comes back through the renderer, so it's re-checked here rather than
+// trusted: shell.openExternal hands any scheme straight to the OS.
+ipcMain.handle('vroid:open-model-page', (event, modelUrl) => {
+  assertTrustedVroidSender(event);
+  if (!isVroidHubUrl(modelUrl)) {
+    throw new Error('Only VRoid Hub model pages can be opened from here.');
+  }
+  void shell.openExternal(modelUrl);
+  return true;
 });
 
 ipcMain.handle('vroid:select-character', async (event, characterId) => {
