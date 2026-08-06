@@ -55,6 +55,10 @@ The Color fade row stays pinned under the environment list (**Use color** + **Re
 Built-ins are **never** replaced by a custom env directory (unlike avatars).
 
 <p align="center">
+  <img src="screenshots/AVATAR_M5_browsing_custom_environments.gif" alt="Browsing a custom environments folder in Appearance" height="400" />
+</p>
+
+<p align="center">
   <img src="screenshots/34-appearance-env-custom-dir.png" alt="Custom environments from a Directories folder" height="260" />
 </p>
 

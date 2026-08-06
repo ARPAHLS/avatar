@@ -64,7 +64,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 - **Browser / localhost** — for contributors ([install](docs/getting-started/installation.md))
 
 <p align="center">
-  <img src="docs/screenshots/01-hero-overlay-dark-ide.png" alt="AVATAR overlay on a dark IDE" width="100%" />
+  <img src="docs/screenshots/AVATAR_M5_victory.gif" alt="AVATAR overlay companion on a dark IDE" height="420" />
 </p>
 
 ## Quick start
@@ -123,7 +123,8 @@ More: [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-
 Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [VRMA animations](docs/animations/vrma.md).
 
 <p align="center">
-  <img src="docs/screenshots/21-gear-animations.png" alt="Animations submenu" height="260" />
+  <img src="docs/screenshots/AVATAR_M5_Animations_Select_Greeting.gif" alt="Selecting Greeting from the Animations menu" height="400" />
+  <img src="docs/screenshots/AVATAR_M5_loop.gif" alt="Default animation loop on the companion stage" height="400" />
 </p>
 
 ### Swap avatars
@@ -135,6 +136,10 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 ### Custom environments
 
 **Desktop / installer:** Gear → **Settings** → **Directories** → **Environments** → **Custom**, pick a folder of `.gif` / `.png` / `.jpg` / `.jpeg`. Built-ins stay; Appearance → Environments gains a **Custom** expander. Guide: [Environments](docs/environments.md).
+
+<p align="center">
+  <img src="docs/screenshots/AVATAR_M5_browsing_custom_environments.gif" alt="Browsing custom environments in Appearance" height="400" />
+</p>
 
 **From source (contributors):** trial files can also go in `avatar/src/assets/environments/custom/` while Directories is Default (local only; not shipped in the installer).
 

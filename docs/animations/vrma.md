@@ -11,7 +11,11 @@ Motions are `.vrma` clips from the bundled VRMA motion pack under `src/assets/av
 Menu label: **Default** (`id: default`). This is what runs on first launch.
 
 <p align="center">
-  <img src="../screenshots/21-gear-animations.png" alt="Animations submenu" height="260" />
+  <img src="../screenshots/AVATAR_M5_Animations_Select_Greeting.gif" alt="Selecting Greeting from the Animations menu" height="400" />
+</p>
+
+<p align="center">
+  <img src="../screenshots/AVATAR_M5_loop.gif" alt="Default greeting and loop playing on the stage" height="400" />
 </p>
 
 | Phase | Clip label | File / id |
