@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **View on VRoid Hub** link in the hearted-model conditions-of-use gate (Electron): the terms are the author's, so the gate now points back to the model's own Hub page instead of stating them with no traceable source. Omitted for models whose Hub response carries no character id. See [VRoid Hub connection](docs/vroid-hub.md).
+
 ### Changed
 
 - Document credits for built-in environment GIFs (GIPHY: Stars / Lemat Works, Code / Justin, Bloom).

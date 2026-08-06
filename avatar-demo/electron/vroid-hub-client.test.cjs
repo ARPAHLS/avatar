@@ -70,7 +70,7 @@ test("lists the account's own models and eligible hearted models, filtering inel
               id: "hearted-allowed",
               name: "Hearted, allowed",
               is_other_users_available: true,
-              character: { user: { name: "Some Author" } },
+              character: { id: "char-9", user: { name: "Some Author" } },
               license: { credit: "necessary" },
             }),
             characterModel({
@@ -107,6 +107,9 @@ test("lists the account's own models and eligible hearted models, filtering inel
   assert.equal(hearted.source, "hearted");
   assert.equal(hearted.author_name, "Some Author");
   assert.deepEqual(hearted.license, { spec_version: "0.0", credit: "necessary" });
+  assert.equal(hearted.hub_url, "https://hub.vroid.com/characters/char-9/models/hearted-allowed");
+  // No character.id in this fixture, so there's no page to link to.
+  assert.equal(own.hub_url, null);
 });
 
 test("extracts VRM 0.0 and VRM 1.0 conditions of use in their own native shapes", async (context) => {

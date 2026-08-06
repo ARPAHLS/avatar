@@ -103,7 +103,10 @@ On desktop you can point Settings → Directories → Avatars at a folder of `.v
 
 On **desktop**, when VRoid Hub is connected, a **VRoid Hub** block appears
 under the built-in thumbnails so you can pick Hub characters here (setup
-still lives under Settings). See [VRoid Hub connection](vroid-hub.md).
+still lives under Settings). Picking a **hearted** (someone else’s) character
+first shows its conditions of use, where **View on VRoid Hub** opens the
+model’s own page in your browser so you can check the author’s terms at the
+source. See [VRoid Hub connection](vroid-hub.md).
 
 <p align="center">
   <img src="screenshots/30-appearance-avatars.png" alt="Appearance Avatars section" height="240" />
@@ -117,6 +120,10 @@ still lives under Settings). See [VRoid Hub connection](vroid-hub.md).
 <p align="center">
   <img src="screenshots/75-vroid-appearance-loading.png" alt="Hub character loading" height="200" />
   <img src="screenshots/76-vroid-license-gate.png" alt="Hearted model conditions of use" height="240" />
+</p>
+
+<p align="center">
+  <img src="screenshots/76-vroid-license-gate-link.gif" alt="Opening the model’s VRoid Hub page from the conditions-of-use gate" height="240" />
 </p>
 
 ### Environments

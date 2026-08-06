@@ -1502,6 +1502,25 @@
   background: rgba(255, 255, 255, 0.45);
 }
 
+.vroid-hub-license-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 2px 0 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #5b3fa8;
+  font: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.vroid-hub-license-link:hover {
+  color: #7a5ad0;
+}
+
 .vroid-hub-license-list {
   margin: 6px 0 8px;
   padding: 0;
