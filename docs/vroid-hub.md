@@ -202,5 +202,5 @@ the Hub website even when Chrome can browse Hub normally.
 - **Settings vs Appearance** — Settings is for link/account; Appearance is
   where you choose what is on stage (built-ins + Hub).
 
-See also: [Avatars](avatars-and-skins.md) · [Using the app](using-the-app.md) ·
+See also: [Avatars](avatars.md) · [Using the app](using-the-app.md) ·
 [User settings](user-settings.md).

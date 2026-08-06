@@ -135,6 +135,10 @@ directories:
 
 You normally never edit this by hand — use the UI. Hand-edits are fine if the app is closed; invalid values fall back to defaults on load.
 
+`skinId: default` is a reserved legacy field kept for config compatibility.
+Newer installs should use `avatarId` (or `directories` custom avatar folders)
+and leave `skinId` untouched.
+
 `avatarTransform.rotation` is your own framing rotation only. Whether a model
 needs turning to face the camera is decided per model from its VRM spec version
 (VRM 0.0 faces away and is flipped automatically; VRM 1.0 already faces you), so
