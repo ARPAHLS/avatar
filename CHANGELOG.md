@@ -8,7 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Appearance picker performance**: avatar thumbnails are static images instead of live VRM previews, so opening Appearance no longer stands up a 3D scene per card. Bundled avatars ship pre-rendered portraits (`src/assets/avatars/thumbs/`, regenerate with `npm run thumbs`); custom-folder avatars render once and are cached under Electron `userData/thumbnails/`, keyed by path plus file mtime and size so a replaced `.vrm` regenerates. First scan of a new custom folder still fills in progressively.
 - Document credits for built-in environment GIFs (GIPHY: Stars / Lemat Works, Code / Justin, Bloom).
+
+### Fixed
+
+- Swapping avatars released the model from the scene graph but never disposed it, stranding each previous model's geometries, materials, and textures in VRAM for the rest of the session.
+- `npm run dev:desktop` waited on `127.0.0.1` while Vite bound `localhost` (`::1` on Windows), so Electron never launched and the script silently left a bare Vite server running. The dev port is now pinned with `--strictPort`.
 
 ## [0.4.0] — 2026-08-04
 
