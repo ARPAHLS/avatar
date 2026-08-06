@@ -70,11 +70,7 @@ console.log('wrote build/icon.ico', ico.length, 'bytes');
 
 // NSIS assets: copy public PNGs into build/ and emit the BMPs electron-builder expects.
 // Sizes are already NSIS-correct (top 150×57, side 164×314); keep them unversioned.
-const installerAssets = [
-  { name: 'installer_top', width: 150, height: 57 },
-  { name: 'installer_side', width: 164, height: 314 },
-];
-
+// The authoritative list is the $assets array inside the PowerShell block below.
 const installerPs = `
 Add-Type -AssemblyName System.Drawing
 $public = '${path.join(root, 'public').replace(/'/g, "''")}'

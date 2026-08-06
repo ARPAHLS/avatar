@@ -6,7 +6,6 @@ import { PanelSelect } from '../ui/PanelPrimitives';
 export function VoicePanel({
   audioSourceId,
   setAudioSourceId,
-  audioFile,
   setAudioFile,
   windowSourceId,
   setWindowSourceId,

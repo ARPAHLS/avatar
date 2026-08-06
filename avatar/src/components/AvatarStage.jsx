@@ -747,7 +747,6 @@ export function AvatarStage() {
             <VoicePanel
               audioSourceId={audioSourceId}
               setAudioSourceId={setAudioSourceId}
-              audioFile={audioFile}
               setAudioFile={setAudioFile}
               windowSourceId={windowSourceId}
               setWindowSourceId={setWindowSourceId}

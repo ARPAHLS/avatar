@@ -39,6 +39,10 @@ export function VrmAvatar({
       return undefined;
     }
 
+    // Captured once so the cleanup detaches from the same group this run
+    // attached to, even if the ref has been repointed by the time it fires.
+    const container = group.current;
+
     loader.load(
       modelPath,
       (gltf) => {
@@ -58,7 +62,7 @@ export function VrmAvatar({
         VRMUtils.rotateVRM0(vrmData);
 
         loaded = vrmData;
-        group.current?.add(vrmData.scene);
+        container?.add(vrmData.scene);
         setVrm(vrmData);
         onLoaded?.();
       },
@@ -72,9 +76,9 @@ export function VrmAvatar({
     return () => {
       disposed = true;
       setVrm(null);
-      if (group.current) {
-        while (group.current.children.length > 0) {
-          group.current.remove(group.current.children[0]);
+      if (container) {
+        while (container.children.length > 0) {
+          container.remove(container.children[0]);
         }
       }
       // Detaching a scene leaves its geometries, materials and textures on the
