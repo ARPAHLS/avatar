@@ -32,9 +32,15 @@ const {
 const {
   pathExists,
   readLibraryFile,
+  resolveLibraryPath,
   scanAvatars,
   scanEnvironments,
 } = require('./user-library.cjs');
+const {
+  configureThumbnailCache,
+  readThumbnail,
+  writeThumbnail,
+} = require('./thumbnails.cjs');
 
 const WINDOW_STATE_FILE = 'window-state.json';
 const DEFAULT_WIDTH = 420;
@@ -301,8 +307,21 @@ function createWindow() {
 
   applyOverlayMode(overlayMode);
 
+  if (process.env.AVATAR_GEN_THUMBS) {
+    // The generator's only progress report is renderer-side console output,
+    // and this window is frameless with no DevTools accelerator.
+    mainWindow.webContents.on('console-message', (...args) => {
+      const details = args[1];
+      const message = details && typeof details === 'object' ? details.message : args[2];
+      if (typeof message === 'string') console.log(message);
+    });
+  }
+
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow?.webContents.setZoomFactor(windowScale);
+    // WebGL in a window that is never composited does not reliably produce a
+    // frame, and the generator's whole job is to read one back.
+    if (process.env.AVATAR_GEN_THUMBS) revealMainWindow();
   });
 
   const distIndex = path.join(__dirname, '../dist/index.html');
@@ -310,9 +329,10 @@ function createWindow() {
   const desktopQuery = { query: { desktop: '1' } };
 
   if (devUrl) {
-    const url = devUrl.includes('desktop=1')
+    const base = devUrl.includes('desktop=1')
       ? devUrl
       : `${devUrl}${devUrl.includes('?') ? '&' : '?'}desktop=1`;
+    const url = process.env.AVATAR_GEN_THUMBS ? `${base}&genthumbs=1` : base;
     mainWindow.loadURL(url);
   } else if (fs.existsSync(distIndex)) {
     mainWindow.loadFile(distIndex, desktopQuery);
@@ -569,6 +589,40 @@ ipcMain.handle('library:read-file', (event, id) => {
   return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
 });
 
+ipcMain.handle('thumbnail:get', (event, id) => {
+  assertTrustedLibrarySender(event);
+  const absolutePath = resolveLibraryPath(id);
+  if (!absolutePath) return null;
+  const png = readThumbnail(absolutePath);
+  if (!png) return null;
+  return png.buffer.slice(png.byteOffset, png.byteOffset + png.byteLength);
+});
+
+// Dev-only asset generation (npm run thumbs). Registered only for that run, so
+// a packaged app has no channel that can write into the source tree at all.
+if (!app.isPackaged && process.env.AVATAR_GEN_THUMBS) {
+  ipcMain.handle('thumbnail:dev-write', (event, fileName, png) => {
+    assertTrustedLibrarySender(event);
+    if (!/^avatar\d+\.png$/.test(String(fileName))) {
+      throw new Error(`Refusing to write unexpected thumbnail name: ${fileName}`);
+    }
+    const dir = path.join(__dirname, '../src/assets/avatars/thumbs');
+    fs.mkdirSync(dir, { recursive: true });
+    const target = path.join(dir, fileName);
+    fs.writeFileSync(target, Buffer.from(png));
+    return target;
+  });
+}
+
+ipcMain.handle('thumbnail:put', (event, id, png) => {
+  assertTrustedLibrarySender(event);
+  const absolutePath = resolveLibraryPath(id);
+  if (!absolutePath) return false;
+  // The renderer hands over an ArrayBuffer; only the id is trusted to name a
+  // file, and writeThumbnail bounds the size.
+  return writeThumbnail(absolutePath, Buffer.from(png));
+});
+
 ipcMain.handle('vroid:get-status', (event) => {
   assertTrustedVroidSender(event);
   return vroidHubStatus();
@@ -669,6 +723,7 @@ ipcMain.handle('vroid:select-character', async (event, characterId) => {
 
 app.whenReady().then(async () => {
   setupDisplayMediaHandler();
+  configureThumbnailCache(app.getPath('userData'));
   createWindow();
 
   // VRoid Hub OAuth is opt-in and advanced: it's off until the user

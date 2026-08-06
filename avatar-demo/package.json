@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "vite",
     "dev:desktop": "concurrently -n vite,electron -c cyan,magenta \"vite --port 5173 --strictPort\" \"wait-on http://localhost:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "thumbs": "concurrently -n vite,electron -c cyan,magenta -k --success first \"vite --port 5174 --strictPort\" \"wait-on http://localhost:5174 && cross-env AVATAR_GEN_THUMBS=1 VITE_DEV_SERVER_URL=http://localhost:5174 electron .\"",
     "desktop": "npm run build && cross-env NODE_ENV=production electron .",
     "build": "vite build",
     "icons": "node scripts/make-icons.mjs",

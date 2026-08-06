@@ -1165,6 +1165,38 @@
   overflow: hidden;
 }
 
+.mini-avatar__image {
+  width: 56px;
+  height: 56px;
+  display: block;
+  object-fit: cover;
+}
+
+/* Shown only until a user-folder avatar has been rendered once. */
+.mini-avatar__pending {
+  width: 56px;
+  height: 56px;
+  display: block;
+  background: linear-gradient(135deg, #efeaf8, #dcd3f0);
+  animation: mini-avatar-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes mini-avatar-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mini-avatar__pending {
+    animation: none;
+  }
+}
+
 .background-thumb {
   width: 64px;
   height: 64px;

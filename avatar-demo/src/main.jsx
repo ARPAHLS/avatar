@@ -7,8 +7,16 @@ import App from './App.jsx';
 
 enableDesktopMode();
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+// Dev-only asset generation (npm run thumbs): render the bundled avatars'
+// portraits and exit, without mounting the app.
+if (import.meta.env.DEV && new URLSearchParams(window.location.search).has('genthumbs')) {
+  import('./lib/generateBundledThumbnails').then(({ generateBundledThumbnails }) =>
+    generateBundledThumbnails(),
+  );
+} else {
+  createRoot(document.getElementById('root')).render(
+    <StrictMode>
+      <App />
+    </StrictMode>,
+  );
+}
