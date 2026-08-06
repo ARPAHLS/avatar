@@ -137,6 +137,10 @@ available here.
 </p>
 
 <p align="center">
+  <img src="screenshots/76-vroid-license-gate-link.gif" alt="Opening the model’s VRoid Hub page from the conditions-of-use gate" height="260" />
+</p>
+
+<p align="center">
   <img src="screenshots/77-vroid-hub-on-stage.png" alt="Hub character on the AVATAR stage" height="300" />
 </p>
 
