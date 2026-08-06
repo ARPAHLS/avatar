@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Drop-in naming: avatarN.vrm. Motions use the bundled VRMA pack. See docs/avatars-and-skins.md and docs/animations/vrma.md.
+        Drop-in naming: avatarN.vrm. Motions use the bundled VRMA pack. See docs/avatars.md and docs/animations/vrma.md.
 
   - type: dropdown
     id: topic
