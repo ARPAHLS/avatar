@@ -65,60 +65,70 @@ async function renderThumbnail(modelPath) {
   const gltf = await loader.loadAsync(modelPath);
   const vrm = gltf.userData.vrm;
 
-  // Same two corrections the live avatar applies; rotateVRM0 in particular is
-  // what keeps VRM 0.0 models facing the camera instead of away from it.
-  VRMUtils.combineSkeletons(vrm.scene);
-  VRMUtils.rotateVRM0(vrm);
+  if (!vrm) {
+    // A plain .glb, or anything renamed to .vrm — it parses, but there is no
+    // VRM payload to pose. The loader has already built its geometries and
+    // textures, and nothing else holds them.
+    VRMUtils.deepDispose(gltf.scene);
+    throw new Error('File is not a VRM.');
+  }
 
-  // rotateVRM0 owns vrm.scene's transform, so the framing offset goes on a
-  // wrapper — the same split VrmAvatar uses. Writing it onto vrm.scene happens
-  // to work today only because rotateVRM0 touches rotation and not position.
-  const framing = new Group();
-  framing.position.y = MODEL_OFFSET_Y;
-  framing.add(vrm.scene);
-
-  const canvas = document.createElement('canvas');
-  canvas.width = THUMBNAIL_PX;
-  canvas.height = THUMBNAIL_PX;
-
-  const renderer = new WebGLRenderer({
-    canvas,
-    alpha: true,
-    antialias: true,
-    // toBlob reads the drawing buffer after render returns, which is only
-    // guaranteed to still hold the frame when this is set.
-    preserveDrawingBuffer: true,
-  });
-  renderer.setSize(THUMBNAIL_PX, THUMBNAIL_PX, false);
-
-  const scene = new Scene();
-  scene.add(new AmbientLight(0xffffff, 0.7));
-  const key = new DirectionalLight(0xffffff, 0.7);
-  key.position.set(1, 2, 2);
-  scene.add(key);
-  scene.add(framing);
-
-  const camera = new PerspectiveCamera(CAMERA_FOV, 1, 0.1, 20);
-  camera.position.set(...CAMERA_POSITION);
-  camera.lookAt(...CAMERA_LOOK_AT);
-
+  // Everything allocated from here on has to be released even if the render
+  // throws, so it all lives inside the try.
+  let renderer = null;
   try {
+    // Same two corrections the live avatar applies; rotateVRM0 in particular
+    // is what keeps VRM 0.0 models facing the camera instead of away from it.
+    VRMUtils.combineSkeletons(vrm.scene);
+    VRMUtils.rotateVRM0(vrm);
+
+    // rotateVRM0 owns vrm.scene's transform, so the framing offset goes on a
+    // wrapper — the same split VrmAvatar uses. Writing it onto vrm.scene
+    // happens to work today only because rotateVRM0 touches rotation, not
+    // position.
+    const framing = new Group();
+    framing.position.y = MODEL_OFFSET_Y;
+    framing.add(vrm.scene);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = THUMBNAIL_PX;
+    canvas.height = THUMBNAIL_PX;
+
+    renderer = new WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      // toBlob reads the drawing buffer after render returns, which is only
+      // guaranteed to still hold the frame when this is set.
+      preserveDrawingBuffer: true,
+    });
+    renderer.setSize(THUMBNAIL_PX, THUMBNAIL_PX, false);
+
+    const scene = new Scene();
+    scene.add(new AmbientLight(0xffffff, 0.7));
+    const key = new DirectionalLight(0xffffff, 0.7);
+    key.position.set(1, 2, 2);
+    scene.add(key);
+    scene.add(framing);
+
+    const camera = new PerspectiveCamera(CAMERA_FOV, 1, 0.1, 20);
+    camera.position.set(...CAMERA_POSITION);
+    camera.lookAt(...CAMERA_LOOK_AT);
+
     renderer.render(scene, camera);
-    const blob = await new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       canvas.toBlob((value) => {
         if (value) resolve(value);
         else reject(new Error('Thumbnail canvas produced no image.'));
       }, 'image/png');
     });
-    return blob;
   } finally {
     // This renderer exists for exactly one frame. Everything it and the model
     // put on the GPU has to go back, or generating thumbnails would leak more
     // than the live previews ever did.
-    scene.remove(framing);
     VRMUtils.deepDispose(vrm.scene);
-    renderer.dispose();
-    renderer.forceContextLoss();
+    renderer?.dispose();
+    renderer?.forceContextLoss();
   }
 }
 
@@ -149,9 +159,14 @@ export function getLibraryThumbnail(entry) {
       }
 
       const blob = await runQueued(() => renderThumbnail(entry.path));
-      // Best-effort: a cache that refuses the write still leaves this session
-      // with a working thumbnail, it just pays for it again next launch.
-      await api.putThumbnail(entry.id, await blob.arrayBuffer());
+
+      // Best-effort, and it has to actually behave that way: a cache that
+      // refuses the write must not cost us the image we just rendered.
+      try {
+        await api.putThumbnail(entry.id, await blob.arrayBuffer());
+      } catch {
+        // Falls back to regenerating next launch.
+      }
 
       const url = URL.createObjectURL(blob);
       urlCache.set(entry.id, url);
@@ -178,7 +193,13 @@ export function renderThumbnailBlob(modelPath) {
   return runQueued(() => renderThumbnail(modelPath));
 }
 
-/** Drop this session's object URLs (directory switch, teardown). */
+/**
+ * Drop this session's object URLs. Must be called whenever the avatar library
+ * is rescanned: ids are derived from the file path alone, so without this a
+ * .vrm replaced in place keeps serving its old portrait for the rest of the
+ * session — urlCache would answer before the disk cache's mtime/size check
+ * ever got a chance to miss.
+ */
 export function revokeThumbnailUrls() {
   for (const url of urlCache.values()) URL.revokeObjectURL(url);
   urlCache.clear();
