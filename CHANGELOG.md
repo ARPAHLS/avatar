@@ -6,21 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-08-06
+
 ### Added
 
-- **View on VRoid Hub** link in the hearted-model conditions-of-use gate (Electron): the terms are the author's, so the gate now points back to the model's own Hub page instead of stating them with no traceable source. Omitted for models whose Hub response carries no character id. See [VRoid Hub connection](docs/vroid-hub.md).
+- **View on VRoid Hub** link in the hearted-model conditions-of-use gate (Electron): the terms are the author's, so the gate now points back to the model's own Hub page instead of stating them with no traceable source. Omitted for models whose Hub response carries no character id. See [VRoid Hub connection](docs/vroid-hub.md). (#18, #19)
+- Issue reporting checklist in `CONTRIBUTING.md` (templates, version/OS/run mode, bug vs feature framing, screenshots). (#27, #30)
 
 ### Changed
 
- - **Appearance picker performance**: avatar thumbnails are static images instead of live VRM previews, so opening Appearance no longer stands up a 3D scene per card. Bundled avatars ship pre-rendered portraits (`src/assets/avatars/thumbs/`, regenerate with `npm run thumbs`); custom-folder avatars render once and are cached under Electron `userData/thumbnails/`, keyed by path plus file mtime and size so a replaced `.vrm` regenerates. First scan of a new custom folder still fills in progressively.
- - Document credits for built-in environment GIFs (GIPHY: Stars / Lemat Works, Code / Justin, Bloom).
- - Add an issue reporting checklist to `CONTRIBUTING.md`.
- - Rename the avatars guide to `docs/avatars.md` and document `skinId: default` as a reserved legacy field.
+- **Appearance picker performance**: avatar thumbnails are static images instead of live VRM previews, so opening Appearance no longer stands up a 3D scene per card. Bundled avatars ship pre-rendered portraits (`src/assets/avatars/thumbs/`, regenerate with `npm run thumbs`); custom-folder avatars render once and are cached under Electron `userData/thumbnails/`, keyed by path plus file mtime and size so a replaced `.vrm` regenerates. First scan of a new custom folder still fills in progressively. (#10, #20)
+- Document credits for built-in environment GIFs (GIPHY: Stars / Lemat Works, Code / Justin, Bloom).
+- Rename the avatars guide to `docs/avatars.md` and document `skinId: default` as a reserved legacy field. (#25, #31)
 
 ### Fixed
 
-- Swapping avatars released the model from the scene graph but never disposed it, stranding each previous model's geometries, materials, and textures in VRAM for the rest of the session.
-- `npm run dev:desktop` waited on `127.0.0.1` while Vite bound `localhost` (`::1` on Windows), so Electron never launched and the script silently left a bare Vite server running. The dev port is now pinned with `--strictPort`.
+- Swapping avatars released the model from the scene graph but never disposed it, stranding each previous model's geometries, materials, and textures in VRAM for the rest of the session. (#20)
+- `npm run dev:desktop` waited on `127.0.0.1` while Vite bound `localhost` (`::1` on Windows), so Electron never launched and the script silently left a bare Vite server running. The dev port is now pinned with `--strictPort`. (#20)
 
 ## [0.4.0] — 2026-08-04
 

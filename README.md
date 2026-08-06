@@ -9,7 +9,7 @@
 <p align="center">&nbsp;</p>
 
 <div align="center">
-  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe"><img src="https://img.shields.io/badge/Version-0.4.0-b8d4f0?style=flat-square" alt="Version 0.4.0" /></a>
+  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe"><img src="https://img.shields.io/badge/Version-0.5.0-b8d4f0?style=flat-square" alt="Version 0.5.0" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-ffb38a?style=flat-square" alt="License MIT" /></a>
   <a href="https://vrm.dev/ja/"><img src="https://img.shields.io/badge/BOOTH-VRM-f87171?style=flat-square" alt="BOOTH VRM" /></a>
   <a href="https://hub.vroid.com/en/"><img src="https://img.shields.io/badge/VRoid-Hub-f0d78c?style=flat-square" alt="VRoid Hub" /></a>
@@ -32,7 +32,7 @@
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> ·
-  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe">Download .exe</a> ·
+  <a href="https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe">Download .exe</a> ·
   <a href="docs/using-the-app.md">User guide</a> ·
   <a href="docs/README.md">Documentation</a> ·
   <a href="docs/getting-started/installation.md">Install</a> ·
@@ -49,14 +49,14 @@
 
 ---
 
-**AVATAR** is an open-source **desktop companion** from ARPA. The primary experience is the **Electron** transparent always-on-top overlay. A Windows **[`.exe` installer](https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe)** is available for end users. The browser / localhost Vite app is for **development and contributors**.
+**AVATAR** is an open-source **desktop companion** from ARPA. The primary experience is the **Electron** transparent always-on-top overlay. A Windows **[`.exe` installer](https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe)** is available for end users. The browser / localhost Vite app is for **development and contributors**.
 
 It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from live audio — including system / device output on desktop.
 
 ## What this is
 
 - **Electron desktop overlay** — pin, snap, window scale, device loopback ([user guide](docs/using-the-app.md) · [settings](docs/user-settings.md))
-- **VRM avatars** — bundled samples, plus your own `.vrm` folder from Settings → Directories ([avatars](docs/avatars.md))
+- **VRM avatars** — bundled samples, your own `.vrm` folder from Settings → Directories, static Appearance thumbnails ([avatars](docs/avatars.md))
 - **VRoid Hub** — bring-your-own OAuth app; connect in Settings, pick characters in Appearance ([VRoid Hub](docs/vroid-hub.md))
 - **Environments** — built-ins, Custom folder from Settings → Directories, color fade, or none ([environments](docs/environments.md))
 - **Persistent settings** — `config.yaml` across launches ([user settings](docs/user-settings.md))
@@ -71,7 +71,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 
 ### 1. Windows installer (easiest)
 
-Download **[AVATAR-Setup-0.4.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe)** — no Node.js. Run the installer, accept the EULA, launch **AVATAR**.
+Download **[AVATAR-Setup-0.5.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe)** — no Node.js. Run the installer, accept the EULA, launch **AVATAR**.
 
 ([All releases](https://github.com/ARPAHLS/avatar/releases) · [install notes](docs/getting-started/installation.md))
 
@@ -144,7 +144,7 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 | :--- | :--- |
 | **User guide** | [Using the app](docs/using-the-app.md) |
 | **Getting started** | [Install](docs/getting-started/installation.md) · [First session](docs/getting-started/first-session.md) |
-| **Download** | [AVATAR-Setup-0.4.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe) · [v0.4.0 release](https://github.com/ARPAHLS/avatar/releases/tag/v0.4.0) |
+| **Download** | [AVATAR-Setup-0.5.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe) · [v0.5.0 release](https://github.com/ARPAHLS/avatar/releases/tag/v0.5.0) |
 | **Characters & stage** | [Avatars](docs/avatars.md) · [Environments](docs/environments.md) · [Camera & lighting](docs/camera-and-lighting.md) |
 | **Motion & voice** | [VRMA](docs/animations/vrma.md) · [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-sync.md) |
 | **VRoid Hub** | [VRoid Hub connection](docs/vroid-hub.md) |

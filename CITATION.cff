@@ -12,12 +12,12 @@ abstract: >-
   (browser/localhost for development). It can follow cloud APIs, local LLMs, or
   everyday listening — study, video, podcasts, speech, and audiobooks — instead of
   a blank background.
-version: "0.4.0"
-date-released: "2026-08-04"
+version: "0.5.0"
+date-released: "2026-08-06"
 license: MIT
 repository-code: "https://github.com/ARPAHLS/avatar"
 url: "https://github.com/ARPAHLS/avatar"
-repository-artifact: "https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe"
+repository-artifact: "https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe"
 identifiers:
   - type: doi
     value: 10.5281/zenodo.21791157

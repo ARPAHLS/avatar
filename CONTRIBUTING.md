@@ -35,7 +35,7 @@ npm install
 | Windows installer (local output under `desktop-setup/`) | `npm run dist:win` |
 | Regenerate bundled avatar thumbnails | `npm run thumbs` |
 
-End users can use [AVATAR-Setup-0.4.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe) without Node.
+End users can use [AVATAR-Setup-0.5.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe) without Node.
 
 ### Bundled avatar thumbnails
 
@@ -70,7 +70,7 @@ AVATAR is small but cross-cutting. When you change behavior, ask what else must 
 | Environments / chrome contrast | [Environments](docs/environments.md), `chromeTone` / luma sampling on desktop |
 | Camera, lighting, transform | [Camera & lighting](docs/camera-and-lighting.md), reset-section behavior |
 | Animations / Default sequence | [VRMA](docs/animations/vrma.md), `config/animations.js`, manual testing notes if the Default loop changes |
- | Avatars / drop-in naming | [Avatars](docs/avatars.md), README “Swap avatars” if user-facing, `npm run thumbs` if a bundled avatar or the catalog changed |
+| Avatars / drop-in naming | [Avatars](docs/avatars.md), README “Swap avatars” if user-facing, `npm run thumbs` if a bundled avatar or the catalog changed |
 | VRoid Hub OAuth / Hub characters | [VRoid Hub](docs/vroid-hub.md), Appearance + Settings sections in [Using the app](docs/using-the-app.md), Electron `vroid-*.cjs` + preload `voxVroidHub`, session-only storage notes in [User settings](docs/user-settings.md) |
 | User Directories (avatars / envs) | Settings Directories in [Using the app](docs/using-the-app.md), [Avatars](docs/avatars.md), [Environments](docs/environments.md), `user-library.cjs` + `directories` in [User settings](docs/user-settings.md) |
 | Settings schema or defaults | [User settings](docs/user-settings.md), `config/userSettings.js`, Electron `settingsStore.cjs` **and** browser `userSettingsStore` if both apply |

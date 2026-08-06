@@ -12,6 +12,8 @@ Path: `avatar-demo/src/assets/avatars/`.
 
 Gear → **Appearance** → **Avatars**. Selection persists as `avatarId` in [config.yaml](user-settings.md).
 
+Picker cards use **static thumbnails** (not live 3D previews), so Appearance opens quickly. Bundled portraits live under `src/assets/avatars/thumbs/` (regenerate with `npm run thumbs` when a bundled `.vrm` or the catalog changes — see [Contributing](../CONTRIBUTING.md#bundled-avatar-thumbnails)). Custom-folder portraits are rendered once and cached under Electron `userData/thumbnails/` (keyed by path, mtime, and size).
+
 <p align="center">
   <img src="screenshots/91-multi-avatar-strip.png" alt="Avatar 1, 2, 3, and 4" height="240" />
 </p>

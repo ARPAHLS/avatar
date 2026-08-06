@@ -1,5 +1,12 @@
 # Roadmap
 
+## v0.5.0 — Shipped
+
+- [x] Static Appearance avatar thumbnails (bundled + custom-folder cache) (#10, #20)
+- [x] View on VRoid Hub from hearted-model conditions gate (#18, #19)
+- [x] Avatars guide rename (`docs/avatars.md`) + issue-reporting checklist (#25, #27, #30, #31)
+- [x] VRM dispose on swap + `dev:desktop` localhost fix (#20)
+
 ## v0.4.0 — Shipped
 
 - [x] User Directories for avatars / environments (issue #2 redesign)
@@ -26,13 +33,15 @@
 
 ## Next
 
-- [ ] Keyword → animation mapping table
-- [ ] Agent/event bus hook for external triggers
+- [ ] Keyword → animation mapping table (#7)
+- [ ] Agent/event bus hook for external triggers (#6)
 - [ ] Optional idle VRMA loop
-- [ ] Custom animation directories (`.vrma`) — Settings row reserved
+- [ ] Custom animation directories (`.vrma`) — Settings row reserved (#23)
+- [ ] Animation hotkeys / keybindings (#24)
+- [ ] Avatar thumbnail follow-ups (pre-warm, sidecars, cache prune) (#21)
+- [ ] Environments picker flicker / GIF size (#22)
 - [ ] Code-signed Windows installer
 - [ ] Broader CI (lint / build)
 - [ ] Asset license audit and manifest
 - [ ] Security review for capture permissions copy
-- [ ] Performance pass on dual Canvas avatar pickers
 - [ ] Harden VRoid Hub VRM download for restrictive networks / CDN paths
