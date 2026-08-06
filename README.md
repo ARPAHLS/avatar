@@ -36,7 +36,7 @@
   <a href="docs/using-the-app.md">User guide</a> ·
   <a href="docs/README.md">Documentation</a> ·
   <a href="docs/getting-started/installation.md">Install</a> ·
-  <a href="docs/avatars-and-skins.md">Avatars</a> ·
+  <a href="docs/avatars.md">Avatars</a> ·
   <a href="docs/environments.md">Environments</a> ·
   <a href="docs/voice/audio-sources.md">Voice</a> ·
   <a href="docs/vroid-hub.md">VRoid Hub</a> ·
@@ -56,7 +56,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 ## What this is
 
 - **Electron desktop overlay** — pin, snap, window scale, device loopback ([user guide](docs/using-the-app.md) · [settings](docs/user-settings.md))
-- **VRM avatars** — bundled samples, plus your own `.vrm` folder from Settings → Directories ([avatars](docs/avatars-and-skins.md))
+- **VRM avatars** — bundled samples, plus your own `.vrm` folder from Settings → Directories ([avatars](docs/avatars.md))
 - **VRoid Hub** — bring-your-own OAuth app; connect in Settings, pick characters in Appearance ([VRoid Hub](docs/vroid-hub.md))
 - **Environments** — built-ins, Custom folder from Settings → Directories, color fade, or none ([environments](docs/environments.md))
 - **Persistent settings** — `config.yaml` across launches ([user settings](docs/user-settings.md))
@@ -128,7 +128,7 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 
 ### Swap avatars
 
-**Desktop / installer:** Gear → **Settings** → **Directories** → **Avatars** → **Custom**, pick a folder of `.vrm` files. Appearance then shows that list. You can also use **VRoid Hub** under Appearance. Guide: [Avatars](docs/avatars-and-skins.md) · [VRoid Hub](docs/vroid-hub.md).
+**Desktop / installer:** Gear → **Settings** → **Directories** → **Avatars** → **Custom**, pick a folder of `.vrm` files. Appearance then shows that list. You can also use **VRoid Hub** under Appearance. Guide: [Avatars](docs/avatars.md) · [VRoid Hub](docs/vroid-hub.md).
 
 **From source (contributors):** drop `avatar4.vrm` into `avatar-demo/src/assets/avatars/` and restart — naming is covered in the avatars guide.
 
@@ -145,7 +145,7 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 | **User guide** | [Using the app](docs/using-the-app.md) |
 | **Getting started** | [Install](docs/getting-started/installation.md) · [First session](docs/getting-started/first-session.md) |
 | **Download** | [AVATAR-Setup-0.4.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe) · [v0.4.0 release](https://github.com/ARPAHLS/avatar/releases/tag/v0.4.0) |
-| **Characters & stage** | [Avatars](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [Camera & lighting](docs/camera-and-lighting.md) |
+| **Characters & stage** | [Avatars](docs/avatars.md) · [Environments](docs/environments.md) · [Camera & lighting](docs/camera-and-lighting.md) |
 | **Motion & voice** | [VRMA](docs/animations/vrma.md) · [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-sync.md) |
 | **VRoid Hub** | [VRoid Hub connection](docs/vroid-hub.md) |
 | **Settings** | [config.yaml & resets](docs/user-settings.md) |
@@ -187,7 +187,7 @@ Built-in environment GIFs (Stars / Code / Bloom) are from [GIPHY](https://giphy.
 
 Full terms: **[docs/assets-and-credits.md](docs/assets-and-credits.md)** · Rights holders: **input@arpacorp.net**
 
-Beyond the bundled samples, you can bring your own characters and backdrops: **Settings → Directories** (local `.vrm` / image folders) and **VRoid Hub** (linked characters, session-only). See [Avatars](docs/avatars-and-skins.md) · [Environments](docs/environments.md) · [VRoid Hub](docs/vroid-hub.md) · [Using the app](docs/using-the-app.md).
+Beyond the bundled samples, you can bring your own characters and backdrops: **Settings → Directories** (local `.vrm` / image folders) and **VRoid Hub** (linked characters, session-only). See [Avatars](docs/avatars.md) · [Environments](docs/environments.md) · [VRoid Hub](docs/vroid-hub.md) · [Using the app](docs/using-the-app.md).
 
 ## Privacy
 

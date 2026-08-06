@@ -50,5 +50,5 @@ Only framing wrong? **Camera & Lighting → Reset Camera**.
 ## Next
 
 - [Using the app](../using-the-app.md) — full walkthrough  
-- [Avatars](../avatars-and-skins.md) · [Environments](../environments.md) · [Camera & lighting](../camera-and-lighting.md)  
+- [Avatars](../avatars.md) · [Environments](../environments.md) · [Camera & lighting](../camera-and-lighting.md)
 - [Voice](../voice/audio-sources.md) · [Animations](../animations/vrma.md) · [User settings](../user-settings.md) · [VRoid Hub](../vroid-hub.md)
