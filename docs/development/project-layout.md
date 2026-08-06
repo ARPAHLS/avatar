@@ -1,7 +1,7 @@
 # Project layout
 
 ```text
-avatar-demo/
+avatar/
 ├── electron/
 │   ├── main.cjs
 │   ├── preload.cjs

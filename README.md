@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="avatar-demo/public/AVATAR_SPLASH.png" alt="AVATAR" width="420" />
+  <img src="avatar/public/AVATAR_SPLASH.png" alt="AVATAR" width="420" />
 </div>
 
 <p align="center">
@@ -80,7 +80,7 @@ Download **[AVATAR-Setup-0.5.0.exe](https://github.com/ARPAHLS/avatar/releases/d
 Requires **Node.js 20+** and **npm**:
 
 ```bash
-cd avatar-demo
+cd avatar
 npm install
 npm run desktop
 ```
@@ -88,7 +88,7 @@ npm run desktop
 ### 3. Web app (browser)
 
 ```bash
-cd avatar-demo
+cd avatar
 npm install
 npm run dev
 ```
@@ -130,13 +130,13 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 
 **Desktop / installer:** Gear → **Settings** → **Directories** → **Avatars** → **Custom**, pick a folder of `.vrm` files. Appearance then shows that list. You can also use **VRoid Hub** under Appearance. Guide: [Avatars](docs/avatars.md) · [VRoid Hub](docs/vroid-hub.md).
 
-**From source (contributors):** drop `avatar4.vrm` into `avatar-demo/src/assets/avatars/` and restart — naming is covered in the avatars guide.
+**From source (contributors):** drop `avatar4.vrm` into `avatar/src/assets/avatars/` and restart — naming is covered in the avatars guide.
 
 ### Custom environments
 
 **Desktop / installer:** Gear → **Settings** → **Directories** → **Environments** → **Custom**, pick a folder of `.gif` / `.png` / `.jpg` / `.jpeg`. Built-ins stay; Appearance → Environments gains a **Custom** expander. Guide: [Environments](docs/environments.md).
 
-**From source (contributors):** trial files can also go in `avatar-demo/src/assets/environments/custom/` while Directories is Default (local only; not shipped in the installer).
+**From source (contributors):** trial files can also go in `avatar/src/assets/environments/custom/` while Directories is Default (local only; not shipped in the installer).
 
 ## Documentation
 
@@ -161,7 +161,7 @@ avatar/
 │   ├── using-the-app.md
 │   ├── screenshots/
 │   └── …
-├── avatar-demo/
+├── avatar/
 │   ├── electron/
 │   ├── public/
 │   └── src/

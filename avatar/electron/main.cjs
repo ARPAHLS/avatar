@@ -750,7 +750,7 @@ app.whenReady().then(async () => {
   // pastes its client id/secret into Settings (see docs/vroid-hub.md).
   // Dev-only convenience: safeStorage needs a real OS keychain backend on
   // Linux (KWallet or GNOME Secret Service over D-Bus). Contributors running
-  // avatar-demo from source without one would otherwise have the VRoid Hub
+  // avatar from source without one would otherwise have the VRoid Hub
   // feature silently disabled. Packaged builds never call this, so a
   // distributed build still requires real OS-backed encryption.
   if (!app.isPackaged) {

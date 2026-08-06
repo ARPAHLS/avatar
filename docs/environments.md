@@ -1,6 +1,6 @@
 # Environments
 
-Backgrounds live under `avatar-demo/src/assets/environments/`.
+Backgrounds live under `avatar/src/assets/environments/`.
 
 Open Gear → **Appearance** → **Environments**.
 
@@ -64,7 +64,7 @@ The `custom/` folder is for **local trial media** when Directories is still Defa
 
 **Shipped Windows builds** do not pack local Custom media. Prefer Settings → Directories for installer users.
 
-1. Drop media into `avatar-demo/src/assets/environments/custom/` (`.gif`, `.png`, `.jpg`, `.jpeg`).  
+1. Drop media into `avatar/src/assets/environments/custom/` (`.gif`, `.png`, `.jpg`, `.jpeg`).  
 2. Restart Vite / Electron so Vite’s glob picks them up.  
 3. Gear → Appearance → Environments → open **Custom**.
 

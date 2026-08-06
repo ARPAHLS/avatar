@@ -21,7 +21,7 @@ Details: [Installation](docs/getting-started/installation.md) · [Architecture](
 ## Run locally
 
 ```bash
-cd avatar-demo
+cd avatar
 npm install
 ```
 
@@ -39,7 +39,7 @@ End users can use [AVATAR-Setup-0.5.0.exe](https://github.com/ARPAHLS/avatar/rel
 
 ### Bundled avatar thumbnails
 
-The Appearance picker draws avatars as static images, not live VRM previews. Portraits for the bundled avatars are **committed** under `avatar-demo/src/assets/avatars/thumbs/` (`avatar1.png` … `avatar3.png`).
+The Appearance picker draws avatars as static images, not live VRM previews. Portraits for the bundled avatars are **committed** under `avatar/src/assets/avatars/thumbs/` (`avatar1.png` … `avatar3.png`).
 
 If you change a bundled `.vrm`, or add or remove an entry in `src/config/avatars.js`, run `npm run thumbs` and commit the result — the picker will otherwise show a stale or missing portrait. The command opens Electron briefly, renders each avatar with the same renderer the app uses at runtime, writes the PNGs into the source tree, and exits. It is dev-only: the write channel is registered only for that run, so a packaged app cannot write into the source tree.
 
@@ -57,7 +57,7 @@ Thumbnails for a user's own custom folder are **not** committed — they are ren
 
 ### Prefer catalogs over hard-coding
 
-Avatars, animations, audio sources, environments, and defaults live in **`avatar-demo/src/config/`**. If you add a clip, source, or built-in environment, register it in the catalog — do not scatter paths in components.
+Avatars, animations, audio sources, environments, and defaults live in **`avatar/src/config/`**. If you add a clip, source, or built-in environment, register it in the catalog — do not scatter paths in components.
 
 ### Think about ripple effects
 
@@ -75,7 +75,7 @@ AVATAR is small but cross-cutting. When you change behavior, ask what else must 
 | User Directories (avatars / envs) | Settings Directories in [Using the app](docs/using-the-app.md), [Avatars](docs/avatars.md), [Environments](docs/environments.md), `user-library.cjs` + `directories` in [User settings](docs/user-settings.md) |
 | Settings schema or defaults | [User settings](docs/user-settings.md), `config/userSettings.js`, Electron `settingsStore.cjs` **and** browser `userSettingsStore` if both apply |
 | Window / overlay / snap / scale | Using-the-app Settings section, Electron `main.cjs` IPC + preload API |
-| Installer / packaging | [Installation](docs/getting-started/installation.md), [releases](docs/releases/README.md) if user-facing, `avatar-demo/build/` assets, `package.json` `build` field |
+| Installer / packaging | [Installation](docs/getting-started/installation.md), [releases](docs/releases/README.md) if user-facing, `avatar/build/` assets, `package.json` `build` field |
 | Public API of preload / IPC | Every `window.voxDesktop` (or equivalent) caller; keep `preload.cjs` and `main.cjs` in sync |
 | Labels or issue forms | [`.github/labels.yml`](.github/labels.yml) (CI syncs labels) — do not invent one-off label names in templates |
 
@@ -112,7 +112,7 @@ Docs-only PRs still need a clear description; changelog entry optional unless th
 - **Do not** commit VRM/VRMA (or other media) you do not have rights to redistribute.
 - Bundled samples and the free VRMA pack have specific terms — read [Assets & credits](docs/assets-and-credits.md) before adding or replacing media.
 - Built-in environments belong next to `stars.gif` / `code.gif` / `bloom.gif` and in `config/environments.js`. Trial GIFs stay in `custom/` (gitignored media; folder kept with `.gitkeep`).
-- Installer art / EULA live under `avatar-demo/build/` and `public/` — keep NSIS sizes and ASCII license constraints in mind if you touch packaging.
+- Installer art / EULA live under `avatar/build/` and `public/` — keep NSIS sizes and ASCII license constraints in mind if you touch packaging.
 
 ---
 
@@ -120,7 +120,7 @@ Docs-only PRs still need a clear description; changelog entry optional unless th
 
 Before you open a PR:
 
-- [ ] `npm run lint` and `npm run build` pass in `avatar-demo/`
+- [ ] `npm run lint` and `npm run build` pass in `avatar/`
 - [ ] Smoke-tested the path you changed (`dev:desktop` and/or `dev` as appropriate)
 - [ ] Catalogs / config updated if you added assets or options
 - [ ] Electron preload ↔ main IPC still aligned (if you touched desktop APIs)

@@ -21,7 +21,7 @@ Also listed on [Releases](https://github.com/ARPAHLS/avatar/releases/tag/v0.5.0)
 Requires **Node.js 20+** and **npm**. Builds the app, then opens the Electron companion:
 
 ```bash
-cd avatar-demo
+cd avatar
 npm install
 npm run desktop
 ```
@@ -37,7 +37,7 @@ npm run dev:desktop
 Contributors / UI work in the browser (no system-audio loopback):
 
 ```bash
-cd avatar-demo
+cd avatar
 npm install
 npm run dev
 ```
@@ -49,7 +49,7 @@ Open [http://localhost:5173](http://localhost:5173).
 ## Build the Windows installer (from source)
 
 ```bash
-cd avatar-demo
+cd avatar
 npm run dist:win
 ```
 

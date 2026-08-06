@@ -7,7 +7,7 @@ For every control in depth: **[Using the app](../using-the-app.md)**.
 ## 1. Launch
 
 - **Installer:** start **AVATAR** from the Start menu or desktop shortcut.  
-- **From source:** `cd avatar-demo` → `npm install` → `npm run desktop`
+- **From source:** `cd avatar` → `npm install` → `npm run desktop`
 
 A transparent window should appear on top of your other apps.
 

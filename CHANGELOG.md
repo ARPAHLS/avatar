@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Rename the app package directory from `avatar-demo/` to `avatar/`. Contributor paths (`cd avatar`, docs, `.gitignore`) updated; the Windows installer is unchanged.
+
 ## [0.5.0] — 2026-08-06
 
 ### Added

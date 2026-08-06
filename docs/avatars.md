@@ -8,7 +8,7 @@
 | Avatar 2 | `avatar2.vrm` |
 | Avatar 3 | `avatar3.vrm` |
 
-Path: `avatar-demo/src/assets/avatars/`.
+Path: `avatar/src/assets/avatars/`.
 
 Gear → **Appearance** → **Avatars**. Selection persists as `avatarId` in [config.yaml](user-settings.md).
 

@@ -44,13 +44,13 @@ Relevant links:
 
 ## VRMA animations (7 free motion pack)
 
-Bundled under `avatar-demo/src/assets/avatars/VRMA/`.
+Bundled under `avatar/src/assets/avatars/VRMA/`.
 
 These are the **seven free VRM Animation (`.vrma`) files** distributed by the **VRoid Project** on **BOOTH** (announced February 2024 with VRoid Hub Photo Booth / `.vrma` support). See:
 
 - [VRoid news — Photo Booth, BOOTH .vrma, 7 free animations](https://vroid.com/en/news/6HozzBIV0KkcKf9dc1fZGW)
 - [BOOTH](https://booth.pm/) — search the official VRoid Project shop / `#VRMA`
-- Local terms copy: [`Readme_VRMA_MotionPack_EN.txt`](../avatar-demo/src/assets/avatars/VRMA/Readme_VRMA_MotionPack_EN.txt)
+- Local terms copy: [`Readme_VRMA_MotionPack_EN.txt`](../avatar/src/assets/avatars/VRMA/Readme_VRMA_MotionPack_EN.txt)
 
 ### Clips included
 
@@ -93,7 +93,7 @@ Project contact for this repository’s use of the pack: **input@arpacorp.net**
 
 ## Built-in environment GIFs
 
-Path: `avatar-demo/src/assets/environments/`. Sourced from [GIPHY](https://giphy.com/) as free / publicly shared backgrounds for sample stage backdrops.
+Path: `avatar/src/assets/environments/`. Sourced from [GIPHY](https://giphy.com/) as free / publicly shared backgrounds for sample stage backdrops.
 
 | File | Label | Source / credit |
 | :--- | :--- | :--- |
