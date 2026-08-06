@@ -67,7 +67,10 @@ Autosave runs shortly after you change something (~400 ms debounce).
 **Settings → Reset all settings** deletes the YAML file (or clears localStorage) and reapplies the factory defaults above.
 
 <p align="center">
-  <img src="screenshots/80-settings-panel.png" alt="Settings — Overlay, Snap, Directories, VRoid Hub, System" height="260" />
+  <img src="screenshots/AVATAR_M5_Settings_Scroll.gif" alt="Scrolling the Settings panel — Overlay, Snap, Directories" height="400" />
+</p>
+
+<p align="center">
   <img src="screenshots/82-settings-directories.png" alt="Settings Directories section" height="260" />
 </p>
 

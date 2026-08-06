@@ -5,6 +5,10 @@ Gear → **Camera & Lighting**.
 All values autosave to `config.yaml` (or browser local storage). See [User settings](user-settings.md).
 
 <p align="center">
+  <img src="screenshots/AVATAR_M5_camera_lighting.gif" alt="Adjusting Camera and Lighting on the desktop companion" height="400" />
+</p>
+
+<p align="center">
   <img src="screenshots/60-camera-panel.png" alt="Camera controls" height="220" />
   <img src="screenshots/61-lighting-panel.png" alt="Lighting controls" height="220" />
 </p>

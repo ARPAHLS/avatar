@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Rename the app package directory from `avatar-demo/` to `avatar/`. Contributor paths (`cd avatar`, docs, `.gitignore`) updated; the Windows installer is unchanged.
+- Docs and README: add desktop companion GIFs (`AVATAR_M5_*`) for overlay, Settings scroll, animations, custom environments, and Camera & Lighting.
 
 ## [0.5.0] — 2026-08-06
 

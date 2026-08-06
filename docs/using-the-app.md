@@ -20,7 +20,7 @@ This guide walks through every control in the **Electron desktop companion**. Pr
 Glass **bar** at the bottom: drag handle (line), **window scale**, optional green **live** dot, **gear** menu.
 
 <p align="center">
-  <img src="screenshots/01-hero-overlay-dark-ide.png" alt="Overlay on a dark IDE" width="100%" />
+  <img src="screenshots/AVATAR_M5_victory.gif" alt="Overlay companion on a dark IDE" height="420" />
 </p>
 
 <p align="center">
@@ -144,6 +144,10 @@ source. See [VRoid Hub connection](vroid-hub.md).
   <img src="screenshots/34-appearance-env-custom-dir.png" alt="Custom environments from Directories folder" height="220" />
 </p>
 
+<p align="center">
+  <img src="screenshots/AVATAR_M5_browsing_custom_environments.gif" alt="Browsing custom environments in Appearance" height="400" />
+</p>
+
 Full detail: [Environments](environments.md).
 
 ### Bar & button colors (chrome)
@@ -242,6 +246,10 @@ Position **X / Y / Z** (default `0, -1.03, -1.48`).
 See [Camera & lighting](camera-and-lighting.md).
 
 <p align="center">
+  <img src="screenshots/AVATAR_M5_camera_lighting.gif" alt="Adjusting Camera and Lighting on the desktop companion" height="400" />
+</p>
+
+<p align="center">
   <img src="screenshots/60-camera-panel.png" alt="Camera panel" height="200" />
   <img src="screenshots/61-lighting-panel.png" alt="Lighting panel" height="200" />
   <img src="screenshots/62-avatar-transform-panel.png" alt="Avatar transform panel" height="200" />
@@ -272,7 +280,8 @@ Pick any listed VRMA clip to play that motion only. Choosing **Default** again r
 Catalog: [VRMA](animations/vrma.md).
 
 <p align="center">
-  <img src="screenshots/21-gear-animations.png" alt="Animations menu" height="260" />
+  <img src="screenshots/AVATAR_M5_Animations_Select_Greeting.gif" alt="Selecting Greeting from the Animations menu" height="400" />
+  <img src="screenshots/AVATAR_M5_loop.gif" alt="Default animation loop on the companion stage" height="400" />
 </p>
 
 ---
@@ -301,7 +310,10 @@ Bottom left  | Bottom center  | Bottom right
 The active cell stays **highlighted**. If you **drag** the glass bar by hand, the highlight clears (no cell selected).
 
 <p align="center">
-  <img src="screenshots/80-settings-panel.png" alt="Settings — Overlay, Snap, Directories, VRoid Hub, System" height="260" />
+  <img src="screenshots/AVATAR_M5_Settings_Scroll.gif" alt="Scrolling Settings — Overlay, Snap, Directories" height="400" />
+</p>
+
+<p align="center">
   <img src="screenshots/82-settings-directories.png" alt="Settings Directories section" height="260" />
   <img src="screenshots/81-snap-pad-selected.png" alt="Snap pad with a cell selected" height="240" />
   <img src="screenshots/85-windowed-mode.png" alt="Windowed mode" height="240" />
