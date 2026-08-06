@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **Appearance picker performance**: avatar thumbnails are static images instead of live VRM previews, so opening Appearance no longer stands up a 3D scene per card. Bundled avatars ship pre-rendered portraits (`src/assets/avatars/thumbs/`, regenerate with `npm run thumbs`); custom-folder avatars render once and are cached under Electron `userData/thumbnails/`, keyed by path plus file mtime and size so a replaced `.vrm` regenerates. First scan of a new custom folder still fills in progressively.
 - Document credits for built-in environment GIFs (GIPHY: Stars / Lemat Works, Code / Justin, Bloom).
+- Add an issue reporting checklist to `CONTRIBUTING.md`.
 
 ### Fixed
 
