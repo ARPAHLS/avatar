@@ -128,6 +128,14 @@ Before you open a PR:
 - Questions → **Question / support** template, or **input@arpacorp.net**.
 - Security / privacy concerns around capture → label `security-privacy` or email maintainers; do not file exploit detail in public issues if unsure.
 
+### Reporting issues
+
+- Search [open issues](https://github.com/ARPAHLS/avatar/issues) first and use the matching template from [issue templates](https://github.com/ARPAHLS/avatar/issues/new/choose).
+- Include the AVATAR version (installer version or commit), your OS, and how you run it (installer / desktop dev / browser dev).
+- For bugs: numbered repro steps, expected vs actual behavior, and redact any local paths or personal data before pasting logs.
+- For features: describe the problem, the proposed behavior, and the primary surface (renderer, Electron, voice, settings, etc.).
+- Attach screenshots or short clips when the issue is visual.
+
 ---
 
 ## Roadmap
