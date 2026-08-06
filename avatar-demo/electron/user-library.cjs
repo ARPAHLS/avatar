@@ -123,10 +123,22 @@ function pathExists(dirPath) {
   return normalizeDir(dirPath) != null;
 }
 
+/**
+ * The absolute path behind a scanned id, for callers that need to stat the
+ * file rather than read it (the thumbnail cache keys on mtime and size).
+ * @param {unknown} id
+ * @returns {string | null}
+ */
+function resolveLibraryPath(id) {
+  if (typeof id !== 'string' || id.trim() === '') return null;
+  return fileIndex.get(id) ?? null;
+}
+
 module.exports = {
   scanAvatars,
   scanEnvironments,
   readLibraryFile,
+  resolveLibraryPath,
   pathExists,
   normalizeDir,
 };

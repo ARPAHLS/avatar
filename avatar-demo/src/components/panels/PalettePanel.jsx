@@ -77,18 +77,14 @@ export function PalettePanel({
           </p>
         ) : (
           <div className="avatar-picker">
-            {avatarCatalog.map((entry) => {
-              const previewPath =
-                entry.skins.find((skin) => skin.id === 'default')?.path ?? entry.skins[0]?.path;
-              return (
-                <MiniAvatar
-                  key={entry.id}
-                  modelPath={previewPath}
-                  selected={selectedAvatarId === entry.id}
-                  onClick={() => onAvatarChange(entry.id)}
-                />
-              );
-            })}
+            {avatarCatalog.map((entry) => (
+              <MiniAvatar
+                key={entry.id}
+                entry={entry}
+                selected={selectedAvatarId === entry.id}
+                onClick={() => onAvatarChange(entry.id)}
+              />
+            ))}
           </div>
         )}
         <div className="vroid-hub-inline">

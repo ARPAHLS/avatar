@@ -15,6 +15,23 @@ const vrmModules = import.meta.glob('../assets/avatars/avatar*.vrm', {
   import: 'default',
 });
 
+// Portraits generated ahead of time (see scripts/README or npm run thumbs), so
+// opening Appearance never has to parse a bundled model just to draw a 56px
+// circle. A missing file is not an error: the picker falls back to rendering
+// one on the spot.
+const thumbnailModules = import.meta.glob('../assets/avatars/thumbs/avatar*.png', {
+  eager: true,
+  import: 'default',
+});
+
+/** @param {number} index */
+function bundledThumbnail(index) {
+  const match = Object.entries(thumbnailModules).find(([modulePath]) =>
+    modulePath.endsWith(`/avatar${index}.png`),
+  );
+  return match ? /** @type {string} */ (match[1]) : null;
+}
+
 /**
  * @typedef {Object} AvatarSkin
  * @property {string} id
@@ -28,6 +45,7 @@ const vrmModules = import.meta.glob('../assets/avatars/avatar*.vrm', {
  * @property {string} id
  * @property {string} label
  * @property {number} index
+ * @property {string | null} [thumbnail]
  * @property {AvatarSkin[]} skins
  */
 
@@ -46,6 +64,7 @@ for (const [modulePath, src] of Object.entries(vrmModules)) {
     id,
     label: `Avatar ${index}`,
     index,
+    thumbnail: bundledThumbnail(index),
     skins: [
       {
         id: 'default',

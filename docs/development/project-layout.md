@@ -6,6 +6,7 @@ avatar-demo/
 │   ├── main.cjs
 │   ├── preload.cjs
 │   ├── settingsStore.cjs
+│   ├── thumbnails.cjs
 │   ├── user-library.cjs
 │   ├── vroid-oauth-server.cjs
 │   ├── vroid-hub-auth.cjs
@@ -17,6 +18,7 @@ avatar-demo/
 └── src/
     ├── assets/
     │   ├── avatars/
+    │   │   ├── thumbs/          # committed picker portraits (npm run thumbs)
     │   │   └── VRMA/
     │   └── environments/
     │       ├── stars.gif / code.gif / bloom.gif
@@ -42,3 +44,6 @@ End users personalize via **Settings → Directories** and **VRoid Hub** (see [U
 | `npm run build` | CI / web | Production Vite bundle |
 | `npm run lint` | Contributors | ESLint |
 | `npm test` | Contributors | Electron unit tests |
+| `npm run thumbs` | Contributors | Re-render committed avatar portraits into `src/assets/avatars/thumbs/` |
+
+Run `npm run thumbs` whenever a bundled `.vrm` or the `config/avatars.js` catalog changes, and commit the PNGs — the Appearance picker reads those files rather than rendering a live preview. Custom-folder avatars are cached at runtime under Electron `userData/thumbnails/` instead. See [Contributing](../../CONTRIBUTING.md#bundled-avatar-thumbnails).

@@ -33,6 +33,11 @@ contextBridge.exposeInMainWorld('voxDesktop', {
   scanLibraryAvatars: (dirPath) => ipcRenderer.invoke('library:scan-avatars', dirPath),
   scanLibraryEnvironments: (dirPath) => ipcRenderer.invoke('library:scan-environments', dirPath),
   readLibraryFile: (id) => ipcRenderer.invoke('library:read-file', id),
+  getThumbnail: (id) => ipcRenderer.invoke('thumbnail:get', id),
+  putThumbnail: (id, png) => ipcRenderer.invoke('thumbnail:put', id, png),
+  // Only answered during `npm run thumbs`; rejects in any normal run.
+  devWriteThumbnail: (fileName, png) =>
+    ipcRenderer.invoke('thumbnail:dev-write', fileName, png),
 });
 
 contextBridge.exposeInMainWorld('voxVroidHub', {

@@ -30,6 +30,7 @@ import {
   revokeEnvironmentBlobUrls,
 } from '../lib/userLibrary';
 import { loadUserSettings, resetUserSettings, saveUserSettings } from '../lib/userSettingsStore';
+import { revokeThumbnailUrls } from '../lib/thumbnails';
 import { VrmAvatar } from './avatar/VrmAvatar';
 import { AvatarStageShell } from './avatar/AvatarStageShell';
 import { CameraController } from './ui/CameraController';
@@ -299,6 +300,9 @@ export function AvatarStage() {
 
     async function refreshAvatarLibrary() {
       revokeAvatarBlobUrls(libraryAvatarsRef.current);
+      // Thumbnails are keyed by path, so a rescan has to drop them too or a
+      // replaced .vrm keeps showing its old portrait.
+      revokeThumbnailUrls();
       if (!customAvatarMode || !directories.avatars.path) {
         if (!cancelled) {
           setLibraryAvatars([]);
@@ -425,6 +429,7 @@ export function AvatarStage() {
   useEffect(() => {
     return () => {
       revokeAvatarBlobUrls(libraryAvatarsRef.current);
+      revokeThumbnailUrls();
       revokeEnvironmentBlobUrls(libraryEnvironmentsRef.current);
       setLibraryCustomEnvironments([]);
     };
@@ -638,6 +643,7 @@ export function AvatarStage() {
     setDirectoriesNotice(null);
     setLibraryCustomEnvironments([]);
     revokeAvatarBlobUrls(libraryAvatarsRef.current);
+    revokeThumbnailUrls();
     revokeEnvironmentBlobUrls(libraryEnvironmentsRef.current);
     setLibraryAvatars([]);
     setLibraryEnvironments([]);

@@ -28,5 +28,7 @@ export function getLibraryApi() {
     scanAvatars: (dirPath) => desktop.scanLibraryAvatars(dirPath),
     scanEnvironments: (dirPath) => desktop.scanLibraryEnvironments(dirPath),
     readFile: (id) => desktop.readLibraryFile(id),
+    getThumbnail: (id) => desktop.getThumbnail?.(id) ?? Promise.resolve(null),
+    putThumbnail: (id, png) => desktop.putThumbnail?.(id, png) ?? Promise.resolve(false),
   };
 }

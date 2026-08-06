@@ -99,7 +99,7 @@ Gear → **Appearance**.
 ### Avatars
 
 Pick **Avatar 1 / 2 / 3** when Directories → Avatars is **Default**.  
-On desktop you can point Settings → Directories → Avatars at a folder of `.vrm` files — Appearance then shows **those instead** of the bundled list. **VRoid Hub** stays under Avatars either way. Details: [Avatars](avatars-and-skins.md).
+On desktop you can point Settings → Directories → Avatars at a folder of `.vrm` files — Appearance then shows **those instead** of the bundled list. **VRoid Hub** stays under Avatars either way. Picker thumbnails are static images, so the drawer opens without rendering every model: bundled avatars ship with theirs, and a custom folder builds its own the first time you open it — cards fill in as each finishes, and are instant from then on. Details: [Avatars](avatars-and-skins.md).
 
 On **desktop**, when VRoid Hub is connected, a **VRoid Hub** block appears
 under the built-in thumbnails so you can pick Hub characters here (setup

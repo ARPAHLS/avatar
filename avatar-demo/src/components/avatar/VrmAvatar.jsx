@@ -32,6 +32,7 @@ export function VrmAvatar({
 
   useEffect(() => {
     let disposed = false;
+    let loaded = null;
 
     if (!modelPath) {
       setVrm(null);
@@ -41,8 +42,13 @@ export function VrmAvatar({
     loader.load(
       modelPath,
       (gltf) => {
-        if (disposed) return;
         const vrmData = gltf.userData.vrm;
+        if (disposed) {
+          // Unmounted mid-parse: this model was never attached, so the cleanup
+          // below has already run and nothing else will ever free it.
+          VRMUtils.deepDispose(vrmData.scene);
+          return;
+        }
         VRMUtils.combineSkeletons(vrmData.scene);
         // Owns vrm.scene.rotation outright: it flips VRM 0.0 models (which face
         // -Z) by 180° and leaves VRM 1.0 (already +Z) alone. Nothing else may
@@ -51,6 +57,7 @@ export function VrmAvatar({
         // the user's framing transform lives on the wrapper group below instead.
         VRMUtils.rotateVRM0(vrmData);
 
+        loaded = vrmData;
         group.current?.add(vrmData.scene);
         setVrm(vrmData);
         onLoaded?.();
@@ -70,6 +77,10 @@ export function VrmAvatar({
           group.current.remove(group.current.children[0]);
         }
       }
+      // Detaching a scene leaves its geometries, materials and textures on the
+      // GPU. Nothing else holds a reference once this effect re-runs, so every
+      // avatar swap used to strand a whole model's worth of VRAM.
+      if (loaded) VRMUtils.deepDispose(loaded.scene);
     };
   }, [modelPath, onLoaded]);
 

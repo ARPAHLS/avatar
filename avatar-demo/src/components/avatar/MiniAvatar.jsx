@@ -1,34 +1,57 @@
-import { Canvas } from '@react-three/fiber';
-import { VrmAvatar } from './VrmAvatar';
+import { useEffect, useState } from 'react';
+import { getLibraryThumbnail } from '../../lib/thumbnails';
 
-export function MiniAvatar({ modelPath, selected, onClick }) {
+/**
+ * A picker thumbnail. This used to be a live <Canvas> per avatar, which meant
+ * Appearance parsed every VRM in the catalog — seconds of blocked main thread —
+ * to draw a handful of 56px circles. The portrait is static either way, so it
+ * is now an image: bundled avatars ship one, user-folder avatars render theirs
+ * once and keep it on disk.
+ */
+export function MiniAvatar({ entry, selected, onClick }) {
+  const [src, setSrc] = useState(entry.thumbnail ?? null);
+
+  useEffect(() => {
+    if (entry.thumbnail) {
+      setSrc(entry.thumbnail);
+      return undefined;
+    }
+
+    let cancelled = false;
+    setSrc(null);
+    const previewPath =
+      entry.skins.find((skin) => skin.id === 'default')?.path ?? entry.skins[0]?.path;
+    if (!previewPath) return undefined;
+
+    void getLibraryThumbnail({ id: entry.id, path: previewPath }).then((url) => {
+      if (!cancelled) setSrc(url);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [entry.id, entry.thumbnail, entry.skins]);
+
   return (
     <div
       onClick={onClick}
       className={`mini-avatar ${selected ? 'mini-avatar--selected' : ''}`}
       role="button"
       tabIndex={0}
+      title={entry.label}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') onClick();
       }}
     >
       <div className="mini-avatar__canvas-wrap">
-        <Canvas
-          camera={{ position: [0, 1.1, 0.7], fov: 24 }}
-          style={{ width: 56, height: 56, background: 'transparent' }}
-          onCreated={({ camera }) => {
-            camera.lookAt(0, 1.0, 0);
-          }}
-        >
-          <ambientLight intensity={0.7} />
-          <directionalLight position={[1, 2, 2]} intensity={0.7} color="#fff" />
-          <VrmAvatar
-            modelPath={modelPath}
-            animationId="idle"
-            avatarPosition={[0, -0.54, 0]}
-            avatarRotation={[0, 0, 0]}
-          />
-        </Canvas>
+        {src ? (
+          <img className="mini-avatar__image" src={src} alt={entry.label} />
+        ) : (
+          // First sight of a user's .vrm still costs one parse to render from.
+          // Thumbnails are generated one at a time, so the rest of the picker
+          // stays interactive while these fill in.
+          <span className="mini-avatar__pending" aria-label={`${entry.label} loading`} />
+        )}
       </div>
     </div>
   );

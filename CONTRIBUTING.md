@@ -33,8 +33,17 @@ npm install
 | Lint | `npm run lint` |
 | Vite production build | `npm run build` |
 | Windows installer (local output under `desktop-setup/`) | `npm run dist:win` |
+| Regenerate bundled avatar thumbnails | `npm run thumbs` |
 
 End users can use [AVATAR-Setup-0.4.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.4.0/AVATAR-Setup-0.4.0.exe) without Node.
+
+### Bundled avatar thumbnails
+
+The Appearance picker draws avatars as static images, not live VRM previews. Portraits for the bundled avatars are **committed** under `avatar-demo/src/assets/avatars/thumbs/` (`avatar1.png` … `avatar3.png`).
+
+If you change a bundled `.vrm`, or add or remove an entry in `src/config/avatars.js`, run `npm run thumbs` and commit the result — the picker will otherwise show a stale or missing portrait. The command opens Electron briefly, renders each avatar with the same renderer the app uses at runtime, writes the PNGs into the source tree, and exits. It is dev-only: the write channel is registered only for that run, so a packaged app cannot write into the source tree.
+
+Thumbnails for a user's own custom folder are **not** committed — they are rendered on demand and cached under Electron `userData/thumbnails/`.
 
 ---
 
@@ -61,7 +70,7 @@ AVATAR is small but cross-cutting. When you change behavior, ask what else must 
 | Environments / chrome contrast | [Environments](docs/environments.md), `chromeTone` / luma sampling on desktop |
 | Camera, lighting, transform | [Camera & lighting](docs/camera-and-lighting.md), reset-section behavior |
 | Animations / Default sequence | [VRMA](docs/animations/vrma.md), `config/animations.js`, manual testing notes if the Default loop changes |
-| Avatars / drop-in naming | [Avatars](docs/avatars-and-skins.md), README “Swap avatars” if user-facing |
+| Avatars / drop-in naming | [Avatars](docs/avatars-and-skins.md), README “Swap avatars” if user-facing, `npm run thumbs` if a bundled avatar or the catalog changed |
 | VRoid Hub OAuth / Hub characters | [VRoid Hub](docs/vroid-hub.md), Appearance + Settings sections in [Using the app](docs/using-the-app.md), Electron `vroid-*.cjs` + preload `voxVroidHub`, session-only storage notes in [User settings](docs/user-settings.md) |
 | User Directories (avatars / envs) | Settings Directories in [Using the app](docs/using-the-app.md), [Avatars](docs/avatars-and-skins.md), [Environments](docs/environments.md), `user-library.cjs` + `directories` in [User settings](docs/user-settings.md) |
 | Settings schema or defaults | [User settings](docs/user-settings.md), `config/userSettings.js`, Electron `settingsStore.cjs` **and** browser `userSettingsStore` if both apply |
