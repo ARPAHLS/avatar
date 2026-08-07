@@ -401,6 +401,7 @@ export function AvatarStage() {
         }));
         setLibraryEnvironments([]);
         setLibraryCustomEnvironments([]);
+        revokeEnvironmentBlobUrls(next);
         setSelectedBg((prev) =>
           prev.type === 'env' && String(prev.id).startsWith('lib-env-')
             ? { type: 'color', value: defaultColor }
@@ -418,6 +419,7 @@ export function AvatarStage() {
         }));
         setLibraryEnvironments([]);
         setLibraryCustomEnvironments([]);
+        revokeEnvironmentBlobUrls(next);
         setSelectedBg((prev) =>
           prev.type === 'env' && String(prev.id).startsWith('lib-env-')
             ? { type: 'color', value: defaultColor }
