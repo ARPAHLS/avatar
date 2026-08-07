@@ -13,6 +13,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-ffb38a?style=flat-square" alt="License MIT" /></a>
   <a href="https://vrm.dev/ja/"><img src="https://img.shields.io/badge/BOOTH-VRM-f87171?style=flat-square" alt="BOOTH VRM" /></a>
   <a href="https://hub.vroid.com/en/"><img src="https://img.shields.io/badge/VRoid-Hub-f0d78c?style=flat-square" alt="VRoid Hub" /></a>
+  <a href="https://github.com/ARPAHLS/avatar/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/ARPAHLS/avatar/ci.yml?branch=main&style=flat-square&label=CI" alt="CI" /></a>
 </div>
 
 <p align="center">
