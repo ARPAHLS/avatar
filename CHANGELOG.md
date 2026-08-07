@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Docs and README: add desktop companion GIFs (`AVATAR_M5_*`) for overlay, Settings scroll, animations, custom environments, and Camera & Lighting.
 - ESLint covers `src/`, `electron/**/*.cjs`, and build scripts (`scripts/`, config files); `npm run lint` enforces `--max-warnings=0`. (#34)
 - Expand [Contributing](CONTRIBUTING.md) for ripple effects, changelog style with issue/PR numbers, CI expectations, and guidance for human and AI contributors.
+- Add Heng-Cheng Hsu (許恒誠) to [`CITATION.cff`](CITATION.cff) authors and preferred citation.
 
 ### Fixed
 

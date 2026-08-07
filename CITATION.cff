@@ -29,6 +29,10 @@ authors:
     email: vpeilivanidis@gmail.com
     affiliation: "ARPA Hellenic Logical Systems"
     website: "https://github.com/rosspeili"
+  - family-names: Hsu
+    given-names: Heng-Cheng
+    alias: "Heng-Cheng Hsu (許恒誠)"
+    email: sachiel6484@gmail.com
   - name: "ARPA Hellenic Logical Systems"
     email: input@arpacorp.net
     website: "https://arpacorp.net"
@@ -52,6 +56,9 @@ preferred-citation:
     - family-names: Peilivanidis
       given-names: Vladimiros
       alias: Ross Peili
+    - family-names: Hsu
+      given-names: Heng-Cheng
+      alias: "Heng-Cheng Hsu (許恒誠)"
     - name: "ARPA Hellenic Logical Systems"
   year: 2026
   doi: "10.5281/zenodo.21791157"
