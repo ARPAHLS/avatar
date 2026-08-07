@@ -66,11 +66,13 @@ Built-ins are **never** replaced by a custom env directory (unlike avatars).
 
 The `custom/` folder is for **local trial media** when Directories is still Default. Files inside it are **not** committed to git (the empty folder is kept via `.gitkeep`).
 
-**Shipped Windows builds** do not pack local Custom media. Prefer Settings → Directories for installer users.
+**Production builds** (`npm run build`, `npm run desktop`, `npm run dist:win`) do not pack local Custom media — only the dev server reads this folder. Prefer Settings → Directories for installer users.
 
 1. Drop media into `avatar/src/assets/environments/custom/` (`.gif`, `.png`, `.jpg`, `.jpeg`).  
-2. Restart Vite / Electron so Vite’s glob picks them up.  
+2. Restart Vite (`npm run dev` / `npm run dev:desktop`) so Vite’s glob picks them up.  
 3. Gear → Appearance → Environments → open **Custom**.
+
+To check trial media against a production bundle, opt in explicitly — `npx cross-env AVATAR_INCLUDE_CUSTOM=1 npm run build` (works in PowerShell, `cmd` and bash).
 
 While Custom is open, built-in thumbs (Stars / Code / Bloom / None) hide so the library has room; close Custom to show them again. Scroll the Custom grid; Color fade stays visible underneath.
 

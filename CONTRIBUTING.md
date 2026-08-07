@@ -112,7 +112,7 @@ Docs-only PRs still need a clear description; changelog entry optional unless th
 
 - If a feature is **Electron-only**, say so in UI copy and docs; do not silently no-op in a confusing way when possible.
 - If you fix something in the renderer, smoke-test **`dev:desktop`** for overlay/audio when the area touches those systems.
-- Shipping builds use `AVATAR_SHIP=1` on `dist:win` so local `custom/` environment GIFs are **not** packaged — do not “fix” shipping by committing trial media into `custom/`.
+- Every production build (`build`, `desktop`, `dist:win`) drops local `custom/` environment media from the bundle; only the dev server keeps it. Use `npx cross-env AVATAR_INCLUDE_CUSTOM=1 npm run build` if you deliberately want trial media in a production build — and do not “fix” shipping by committing trial media into `custom/`.
 
 ### Settings and persistence
 

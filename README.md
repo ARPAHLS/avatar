@@ -141,7 +141,7 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
   <img src="docs/screenshots/AVATAR_M5_browsing_custom_environments.gif" alt="Browsing custom environments in Appearance" height="400" />
 </p>
 
-**From source (contributors):** trial files can also go in `avatar/src/assets/environments/custom/` while Directories is Default (local only; not shipped in the installer).
+**From source (contributors):** trial files can also go in `avatar/src/assets/environments/custom/` while Directories is Default — picked up by the dev server only, and left out of every production build.
 
 ## Documentation
 
