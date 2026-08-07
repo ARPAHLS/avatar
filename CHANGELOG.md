@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Capture the Three.js group once in `VrmAvatar` so effect cleanup detaches from the same container the model was attached to (avoids orphan scenes on avatar swap). (#34)
 - Drop unused `audioFile` prop from `VoicePanel` (file input is uncontrolled). (#34)
+- `npm run dev:desktop` now passes `concurrently -k` so closing the Electron window (or killing Vite) tears down both processes and frees port 5173. (#37, #38)
 
 ## [0.5.0] — 2026-08-06
 
