@@ -38,7 +38,7 @@ npm install
 
 Pull requests and pushes to `main` run the same **lint → test → build** sequence in GitHub Actions (see [Continuous integration](#continuous-integration)). Run those three locally before opening a PR.
 
-End users can use [AVATAR-Setup-0.5.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe) without Node.
+End users can use [AVATAR-Setup-0.6.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.6.0/AVATAR-Setup-0.6.0.exe) without Node.
 
 ### Bundled avatar thumbnails
 

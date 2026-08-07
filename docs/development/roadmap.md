@@ -1,5 +1,15 @@
 # Roadmap
 
+## v0.6.0 — Shipped
+
+- [x] Broader CI (lint / test / build) (#4, #34, #35)
+- [x] ESLint coverage for Electron + build scripts (#34)
+- [x] Package directory rename `avatar-demo/` → `avatar/`
+- [x] Desktop companion docs GIFs (`AVATAR_M5_*`) (#3, #32)
+- [x] `dev:desktop` concurrently `-k` teardown (#37, #38)
+- [x] Custom environment library blob revoke-after-replace (#39, #40)
+- [x] Citation: Heng-Cheng Hsu in `CITATION.cff` (#41)
+
 ## v0.5.0 — Shipped
 
 - [x] Static Appearance avatar thumbnails (bundled + custom-folder cache) (#10, #20)
@@ -41,7 +51,6 @@
 - [ ] Avatar thumbnail follow-ups (pre-warm, sidecars, cache prune) (#21)
 - [ ] Environments picker flicker / GIF size (#22)
 - [ ] Code-signed Windows installer
-- [x] Broader CI (lint / test / build) (#4, #34, #35)
 - [ ] Asset license audit and manifest
 - [ ] Security review for capture permissions copy
 - [ ] Harden VRoid Hub VRM download for restrictive networks / CDN paths

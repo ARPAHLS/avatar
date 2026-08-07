@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-08-07
+
 ### Added
 
 - GitHub Actions CI on pull requests and `main`: `npm ci` → `lint` → `test` → `build` in `avatar/` (Node 22; Electron binary download skipped). See [Contributing](CONTRIBUTING.md#continuous-integration) and [Project layout](docs/development/project-layout.md). (#4, #35)
@@ -14,10 +16,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Rename the app package directory from `avatar-demo/` to `avatar/`. Contributor paths (`cd avatar`, docs, `.gitignore`) updated; the Windows installer is unchanged.
-- Docs and README: add desktop companion GIFs (`AVATAR_M5_*`) for overlay, Settings scroll, animations, custom environments, and Camera & Lighting.
+- Docs and README: add desktop companion GIFs (`AVATAR_M5_*`) for overlay, Settings scroll, animations, custom environments, and Camera & Lighting. (#3, #32)
 - ESLint covers `src/`, `electron/**/*.cjs`, and build scripts (`scripts/`, config files); `npm run lint` enforces `--max-warnings=0`. (#34)
 - Expand [Contributing](CONTRIBUTING.md) for ripple effects, changelog style with issue/PR numbers, CI expectations, and guidance for human and AI contributors.
-- Add Heng-Cheng Hsu (許恒誠) to [`CITATION.cff`](CITATION.cff) authors and preferred citation.
+- Add Heng-Cheng Hsu (許恒誠) to [`CITATION.cff`](CITATION.cff) authors and preferred citation. (#41)
 
 ### Fixed
 
