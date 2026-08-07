@@ -25,10 +25,10 @@ jobs:
       ELECTRON_SKIP_BINARY_DOWNLOAD: 1
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           # Vite 7 needs ^20.19.0 || >=22.12.0.
           node-version: 22
