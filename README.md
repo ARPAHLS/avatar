@@ -44,8 +44,7 @@
   <a href="docs/animations/vrma.md">Animations</a> ·
   <a href="docs/user-settings.md">Settings</a> ·
   <a href="docs/assets-and-credits.md">Assets & Credits</a> ·
-  <a href="CHANGELOG.md">Changelog</a> ·
-  <a href="CITATION.cff">Cite</a>
+  <a href="CHANGELOG.md">Changelog</a>
 </p>
 
 ---
@@ -157,7 +156,6 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 | **Settings** | [config.yaml & resets](docs/user-settings.md) |
 | **Architecture** | [Overview](docs/architecture/overview.md) · [Layout](docs/development/project-layout.md) |
 | **Assets** | [Assets & credits](docs/assets-and-credits.md) |
-| **Cite** | [CITATION.cff](CITATION.cff) · [Changelog](CHANGELOG.md) |
 
 ## Repository layout
 
