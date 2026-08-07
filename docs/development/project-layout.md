@@ -43,7 +43,7 @@ End users personalize via **Settings → Directories** and **VRoid Hub** (see [U
 | `npm run dist:win` | Contributors | Build Windows NSIS installer (local `desktop-setup/` output) |
 | `npm run build` | CI / web | Production Vite bundle |
 | `npm run lint` | Contributors / CI | ESLint (`src/`, `electron/**/*.cjs`, scripts; `--max-warnings=0`) |
-| `npm test` | Contributors / CI | Electron unit tests (`electron/*.test.cjs`) and build-tooling tests (`scripts/*.test.mjs`, two of which run a real `vite build`, so the suite takes ~10s) |
+| `npm test` | Contributors / CI | Electron unit tests (`electron/*.test.cjs`) and build-tooling tests (`scripts/*.test.mjs`, which run three real `vite build`s, so the suite takes ~15s) |
 | `npm run thumbs` | Contributors | Re-render committed avatar portraits into `src/assets/avatars/thumbs/` |
 
 ### Continuous integration
