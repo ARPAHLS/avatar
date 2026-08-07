@@ -362,7 +362,12 @@ export function AvatarStage() {
     let cancelled = false;
 
     async function refreshEnvLibrary() {
-      revokeEnvironmentBlobUrls(libraryEnvironmentsRef.current);
+      // Revoking before the await left the stage and the picker pointing at
+      // urls that no longer resolve for as long as the replacement took to
+      // load. Already-decoded images survive revocation, so nothing changed on
+      // screen — but a remount in that window loaded nothing. Hold the old list
+      // and drop it only once its replacement is in state (#39).
+      const previous = libraryEnvironmentsRef.current;
       const useLibrary =
         desktopMode &&
         directories.environments.mode === 'custom' &&
@@ -370,7 +375,10 @@ export function AvatarStage() {
 
       if (!useLibrary) {
         setLibraryCustomEnvironments([]);
-        if (!cancelled) setLibraryEnvironments([]);
+        if (!cancelled) {
+          setLibraryEnvironments([]);
+          revokeEnvironmentBlobUrls(previous);
+        }
         return;
       }
 
@@ -378,11 +386,13 @@ export function AvatarStage() {
         directories.environments.path,
       );
       if (cancelled) {
+        // A newer run captured the same `previous` and owns retiring it.
         revokeEnvironmentBlobUrls(next);
         return;
       }
       setLibraryEnvironments(next);
       setLibraryCustomEnvironments(next);
+      revokeEnvironmentBlobUrls(previous);
       if (error) {
         setDirectoriesNotice(error);
         setDirectories((prev) => ({
