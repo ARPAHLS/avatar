@@ -41,7 +41,8 @@
 - [ ] Avatar thumbnail follow-ups (pre-warm, sidecars, cache prune) (#21)
 - [ ] Environments picker flicker / GIF size (#22)
 - [ ] Code-signed Windows installer
-- [ ] Broader CI (lint / build)
+- [x] Broader CI (lint / test / build) (#4, #34, #35)
 - [ ] Asset license audit and manifest
 - [ ] Security review for capture permissions copy
 - [ ] Harden VRoid Hub VRM download for restrictive networks / CDN paths
+- [ ] Docs visual overhaul (reshoot screenshots / GIFs, layout rules)

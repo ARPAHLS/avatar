@@ -31,9 +31,12 @@ npm install
 | Production-like Electron on `dist/` | `npm run desktop` |
 | Browser only | `npm run dev` → http://localhost:5173 |
 | Lint | `npm run lint` |
+| Unit tests (Electron modules) | `npm test` |
 | Vite production build | `npm run build` |
 | Windows installer (local output under `desktop-setup/`) | `npm run dist:win` |
 | Regenerate bundled avatar thumbnails | `npm run thumbs` |
+
+Pull requests and pushes to `main` run the same **lint → test → build** sequence in GitHub Actions (see [Continuous integration](#continuous-integration)). Run those three locally before opening a PR.
 
 End users can use [AVATAR-Setup-0.5.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe) without Node.
 
@@ -78,19 +81,32 @@ AVATAR is small but cross-cutting. When you change behavior, ask what else must 
 | Installer / packaging | [Installation](docs/getting-started/installation.md), [releases](docs/releases/README.md) if user-facing, `avatar/build/` assets, `package.json` `build` field |
 | Public API of preload / IPC | Every `window.voxDesktop` (or equivalent) caller; keep `preload.cjs` and `main.cjs` in sync |
 | Labels or issue forms | [`.github/labels.yml`](.github/labels.yml) (CI syncs labels) — do not invent one-off label names in templates |
+| Lint / ESLint scope | `avatar/eslint.config.js` (renderer `src/`, Electron `electron/**/*.cjs`, scripts) — keep Node vs browser globals correct |
+| CI workflow | [`.github/workflows/ci.yml`](.github/workflows/ci.yml), [Project layout](docs/development/project-layout.md#continuous-integration), README CI badge if the workflow name/path changes |
+| Package scripts / Node engines | `avatar/package.json`, install docs if contributors must change Node version |
+| Roadmap item shipped | [Roadmap](docs/development/roadmap.md) checkboxes |
 
 ### Docs, changelog, and README
 
-For **user-visible** changes:
+For **user-visible** or **contributor-visible** changes (behavior, install, CI, lint gates):
 
-1. **`CHANGELOG.md`** — add a bullet under `[Unreleased]` (`Added` / `Changed` / `Fixed` / `Removed`). Keep it short; say *why it matters*, not every file touched.
+1. **`CHANGELOG.md`** — add a bullet under `[Unreleased]` (`Added` / `Changed` / `Fixed` / `Removed`). Keep it short; say *why it matters*, not every file touched. Prefer **issue and PR numbers** when known, matching the style under published releases (e.g. `(#4, #35)`). Do not use `Closes`/`Fixes` keywords inside changelog text.
 2. **Feature docs** — update the guide that describes the behavior (see table above). Do not leave docs describing the old path.
 3. **`docs/using-the-app.md`** — update if menus, defaults, or the main walkthrough change.
 4. **`README.md`** — only if Quick start, install order, badges/links, or high-level “what this is” change. Keep README lite; deep detail stays in `docs/`.
 5. **Screenshots** — replace or add under `docs/screenshots/` when the UI in docs would mislead; keep filenames stable when replacing in place.
 6. **`CITATION.cff` / release notes** — only when versioning or release messaging changes (maintainers).
+7. **`docs/development/roadmap.md`** — mark shipped items when a tracked milestone lands.
 
 Docs-only PRs still need a clear description; changelog entry optional unless the doc fix is user-facing correction of wrong instructions.
+
+### Continuous integration
+
+- Workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml) on every pull request and on pushes to `main`.
+- Steps (in `avatar/`): `npm ci` → `npm run lint` → `npm test` → `npm run build`.
+- Node **22** (Vite 7 compatible). Electron’s binary is **not** downloaded in CI (`ELECTRON_SKIP_BINARY_DOWNLOAD`); unit tests must not `require('electron')` at load time.
+- Windows installer (`dist:win`) is **not** run in CI — too heavy and Windows-specific; verify locally when you touch packaging.
+- A failing CI check blocks confidence for merge; fix lint/tests/build in the same PR when you introduce the breakage.
 
 ### Desktop vs browser parity
 
@@ -104,6 +120,18 @@ Docs-only PRs still need a clear description; changelog entry optional unless th
 - Browser: local store helpers under `src/lib/`.
 - Desktop: `electron/settingsStore.cjs` → `config.yaml` in userData.
 - Changing keys or defaults can break existing user configs — prefer migrations or tolerant reads; document resets in [User settings](docs/user-settings.md).
+
+### For AI coding agents (and humans using them)
+
+Treat the repo as a **product + docs** unit, not a single-folder code patch:
+
+1. **Read before editing** — [Using the app](docs/using-the-app.md), the feature doc for the area, and this ripple table.
+2. **Electron vs browser** — do not claim desktop-only behavior works in `npm run dev` without checking.
+3. **Complementary files in the same PR** — code + catalogs + preload/main + docs + `CHANGELOG.md` `[Unreleased]` + screenshots when the UI story changes. Avoid “follow-up later” for obvious ripples (changelog, user guide line, roadmap checkbox).
+4. **Changelog** — Keep a Changelog sections; short *why*; include `#issue` / `#PR` when known (see [0.5.0](CHANGELOG.md) entries).
+5. **Do not commit** secrets, `desktop-setup/*.exe`, or gitignored `custom/` media.
+6. **Verify** — `npm run lint`, `npm test`, and `npm run build` in `avatar/` (same as CI). Use `dev:desktop` for overlay/audio smoke tests.
+7. **PR description** — what / why / how tested / leftover follow-ups that are genuinely optional.
 
 ---
 
@@ -120,14 +148,14 @@ Docs-only PRs still need a clear description; changelog entry optional unless th
 
 Before you open a PR:
 
-- [ ] `npm run lint` and `npm run build` pass in `avatar/`
+- [ ] `npm run lint`, `npm test`, and `npm run build` pass in `avatar/`
 - [ ] Smoke-tested the path you changed (`dev:desktop` and/or `dev` as appropriate)
 - [ ] Catalogs / config updated if you added assets or options
 - [ ] Electron preload ↔ main IPC still aligned (if you touched desktop APIs)
-- [ ] `CHANGELOG.md` `[Unreleased]` updated for user-visible changes
-- [ ] Relevant docs (and screenshots if needed) updated
+- [ ] `CHANGELOG.md` `[Unreleased]` updated for user- or contributor-visible changes (with issue/PR numbers when known)
+- [ ] Relevant docs (and screenshots if needed) updated; roadmap touched if a listed item shipped
 - [ ] No secrets, local `custom/` media, or `desktop-setup/` installer binaries committed
-- [ ] PR description states **what** changed, **why**, and any **follow-ups**
+- [ ] PR description states **what** changed, **why**, how you **tested**, and any **follow-ups**
 
 ---
 
