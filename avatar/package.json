@@ -15,8 +15,8 @@
     "desktop": "npm run build && cross-env NODE_ENV=production electron .",
     "build": "vite build",
     "icons": "node scripts/make-icons.mjs",
-    "test": "node --test electron/*.test.cjs",
-    "dist:win": "npm run icons && cross-env AVATAR_SHIP=1 vite build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win nsis",
+    "test": "node --test electron/*.test.cjs scripts/*.test.mjs",
+    "dist:win": "npm run icons && vite build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win nsis",
     "lint": "eslint . --max-warnings=0",
     "preview": "vite preview"
   },

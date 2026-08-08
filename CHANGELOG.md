@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Local `custom/` environment media is dropped from **every** production build, not just `dist:win` — `npm run build` and `npm run desktop` no longer hash contributor trial GIFs into `dist/`. Only the dev server reads the folder; `AVATAR_INCLUDE_CUSTOM=1` opts a production build back in. Replaces the `AVATAR_SHIP=1` flag, which is removed. A reformat or rename of the glob now fails the build instead of silently bundling the folder, and `npm test` covers the embargo (`scripts/custom-envs.test.mjs`) — a clean checkout has an empty `custom/`, so a green build proves nothing on its own. (#13)
+
 ## [0.6.0] — 2026-08-07
 
 ### Added
