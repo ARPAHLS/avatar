@@ -26,6 +26,7 @@ export function getLibraryApi() {
     pathExists: (dirPath) => desktop.libraryPathExists(dirPath),
     openFolder: (dirPath) => desktop.openLibraryFolder(dirPath),
     scanAvatars: (dirPath) => desktop.scanLibraryAvatars(dirPath),
+    scanAnimations: (dirPath) => desktop.scanLibraryAnimations(dirPath),
     scanEnvironments: (dirPath) => desktop.scanLibraryEnvironments(dirPath),
     readFile: (id) => desktop.readLibraryFile(id),
     getThumbnail: (id) => desktop.getThumbnail?.(id) ?? Promise.resolve(null),

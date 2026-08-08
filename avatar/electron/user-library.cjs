@@ -5,6 +5,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 
 const AVATAR_EXT = new Set(['.vrm']);
+const ANIM_EXT = new Set(['.vrma']);
 const ENV_EXT = new Set(['.gif', '.png', '.jpg', '.jpeg']);
 
 /** @type {Map<string, string>} id → absolute file path */
@@ -47,7 +48,7 @@ function normalizeDir(dirPath) {
 /**
  * @param {string} dirPath
  * @param {Set<string>} allowedExt
- * @param {'avatar' | 'env'} kind
+ * @param {'avatar' | 'anim' | 'env'} kind
  */
 function scanDirectory(dirPath, allowedExt, kind) {
   const dir = normalizeDir(dirPath);
@@ -87,6 +88,13 @@ function scanDirectory(dirPath, allowedExt, kind) {
  */
 function scanAvatars(dirPath) {
   return scanDirectory(dirPath, AVATAR_EXT, 'avatar');
+}
+
+/**
+ * @param {unknown} dirPath
+ */
+function scanAnimations(dirPath) {
+  return scanDirectory(dirPath, ANIM_EXT, 'anim');
 }
 
 /**
@@ -136,6 +144,7 @@ function resolveLibraryPath(id) {
 
 module.exports = {
   scanAvatars,
+  scanAnimations,
   scanEnvironments,
   readLibraryFile,
   resolveLibraryPath,

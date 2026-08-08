@@ -33,6 +33,7 @@ const {
   pathExists,
   readLibraryFile,
   resolveLibraryPath,
+  scanAnimations,
   scanAvatars,
   scanEnvironments,
 } = require('./user-library.cjs');
@@ -584,6 +585,11 @@ ipcMain.handle('library:open-folder', async (event, dirPath) => {
 ipcMain.handle('library:scan-avatars', (event, dirPath) => {
   assertTrustedLibrarySender(event);
   return scanAvatars(dirPath);
+});
+
+ipcMain.handle('library:scan-animations', (event, dirPath) => {
+  assertTrustedLibrarySender(event);
+  return scanAnimations(dirPath);
 });
 
 ipcMain.handle('library:scan-environments', (event, dirPath) => {

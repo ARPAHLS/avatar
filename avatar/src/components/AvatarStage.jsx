@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { defaultAnimationId } from '../config/animations';
+import {
+  animationCatalog as bundledAnimations,
+  defaultAnimationId,
+  resolveAnimationId,
+} from '../config/animations';
 import { getDefaultAudioSourceId } from '../config/audioSources';
 import {
   customEnvironments,
@@ -24,8 +28,10 @@ import {
 import { useAudioSource } from '../hooks/useAudioSource';
 import { getDesktopApi, getLibraryApi, isDesktopMode } from '../lib/desktopMode';
 import {
+  loadLibraryAnimations,
   loadLibraryAvatars,
   loadLibraryEnvironments,
+  revokeAnimationBlobUrls,
   revokeAvatarBlobUrls,
   revokeEnvironmentBlobUrls,
 } from '../lib/userLibrary';
@@ -81,9 +87,11 @@ export function AvatarStage() {
   });
   const [directories, setDirectories] = useState(createDefaultDirectories);
   const [libraryAvatars, setLibraryAvatars] = useState([]);
+  const [libraryAnimations, setLibraryAnimations] = useState([]);
   const [libraryEnvironments, setLibraryEnvironments] = useState([]);
   const [directoriesNotice, setDirectoriesNotice] = useState(null);
   const libraryAvatarsRef = useRef([]);
+  const libraryAnimationsRef = useRef([]);
   const libraryEnvironmentsRef = useRef([]);
   const panelRef = useRef(null);
   const drawerRef = useRef(null);
@@ -282,6 +290,11 @@ export function AvatarStage() {
   const customAvatarMode =
     desktopMode && directories.avatars.mode === 'custom' && Boolean(directories.avatars.path);
   const avatarCatalog = customAvatarMode ? libraryAvatars : bundledAvatars;
+  const customAnimationMode =
+    desktopMode && directories.animations.mode === 'custom' && Boolean(directories.animations.path);
+  // Replace, not additive: in custom mode the bundled Default sequence and VRMA
+  // pack are unreachable, so the folder is the whole catalog.
+  const animationCatalog = customAnimationMode ? libraryAnimations : bundledAnimations;
   const appearanceCustomEnvironments =
     desktopMode && directories.environments.mode === 'custom' && Boolean(directories.environments.path)
       ? libraryEnvironments
@@ -290,6 +303,10 @@ export function AvatarStage() {
   useEffect(() => {
     libraryAvatarsRef.current = libraryAvatars;
   }, [libraryAvatars]);
+
+  useEffect(() => {
+    libraryAnimationsRef.current = libraryAnimations;
+  }, [libraryAnimations]);
 
   useEffect(() => {
     libraryEnvironmentsRef.current = libraryEnvironments;
@@ -357,6 +374,61 @@ export function AvatarStage() {
       cancelled = true;
     };
   }, [customAvatarMode, directories.avatars.path]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function refreshAnimationLibrary() {
+      // Retire the old urls only once their replacements are in state, so a load
+      // still in flight resolves — same hazard the environments list hit (#39).
+      const previous = libraryAnimationsRef.current;
+
+      if (!customAnimationMode || !directories.animations.path) {
+        if (!cancelled) {
+          setLibraryAnimations([]);
+          revokeAnimationBlobUrls(previous);
+        }
+        return;
+      }
+
+      const { animations: next, error, notice } = await loadLibraryAnimations(
+        directories.animations.path,
+      );
+      if (cancelled) {
+        // A newer run captured the same `previous` and owns retiring it.
+        revokeAnimationBlobUrls(next);
+        return;
+      }
+      setLibraryAnimations(next);
+      revokeAnimationBlobUrls(previous);
+
+      if (error || next.length === 0) {
+        setDirectoriesNotice(
+          error ?? 'No .vrma files in that folder. Keeping the default animation list.',
+        );
+        setDirectories((prev) => ({
+          ...prev,
+          animations: createDefaultDirectorySource(),
+        }));
+        setLibraryAnimations([]);
+        revokeAnimationBlobUrls(next);
+        setAnimationId(defaultAnimationId);
+        return;
+      }
+
+      setDirectoriesNotice((prev) =>
+        notice ?? (prev && prev.toLowerCase().includes('animation') ? null : prev),
+      );
+      // Ids hash the file path, so the same clip keeps its selection across a
+      // rescan; only a folder swap or a file gone since last launch retires one.
+      setAnimationId((current) => resolveAnimationId(next, current));
+    }
+
+    void refreshAnimationLibrary();
+    return () => {
+      cancelled = true;
+    };
+  }, [customAnimationMode, directories.animations.path]);
 
   useEffect(() => {
     let cancelled = false;
@@ -442,6 +514,7 @@ export function AvatarStage() {
     return () => {
       revokeAvatarBlobUrls(libraryAvatarsRef.current);
       revokeThumbnailUrls();
+      revokeAnimationBlobUrls(libraryAnimationsRef.current);
       revokeEnvironmentBlobUrls(libraryEnvironmentsRef.current);
       setLibraryCustomEnvironments([]);
     };
@@ -459,6 +532,14 @@ export function AvatarStage() {
         if (!scanned.length) {
           setDirectoriesNotice(
             'No .vrm files in that folder. Keeping the current avatar source.',
+          );
+          return;
+        }
+      } else if (kind === 'animations') {
+        const scanned = await api.scanAnimations(picked);
+        if (!scanned.length) {
+          setDirectoriesNotice(
+            'No .vrma files in that folder. Keeping the current animation source.',
           );
           return;
         }
@@ -514,6 +595,9 @@ export function AvatarStage() {
       setSelectedSkinId(defaultSkinId);
       setAvatarReady(false);
       setHubActive(false);
+    }
+    if (kind === 'animations') {
+      setAnimationId(defaultAnimationId);
     }
     if (kind === 'environments') {
       setSelectedBg((prev) =>
@@ -656,8 +740,10 @@ export function AvatarStage() {
     setLibraryCustomEnvironments([]);
     revokeAvatarBlobUrls(libraryAvatarsRef.current);
     revokeThumbnailUrls();
+    revokeAnimationBlobUrls(libraryAnimationsRef.current);
     revokeEnvironmentBlobUrls(libraryEnvironmentsRef.current);
     setLibraryAvatars([]);
+    setLibraryAnimations([]);
     setLibraryEnvironments([]);
     setAudioFile(null);
     setAnimationRequest((count) => count + 1);
@@ -697,6 +783,7 @@ export function AvatarStage() {
           onOpenPanel={setOpenPanel}
           openPanel={openPanel}
           animationId={animationId}
+          animationCatalog={animationCatalog}
           onAnimationChange={handleAnimationChange}
           overlayMode={overlayMode}
           onOverlayModeToggle={handleOverlayModeToggle}
@@ -715,6 +802,7 @@ export function AvatarStage() {
             <VrmAvatar
               modelPath={modelPath}
               animationId={animationId}
+              animationCatalog={animationCatalog}
               animationRequest={animationRequest}
               avatarPosition={avatar.position}
               avatarRotation={avatar.rotation}

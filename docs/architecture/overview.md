@@ -32,13 +32,15 @@ flowchart TB
 | `VoicePanel` | Audio source / lip sync controls |
 | `CameraPanel` | Camera, light, avatar transform |
 | `DesktopPanel` | Overlay toggle + 3×3 snap pad |
-| `DirectoriesPanel` | Custom avatar / environment folders (desktop) |
+| `DirectoriesPanel` | Custom avatar / animation / environment folders (desktop) |
 | `VroidHubPanel` | OAuth credentials / connect (Settings) and Hub character pick (Appearance) |
 | Settings drawer | Overlay, Snap, Directories, VRoid Hub, System (**Reset all settings**) |
 
 ### Configuration (`config/`)
 
 Catalogs for avatars, animations (including the Default sequence), audio sources, environments, window scale, visual defaults, and the `userSettings` schema.
+
+The animation catalog is split so its lookups stay unit-testable: `vrmaAssets.js` holds the Vite-resolved `.vrma` imports, `animationLookup.js` the pure catalog lookups (no asset imports, so plain `node --test` can load it), and `animations.js` composes both and re-exports them as the single entry point. Every lookup takes the catalog it should read, because a custom animations folder replaces the bundled list at runtime.
 
 ### Runtime hooks (`hooks/`)
 

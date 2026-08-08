@@ -31,7 +31,7 @@ npm install
 | Production-like Electron on `dist/` | `npm run desktop` |
 | Browser only | `npm run dev` → http://localhost:5173 |
 | Lint | `npm run lint` |
-| Unit tests (Electron modules) | `npm test` |
+| Unit tests (Electron + renderer modules) | `npm test` |
 | Vite production build | `npm run build` |
 | Windows installer (local output under `desktop-setup/`) | `npm run dist:win` |
 | Regenerate bundled avatar thumbnails | `npm run thumbs` |
@@ -39,6 +39,20 @@ npm install
 Pull requests and pushes to `main` run the same **lint → test → build** sequence in GitHub Actions (see [Continuous integration](#continuous-integration)). Run those three locally before opening a PR.
 
 End users can use [AVATAR-Setup-0.6.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.6.0/AVATAR-Setup-0.6.0.exe) without Node.
+
+### Where tests go
+
+`npm test` is the plain Node test runner — there is no bundler or DOM in the loop.
+
+| Location | For |
+| :--- | :--- |
+| `electron/*.test.cjs` | Main-process modules (CommonJS, real `fs` against a `mkdtemp` fixture) |
+| `src/**/*.test.mjs` | Renderer modules that are **pure** — no React, no DOM, no asset imports |
+| `scripts/*.test.mjs` | Build tooling (these run real `vite build`s) |
+
+A `src/` module is only testable if nothing in its import graph reaches a Vite-resolved asset (`.vrma`, `.vrm`, images) — plain Node throws `ERR_UNKNOWN_FILE_EXTENSION` on those. When logic worth testing sits behind such an import, split the module: assets in one file, pure logic in another, and a composing entry point that re-exports both. `src/config/animations.js` → `vrmaAssets.js` + `animationLookup.js` is the reference example.
+
+Anything needing React, the DOM, or `URL.createObjectURL` has **no** automated coverage today and is verified by hand (`npm run dev:desktop`) — say so in the PR rather than leaving it implied.
 
 ### Bundled avatar thumbnails
 
@@ -75,7 +89,7 @@ AVATAR is small but cross-cutting. When you change behavior, ask what else must 
 | Animations / Default sequence | [VRMA](docs/animations/vrma.md), `config/animations.js`, manual testing notes if the Default loop changes |
 | Avatars / drop-in naming | [Avatars](docs/avatars.md), README “Swap avatars” if user-facing, `npm run thumbs` if a bundled avatar or the catalog changed |
 | VRoid Hub OAuth / Hub characters | [VRoid Hub](docs/vroid-hub.md), Appearance + Settings sections in [Using the app](docs/using-the-app.md), Electron `vroid-*.cjs` + preload `voxVroidHub`, session-only storage notes in [User settings](docs/user-settings.md) |
-| User Directories (avatars / envs) | Settings Directories in [Using the app](docs/using-the-app.md), [Avatars](docs/avatars.md), [Environments](docs/environments.md), `user-library.cjs` + `directories` in [User settings](docs/user-settings.md) |
+| User Directories (avatars / animations / envs) | Settings Directories in [Using the app](docs/using-the-app.md), [Avatars](docs/avatars.md), [VRMA](docs/animations/vrma.md), [Environments](docs/environments.md), `user-library.cjs` + `directories` in [User settings](docs/user-settings.md) |
 | Settings schema or defaults | [User settings](docs/user-settings.md), `config/userSettings.js`, Electron `settingsStore.cjs` **and** browser `userSettingsStore` if both apply |
 | Window / overlay / snap / scale | Using-the-app Settings section, Electron `main.cjs` IPC + preload API |
 | Installer / packaging | [Installation](docs/getting-started/installation.md), [releases](docs/releases/README.md) if user-facing, `avatar/build/` assets, `package.json` `build` field |

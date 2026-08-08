@@ -136,8 +136,7 @@ function normalizeDirectories(raw) {
   const data = /** @type {Record<string, unknown>} */ (raw);
   return {
     avatars: normalizeDirectorySource(data.avatars),
-    // Animations custom is not implemented yet — always persist as default.
-    animations: createDefaultDirectorySource(),
+    animations: normalizeDirectorySource(data.animations),
     environments: normalizeDirectorySource(data.environments),
   };
 }

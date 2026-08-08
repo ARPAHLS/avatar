@@ -25,7 +25,7 @@ Autosave runs shortly after you change something (~400 ms debounce).
 | Avatar transform | `position`, `rotation` |
 | Voice | `audioSourceId`, `windowSourceId` (when picking a window) |
 | Desktop | `overlayMode`, `windowScale` |
-| Directories (desktop) | `directories.avatars` / `environments` (`mode` + `path`); animations reserved as default-only |
+| Directories (desktop) | `directories.avatars` / `animations` / `environments` (`mode` + `path`) |
 
 ### Not saved
 
@@ -137,6 +137,12 @@ directories:
 ```
 
 You normally never edit this by hand — use the UI. Hand-edits are fine if the app is closed; invalid values fall back to defaults on load.
+
+With `directories.animations.mode: custom`, `animationId` holds a scanned id
+(`lib-anim-<name>-<hash>`) instead of a bundled one. The hash comes from the
+file's path, so the same clip stays selected across restarts and rescans; a
+missing file falls back to the first clip in the folder, and switching the row
+back to `default` returns to the bundled `default` sequence.
 
 `skinId: default` is a reserved legacy field kept for config compatibility.
 Newer installs should use `avatarId` (or `directories` custom avatar folders)

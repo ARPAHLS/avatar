@@ -10,7 +10,7 @@ import {
   Settings,
   X,
 } from 'lucide-react';
-import { getSelectableAnimations } from '../../config/animations';
+import { animationCatalog, getSelectableAnimations } from '../../config/animations';
 import { isDesktopMode } from '../../lib/desktopMode';
 
 const ICON = 15;
@@ -36,6 +36,7 @@ export function BarCommandMenu({
   open,
   openPanel,
   animationId,
+  animations: catalog = animationCatalog,
   overlayMode,
   onOpenPanel,
   onAnimationChange,
@@ -45,7 +46,7 @@ export function BarCommandMenu({
 }) {
   const [view, setView] = useState('main');
   const desktopMode = isDesktopMode();
-  const animations = getSelectableAnimations();
+  const animations = getSelectableAnimations(catalog);
 
   useEffect(() => {
     if (!open) setView('main');

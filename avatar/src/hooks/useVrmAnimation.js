@@ -11,6 +11,9 @@ import {
 } from '../lib/vrmAnimationAction';
 
 const DEFAULT_FADE = 0.65;
+// The cache keys on url, and a custom animations folder mints fresh blob urls on
+// every rescan — old keys can never be hit again, so the map needs a bound.
+const CACHE_LIMIT = 24;
 
 /**
  * @param {import('@pixiv/three-vrm').VRM | null} vrm
@@ -46,6 +49,12 @@ export function useVrmAnimation(vrm) {
     const animation = gltf.userData.vrmAnimations?.[0];
     if (!animation) throw new Error(`No VRM animation found in ${url}`);
 
+    // Map iterates in insertion order, so the first key is the oldest.
+    while (cache.current.size >= CACHE_LIMIT) {
+      const oldest = cache.current.keys().next().value;
+      if (oldest === undefined) break;
+      cache.current.delete(oldest);
+    }
     cache.current.set(url, animation);
     return animation;
   }, []);

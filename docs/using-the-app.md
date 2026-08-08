@@ -326,10 +326,14 @@ Three rows — **Avatars**, **Animations**, **Environments**:
 | Row | Behavior |
 | :--- | :--- |
 | **Avatars** | `Default` (bundled) or `Custom` folder of `.vrm` files — **replaces** the Appearance avatar strip |
+| **Animations** | `Default` (bundled pack) or `Custom` folder of `.vrma` files — **replaces** the Gear → Animations list |
 | **Environments** | `Default` or `Custom` folder of images — **adds** the Appearance Custom expander; built-ins stay |
-| **Animations** | `Default` only; Custom is greyed out (*coming soon*) |
+
+Every row scans the folder you pick **top level only** — subfolders are ignored. File names become menu labels.
 
 A folder with no matching files is **not** applied (error notice; previous source kept). Reset a row (or **System → Reset all settings**) returns that source to Default. Choices persist in `config.yaml` under `directories` (mode + path).
+
+With **Animations → Custom** active, the bundled **Default** greeting sequence and the VRMA Motion Pack are hidden — the folder is the whole menu. Your saved clip is matched by file path, so it survives a rescan; if that file is gone, the first clip in the folder is selected instead. Back on **Default**, the selection returns to the bundled **Default** sequence. Making your own `.vrma`: [VRMA animations](animations/vrma.md).
 
 ### VRoid Hub (desktop)
 

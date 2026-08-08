@@ -46,7 +46,7 @@
 - [ ] Keyword → animation mapping table (#7)
 - [ ] Agent/event bus hook for external triggers (#6)
 - [ ] Optional idle VRMA loop
-- [ ] Custom animation directories (`.vrma`) — Settings row reserved (#23)
+- [x] Custom animation directories (`.vrma`) — Settings → Directories → Animations (#23)
 - [ ] Animation hotkeys / keybindings (#24)
 - [ ] Avatar thumbnail follow-ups (pre-warm, sidecars, cache prune) (#21)
 - [ ] Environments picker flicker / GIF size (#22)
