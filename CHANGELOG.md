@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Remove the README CI status badge; workflow status stays on the Actions tab.
+- README badge: replace misleading **BOOTH VRM** (linked to vrm.dev) with **VRM Docs** → https://vrm.dev/en/.
 
 ### Fixed
 
