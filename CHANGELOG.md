@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Maintainer [release checklist](docs/development/release-checklist.md) for version bumps, installer build, and GitHub Release publish. (#28)
 - **Custom animations folder** — Settings → Directories → **Animations** is no longer greyed out. Point it at a folder of `.vrma` files and Gear → **Animations** lists those clips instead of the bundled catalog (**replace** semantics, like Avatars; flat top-level scan, file names become labels). A folder with no `.vrma` is not applied, an unreadable clip is skipped and counted rather than costing you the folder, and the selection is matched by file path so it survives restarts and rescans. Licensing for your own clips is yours — authoring routes and the VRMA spec are linked from [VRMA](docs/animations/vrma.md#bring-your-own-vrma). (#23)
 
 ### Changed

@@ -1,6 +1,6 @@
 # Releases
 
-Public release notes for AVATAR. Full change history lives in the root [Changelog](../../CHANGELOG.md). Installers are on [GitHub Releases](https://github.com/ARPAHLS/avatar/releases).
+Public release notes for AVATAR. Full change history lives in the root [Changelog](../../CHANGELOG.md). Installers are on [GitHub Releases](https://github.com/ARPAHLS/avatar/releases). Maintainers: [release checklist](../development/release-checklist.md) before tagging.
 
 | Version | Notes | Download |
 | :--- | :--- | :--- |
