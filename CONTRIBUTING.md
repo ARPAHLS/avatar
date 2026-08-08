@@ -189,6 +189,12 @@ Before you open a PR:
 
 ---
 
+## Releasing (maintainers)
+
+Version bumps touch many files. Use the one-page [release checklist](docs/development/release-checklist.md) before tagging and attaching `AVATAR-Setup-*.exe` — bump surfaces, changelog / `docs/releases/`, lint·test·build, local `dist:win`, GitHub Release body (`@` contributors), unsigned SmartScreen note.
+
+---
+
 ## Roadmap
 
 Larger ideas (agent bus, keyword → animation, code signing, etc.) are tracked in [docs/development/roadmap.md](docs/development/roadmap.md). Feel free to open a feature issue first so we can align on scope before a large PR.

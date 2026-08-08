@@ -50,4 +50,6 @@ End users personalize via **Settings → Directories** and **VRoid Hub** (see [U
 
 Pull requests and pushes to `main` run [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml): install → lint → test → production build in `avatar/` on Ubuntu (Node 22). The workflow does **not** build the Windows installer (`dist:win`) and skips downloading the Electron binary (`ELECTRON_SKIP_BINARY_DOWNLOAD`) because unit tests do not launch Electron. Label sync remains a separate workflow (`.github/workflows/sync-labels.yml`).
 
+Maintainer version bumps and GitHub Releases: [Release checklist](release-checklist.md).
+
 Run `npm run thumbs` whenever a bundled `.vrm` or the `config/avatars.js` catalog changes, and commit the PNGs — the Appearance picker reads those files rather than rendering a live preview. Custom-folder avatars are cached at runtime under Electron `userData/thumbnails/` instead. See [Contributing](../../CONTRIBUTING.md#bundled-avatar-thumbnails).
