@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld('voxDesktop', {
   libraryPathExists: (dirPath) => ipcRenderer.invoke('library:path-exists', dirPath),
   openLibraryFolder: (dirPath) => ipcRenderer.invoke('library:open-folder', dirPath),
   scanLibraryAvatars: (dirPath) => ipcRenderer.invoke('library:scan-avatars', dirPath),
+  scanLibraryAnimations: (dirPath) => ipcRenderer.invoke('library:scan-animations', dirPath),
   scanLibraryEnvironments: (dirPath) => ipcRenderer.invoke('library:scan-environments', dirPath),
   readLibraryFile: (id) => ipcRenderer.invoke('library:read-file', id),
   getThumbnail: (id) => ipcRenderer.invoke('thumbnail:get', id),

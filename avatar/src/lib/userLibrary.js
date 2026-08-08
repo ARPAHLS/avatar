@@ -67,6 +67,85 @@ export async function loadLibraryAvatars(dirPath) {
 }
 
 /**
+ * Load `.vrma` entries from a user folder into AnimationEntry-shaped objects.
+ * These replace the bundled catalog outright, so every entry has to stand on its
+ * own as a selectable, looping clip.
+ * @param {string} dirPath
+ * @returns {Promise<{ animations: object[], error: string | null, notice?: string }>}
+ */
+export async function loadLibraryAnimations(dirPath) {
+  const api = getLibraryApi();
+  if (!api) return { animations: [], error: 'Library API unavailable.' };
+
+  try {
+    const exists = await api.pathExists(dirPath);
+    if (!exists) {
+      return {
+        animations: [],
+        error: 'Animation folder not found. Reset Directories or pick a new folder.',
+      };
+    }
+    const scanned = await api.scanAnimations(dirPath);
+    const animations = [];
+    let skipped = 0;
+    try {
+      for (const entry of scanned) {
+        let buffer;
+        try {
+          buffer = await api.readFile(entry.id);
+        } catch {
+          // The scan already stat'd this file, so it only fails here if it went
+          // away in between — not a reason to lose the rest of the folder.
+          skipped += 1;
+          continue;
+        }
+        // .vrma is a glTF binary container, same as .vrm.
+        const blobUrl = toBlobUrl('model/gltf-binary', buffer);
+        animations.push({
+          id: entry.id,
+          label: entry.label,
+          source: 'vrma',
+          playback: 'loop',
+          vrmaUrl: blobUrl,
+          group: 'Custom',
+          selectable: true,
+        });
+      }
+    } catch (error) {
+      // Bailing out with a partial list would drop the only references to the
+      // urls already minted in this loop.
+      revokeAnimationBlobUrls(animations);
+      throw error;
+    }
+
+    if (skipped > 0 && animations.length === 0) {
+      // Distinct from an empty folder: the clips are there, we just cannot read
+      // them. Saying "no .vrma files" here would state the opposite.
+      return {
+        animations: [],
+        error: `Could not read any of the ${skipped} .vrma ${
+          skipped === 1 ? 'file' : 'files'
+        } in that folder. Keeping the default animation list.`,
+      };
+    }
+    if (skipped > 0) {
+      return {
+        animations,
+        error: null,
+        // Must name the kind: the Directories notice self-clears by keyword.
+        notice: `Skipped ${skipped} unreadable animation ${skipped === 1 ? 'file' : 'files'}.`,
+      };
+    }
+    return { animations, error: null };
+  } catch (error) {
+    return {
+      animations: [],
+      error: error instanceof Error ? error.message : 'Failed to load animation folder.',
+    };
+  }
+}
+
+/**
  * Load image entries from a user folder into EnvironmentEntry-shaped objects.
  * @param {string} dirPath
  * @returns {Promise<{ environments: object[], error: string | null }>}
@@ -114,6 +193,17 @@ export function revokeAvatarBlobUrls(avatars) {
       if (typeof skin.path === 'string' && skin.path.startsWith('blob:')) {
         URL.revokeObjectURL(skin.path);
       }
+    }
+  }
+}
+
+/**
+ * @param {object[]} animations
+ */
+export function revokeAnimationBlobUrls(animations) {
+  for (const entry of animations ?? []) {
+    if (typeof entry.vrmaUrl === 'string' && entry.vrmaUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(entry.vrmaUrl);
     }
   }
 }

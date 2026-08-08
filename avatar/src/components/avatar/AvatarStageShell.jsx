@@ -20,6 +20,7 @@ export function AvatarStageShell({
   onOpenPanel,
   openPanel,
   animationId,
+  animationCatalog,
   onAnimationChange,
   overlayMode,
   onOverlayModeToggle,
@@ -141,6 +142,7 @@ export function AvatarStageShell({
           open={commandMenuOpen}
           openPanel={openPanel}
           animationId={animationId}
+          animations={animationCatalog}
           overlayMode={overlayMode}
           onOpenPanel={onOpenPanel}
           onAnimationChange={onAnimationChange}

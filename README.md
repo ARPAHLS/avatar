@@ -59,7 +59,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 - **VRoid Hub** — bring-your-own OAuth app; connect in Settings, pick characters in Appearance ([VRoid Hub](docs/vroid-hub.md))
 - **Environments** — built-ins, Custom folder from Settings → Directories, color fade, or none ([environments](docs/environments.md))
 - **Persistent settings** — `config.yaml` across launches ([user settings](docs/user-settings.md))
-- **VRMA animations** — Default greeting + loop, plus clips ([VRMA](docs/animations/vrma.md))
+- **VRMA animations** — Default greeting + loop, bundled clips, or your own `.vrma` folder from Settings → Directories ([VRMA](docs/animations/vrma.md))
 - **Browser / localhost** — for contributors ([install](docs/getting-started/installation.md))
 
 <p align="center">

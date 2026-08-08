@@ -6,11 +6,6 @@ const SOURCE_OPTIONS = [
   { value: 'custom', label: 'Custom' },
 ];
 
-const ANIMATION_OPTIONS = [
-  { value: 'default', label: 'Default' },
-  { value: 'custom', label: 'Custom (coming soon)', disabled: true },
-];
-
 /**
  * @param {{
  *   directories: {
@@ -19,9 +14,9 @@ const ANIMATION_OPTIONS = [
  *     environments: { mode: string, path: string | null },
  *   },
  *   onChange: (next: object) => void,
- *   onBrowse: (kind: 'avatars' | 'environments') => void | Promise<void>,
- *   onOpenFolder: (kind: 'avatars' | 'environments') => void | Promise<void>,
- *   onClear: (kind: 'avatars' | 'environments') => void,
+ *   onBrowse: (kind: 'avatars' | 'animations' | 'environments') => void | Promise<void>,
+ *   onOpenFolder: (kind: 'avatars' | 'animations' | 'environments') => void | Promise<void>,
+ *   onClear: (kind: 'avatars' | 'animations' | 'environments') => void,
  *   notice?: string | null,
  * }} props
  */
@@ -33,7 +28,6 @@ export function DirectoriesPanel({
   notice = null,
 }) {
   function setMode(kind, mode) {
-    if (kind === 'animations') return;
     if (mode === 'default') {
       onClear(kind);
       return;
@@ -44,8 +38,8 @@ export function DirectoriesPanel({
   return (
     <div className="directories-panel">
       <p className="panel-note panel-note--compact">
-        Point AVATAR at your own folders. Avatars replace the built-in list; environments stay additive
-        beside Stars / Code / Bloom.
+        Point AVATAR at your own folders. Avatars and animations replace the built-in lists;
+        environments stay additive beside Stars / Code / Bloom.
       </p>
 
       {notice && <p className="panel-note directories-panel__notice">{notice}</p>}
@@ -62,11 +56,12 @@ export function DirectoriesPanel({
 
       <DirectoryRow
         label="Animations"
-        hint=".vrma — coming soon"
+        hint=".vrma files only"
         source={directories.animations}
-        options={ANIMATION_OPTIONS}
-        disabled
-        comingSoon
+        onModeChange={(mode) => setMode('animations', mode)}
+        onBrowse={() => void onBrowse('animations')}
+        onOpen={() => void onOpenFolder('animations')}
+        onClear={() => onClear('animations')}
       />
 
       <DirectoryRow
@@ -91,25 +86,19 @@ function DirectoryRow({
   onOpen,
   onClear,
   options = SOURCE_OPTIONS,
-  disabled = false,
-  comingSoon = false,
 }) {
   const isCustom = source?.mode === 'custom' && Boolean(source?.path);
 
   return (
-    <div className={`directories-row ${disabled ? 'directories-row--disabled' : ''}`}>
+    <div className="directories-row">
       <div className="directories-row__head">
         <span className="directories-row__label">{label}</span>
         <span className="directories-row__hint">{hint}</span>
       </div>
 
       <PanelSelect
-        value={comingSoon ? 'default' : source?.mode === 'custom' && source?.path ? 'custom' : 'default'}
-        disabled={disabled || comingSoon}
-        onChange={(value) => {
-          if (disabled || comingSoon) return;
-          onModeChange?.(value);
-        }}
+        value={isCustom ? 'custom' : 'default'}
+        onChange={(value) => onModeChange?.(value)}
         options={options.map((option) => ({
           value: option.value,
           label: option.label,
@@ -118,11 +107,7 @@ function DirectoryRow({
         placeholder="Source"
       />
 
-      {comingSoon && (
-        <p className="panel-note panel-note--compact directories-row__soon">Custom animations — coming soon</p>
-      )}
-
-      {!comingSoon && isCustom && (
+      {isCustom && (
         <>
           <p className="panel-note panel-note--compact panel-note--mono directories-row__path" title={source.path}>
             {source.path}

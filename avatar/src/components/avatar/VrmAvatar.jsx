@@ -3,7 +3,11 @@ import { useFrame } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
 import { defaultAvatar } from '../../config/defaults';
-import { getAnimationById, resolveVrmaUrl } from '../../config/animations';
+import {
+  animationCatalog as bundledAnimations,
+  createVrmaResolver,
+  getAnimationById,
+} from '../../config/animations';
 import { useAmplitudeLipSync, resetLipSyncExpressions } from '../../hooks/useAmplitudeLipSync';
 import { useBlink } from '../../hooks/useBlink';
 import { useVrmAnimation } from '../../hooks/useVrmAnimation';
@@ -14,6 +18,7 @@ loader.register((parser) => new VRMLoaderPlugin(parser));
 export function VrmAvatar({
   modelPath,
   animationId = 'rest',
+  animationCatalog = bundledAnimations,
   animationRequest = 0,
   avatarPosition,
   avatarRotation,
@@ -91,11 +96,15 @@ export function VrmAvatar({
   useEffect(() => {
     if (!vrm) return undefined;
 
-    const entry = getAnimationById(animationId);
+    const entry = getAnimationById(animationId, animationCatalog);
     activeAnimationRef.current = animationId;
 
     if (entry.source === 'sequence') {
-      const stopSequence = playSequence(entry.intro ?? [], entry.sequence ?? [], resolveVrmaUrl);
+      const stopSequence = playSequence(
+        entry.intro ?? [],
+        entry.sequence ?? [],
+        createVrmaResolver(animationCatalog),
+      );
       return () => stopSequence?.();
     }
 
@@ -107,7 +116,7 @@ export function VrmAvatar({
 
     returnToRest();
     return undefined;
-  }, [animationId, animationRequest, cancel, play, playSequence, returnToRest, vrm]);
+  }, [animationCatalog, animationId, animationRequest, cancel, play, playSequence, returnToRest, vrm]);
 
   useFrame((_, delta) => {
     if (!vrm) return;
