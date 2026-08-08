@@ -82,7 +82,7 @@ AVATAR is small but cross-cutting. When you change behavior, ask what else must 
 | Public API of preload / IPC | Every `window.voxDesktop` (or equivalent) caller; keep `preload.cjs` and `main.cjs` in sync |
 | Labels or issue forms | [`.github/labels.yml`](.github/labels.yml) (CI syncs labels) — do not invent one-off label names in templates |
 | Lint / ESLint scope | `avatar/eslint.config.js` (renderer `src/`, Electron `electron/**/*.cjs`, scripts) — keep Node vs browser globals correct |
-| CI workflow | [`.github/workflows/ci.yml`](.github/workflows/ci.yml), [Project layout](docs/development/project-layout.md#continuous-integration), README CI badge if the workflow name/path changes |
+| CI workflow | [`.github/workflows/ci.yml`](.github/workflows/ci.yml), [Project layout](docs/development/project-layout.md#continuous-integration) |
 | Package scripts / Node engines | `avatar/package.json`, install docs if contributors must change Node version |
 | Roadmap item shipped | [Roadmap](docs/development/roadmap.md) checkboxes |
 
