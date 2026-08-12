@@ -108,7 +108,7 @@ function scanEnvironments(dirPath) {
  * @param {unknown} id
  * @returns {Buffer}
  */
-function readLibraryFile(id) {
+function resolveReadablePath(id) {
   if (typeof id !== 'string' || id.trim() === '') {
     throw new Error('Missing library file id.');
   }
@@ -116,12 +116,34 @@ function readLibraryFile(id) {
   if (!absolutePath) {
     throw new Error('Unknown library file. Refresh the directory and try again.');
   }
+  return absolutePath;
+}
+
+function readLibraryFile(id) {
+  const absolutePath = resolveReadablePath(id);
   // Ensure the indexed path still exists and is a regular file.
   const stat = fs.statSync(absolutePath);
   if (!stat.isFile()) {
     throw new Error('Library path is not a file.');
   }
   return fs.readFileSync(absolutePath);
+}
+
+/**
+ * The same read off the main thread. Environment images are fetched while the
+ * user is watching — a synchronous read of a 20MB gif blocks the main process,
+ * and with it the window, for as long as the disk takes.
+ *
+ * @param {unknown} id
+ * @returns {Promise<Buffer>}
+ */
+async function readLibraryFileAsync(id) {
+  const absolutePath = resolveReadablePath(id);
+  const stat = await fs.promises.stat(absolutePath);
+  if (!stat.isFile()) {
+    throw new Error('Library path is not a file.');
+  }
+  return fs.promises.readFile(absolutePath);
 }
 
 /**
@@ -147,6 +169,7 @@ module.exports = {
   scanAnimations,
   scanEnvironments,
   readLibraryFile,
+  readLibraryFileAsync,
   resolveLibraryPath,
   pathExists,
   normalizeDir,

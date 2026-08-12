@@ -46,6 +46,8 @@ const customGlow = {
  * @property {string | null} [thumb] Still poster for the picker; falls back to `src`
  * @property {HoloGlow} glow
  * @property {boolean} [custom]
+ * @property {boolean} [library] From a user-picked folder, so `src` is read on
+ * demand rather than resolved by Vite — see lib/userLibrary.js
  */
 
 /** @type {EnvironmentEntry[]} */
@@ -145,20 +147,29 @@ export function getEnvironmentById(id) {
 
 /**
  * @param {EnvironmentSelection} selection
- * @returns {{ glow: HoloGlow | null, imageUrl: string | null, hidden: boolean }}
+ * @returns {{ glow: HoloGlow | null, imageUrl: string | null, hidden: boolean, pending: boolean }}
  */
 export function resolveHoloTheme(selection) {
   if (selection.type === 'none') {
-    return { glow: null, imageUrl: null, hidden: true };
+    return { glow: null, imageUrl: null, hidden: true, pending: false };
   }
 
   if (selection.type === 'env') {
     const env = getEnvironmentById(selection.id);
-    return { glow: env.glow, imageUrl: env.src, hidden: false };
+    // A custom-folder environment reads its bytes only once selected, which
+    // takes as long as the file is big. `pending` separates that from the cases
+    // that legitimately have no image, so the stage can hold what it is already
+    // showing instead of blanking — see AvatarStageShell.
+    return {
+      glow: env.glow,
+      imageUrl: env.src ?? null,
+      hidden: false,
+      pending: Boolean(env.library) && !env.src,
+    };
   }
 
   const hex = selection.value.length === 4 ? defaultColor : selection.value;
-  return { glow: glowFromHex(hex), imageUrl: null, hidden: false };
+  return { glow: glowFromHex(hex), imageUrl: null, hidden: false, pending: false };
 }
 
 /** @param {string} hex */

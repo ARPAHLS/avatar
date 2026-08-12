@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Cog } from 'lucide-react';
 import { STAGE } from '../../config/defaults';
 import { resolveChromeTone, resolveChromeToneSync, toneFromLuma } from '../../lib/chromeTone';
-import { getHoloFieldStyle, isHoloFieldHidden } from '../../lib/holoField';
+import {
+  getHoloFieldStyle,
+  getHoloImageUrl,
+  isHoloFieldHidden,
+  isHoloFieldPending,
+} from '../../lib/holoField';
 import { getDesktopApi, isDesktopMode } from '../../lib/desktopMode';
 import { BarCommandMenu } from '../ui/BarCommandMenu';
 import { WindowScaleMenu } from '../ui/WindowScaleMenu';
@@ -30,7 +35,19 @@ export function AvatarStageShell({
 }) {
   const { barHeight, canvasOverflowTop, canvasOverflowSide } = STAGE;
   const desktopMode = isDesktopMode();
-  const holoStyle = getHoloFieldStyle(environmentSelection);
+  // A custom-folder environment is read from disk only once selected, so its
+  // image arrives a moment after the selection does. Rather than blank the
+  // stage for that moment, hold the last background that was ready — glow
+  // included, so the whole field changes at once instead of in two steps.
+  const holoPending = isHoloFieldPending(environmentSelection);
+  const lastReadyHoloStyle = useRef(null);
+  const resolvedHoloStyle = getHoloFieldStyle(environmentSelection);
+  if (!holoPending) lastReadyHoloStyle.current = resolvedHoloStyle;
+  const holoStyle = holoPending ? (lastReadyHoloStyle.current ?? resolvedHoloStyle) : resolvedHoloStyle;
+
+  // Tone is sampled from the image, which resolves after the selection for the
+  // same reason — so the selection alone is not enough to know when to sample.
+  const holoImageUrl = getHoloImageUrl(environmentSelection);
   const [chromeTone, setChromeTone] = useState(() => resolveChromeToneSync(environmentSelection));
 
   useEffect(() => {
@@ -59,7 +76,10 @@ export function AvatarStageShell({
     }
 
     if (!useDesktopSample) {
-      void applyEnvironmentTone();
+      // Hold the current tone while the image is still being read: there is
+      // nothing to sample yet, and resolving now would flip the bar to its
+      // default and back a moment later.
+      if (!holoPending) void applyEnvironmentTone();
       return () => {
         cancelled = true;
       };
@@ -83,7 +103,7 @@ export function AvatarStageShell({
       unsubSettled?.();
       window.removeEventListener('focus', onFocus);
     };
-  }, [environmentSelection, desktopMode, overlayMode]);
+  }, [environmentSelection, holoImageUrl, holoPending, desktopMode, overlayMode]);
 
   function toggleMenu(event) {
     event.stopPropagation();

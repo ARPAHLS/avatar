@@ -6,9 +6,15 @@
  * frames between them — to play inside 40px boxes. A poster is what the picker
  * actually needs; the stage keeps the animation.
  *
+ * Bundled environments carry a committed poster (npm run thumbs). A user's own
+ * folder cannot, so those are generated here on demand and cached to disk, the
+ * same arrangement avatar portraits use — see lib/thumbnails.js.
+ *
  * Nothing here touches three.js: unlike an avatar portrait, an environment
  * thumbnail is a decode and a downscale, both of which run off the main thread.
  */
+import { getLibraryApi } from './desktopMode';
+import { imageMime } from './userLibrary';
 
 // Wider than tall because the picker lays these out in a 3-up grid at 40px
 // high, and 2x covers HiDPI. `object-fit: cover` still does the final crop, so
@@ -101,4 +107,116 @@ export async function renderEnvironmentThumbnailBlob(source, options = {}) {
   } finally {
     close();
   }
+}
+
+/** @type {Map<string, string>} library entry id → object URL, for this session. */
+const urlCache = new Map();
+/** @type {Map<string, Promise<string | null>>} in-flight work, so two mounts share one decode. */
+const pending = new Map();
+
+/**
+ * Unlike a VRM portrait, which blocks the main thread for a second and so has
+ * to be generated strictly one at a time, this is decode work that Chromium
+ * runs off-thread. The cap is here to bound how many source files are held in
+ * memory at once, not to protect the frame rate.
+ */
+const MAX_CONCURRENT = 3;
+let active = 0;
+/** @type {(() => void)[]} */
+const waiting = [];
+
+/**
+ * @template T
+ * @param {() => Promise<T>} job
+ * @returns {Promise<T>}
+ */
+async function runBounded(job) {
+  if (active >= MAX_CONCURRENT) {
+    await new Promise((resolve) => waiting.push(resolve));
+  }
+  active += 1;
+  try {
+    return await job();
+  } finally {
+    active -= 1;
+    waiting.shift()?.();
+  }
+}
+
+/**
+ * @param {{ id: string, fileName: string }} entry
+ * @returns {Promise<Blob>}
+ */
+async function generateThumbnail(entry) {
+  const api = getLibraryApi();
+  if (!api) throw new Error('Library API unavailable.');
+
+  const buffer = await api.readFile(entry.id);
+  // Deliberately not a blob url: those pin their bytes until revoked, and the
+  // whole point of this path is that the full-size file does not stay resident
+  // once the poster exists. A Blob is collectable as soon as this returns.
+  const source = new Blob([buffer], { type: imageMime(entry.fileName) });
+  return renderEnvironmentThumbnailBlob(source);
+}
+
+/**
+ * A cached poster for a user-library environment, generating and storing one if
+ * this is the first time we have seen the file.
+ *
+ * @param {{ id: string, fileName: string }} entry
+ * @returns {Promise<string | null>} object URL, or null if unavailable
+ */
+export function getEnvironmentThumbnail(entry) {
+  const cached = urlCache.get(entry.id);
+  if (cached) return Promise.resolve(cached);
+
+  const inFlight = pending.get(entry.id);
+  if (inFlight) return inFlight;
+
+  const work = (async () => {
+    const api = getLibraryApi();
+    if (!api) return null;
+
+    try {
+      const stored = await api.getThumbnail(entry.id);
+      if (stored) {
+        const url = URL.createObjectURL(new Blob([stored], { type: 'image/png' }));
+        urlCache.set(entry.id, url);
+        return url;
+      }
+
+      const blob = await runBounded(() => generateThumbnail(entry));
+
+      // Best-effort, and it has to actually behave that way: a cache that
+      // refuses the write must not cost us the poster we just generated.
+      try {
+        await api.putThumbnail(entry.id, await blob.arrayBuffer());
+      } catch {
+        // Falls back to regenerating next launch.
+      }
+
+      const url = URL.createObjectURL(blob);
+      urlCache.set(entry.id, url);
+      return url;
+    } catch {
+      return null;
+    } finally {
+      pending.delete(entry.id);
+    }
+  })();
+
+  pending.set(entry.id, work);
+  return work;
+}
+
+/**
+ * Drop this session's poster urls. Must be called whenever the environment
+ * library is rescanned: ids are derived from the file path alone, so without
+ * this an image replaced in place keeps serving its old poster for the rest of
+ * the session — urlCache would answer before the disk cache's mtime/size check
+ * ever got a chance to miss.
+ */
+export function revokeEnvironmentThumbnailUrls() {
+  for (const url of urlCache.values()) URL.revokeObjectURL(url);
+  urlCache.clear();
 }

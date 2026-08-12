@@ -5,8 +5,9 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 
 const CACHE_DIR_NAME = 'thumbnails';
-// A 112x112 RGBA PNG of a character portrait; anything far past this is not a
-// thumbnail we wrote, so refuse to serve or store it.
+// A 112x112 character portrait or a 192x112 environment poster, both RGBA PNG;
+// anything far past this is not a thumbnail we wrote, so refuse to serve or
+// store it.
 const MAX_THUMBNAIL_BYTES = 512 * 1024;
 
 /** @type {string | null} */
@@ -29,8 +30,11 @@ function configureThumbnailCache(userDataPath) {
 /**
  * Two files can share a name across folders, and the same file can be replaced
  * in place, so the identity of a thumbnail is the path *and* what the file
- * looked like when we rendered it. Swapping in a new .vrm under the same name
- * changes mtime and size, which misses the cache and regenerates.
+ * looked like when we rendered it. Swapping in a new .vrm or .gif under the
+ * same name changes mtime and size, which misses the cache and regenerates.
+ *
+ * Nothing here is specific to avatars: keying on the absolute path is what lets
+ * avatar portraits and environment posters share one cache without colliding.
  *
  * @param {string} absolutePath
  * @returns {string | null}

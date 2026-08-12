@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { environments, defaultColor } from '../../config/environments';
 import { MiniAvatar } from '../avatar/MiniAvatar';
+import { MiniEnvironment } from './MiniEnvironment';
 import { AccordionSection, Divider } from '../ui/PanelPrimitives';
 import { VroidHubPanel } from './VroidHubPanel';
 
@@ -178,22 +179,33 @@ export function PalettePanel({
                       Close Custom to show Stars / Code / Bloom / None again.
                     </p>
                     <div className="environment-custom__grid">
-                      {customEnvironmentList.map((env) => (
-                        <button
-                          type="button"
-                          key={env.id}
-                          className={`background-thumb ${
-                            selectedBg.type === 'env' && selectedBg.id === env.id
-                              ? 'background-thumb--selected'
-                              : ''
-                          }`}
-                          onClick={() => setSelectedBg({ type: 'env', id: env.id })}
-                          title={env.label}
-                        >
-                          <img src={env.src} alt={env.label} loading="lazy" />
-                          <span className="background-thumb__label">{env.label}</span>
-                        </button>
-                      ))}
+                      {customEnvironmentList.map((env) =>
+                        // A user's folder resolves a cached poster; contributor
+                        // custom/ media is a build asset and already has a url.
+                        env.library ? (
+                          <MiniEnvironment
+                            key={env.id}
+                            entry={env}
+                            selected={selectedBg.type === 'env' && selectedBg.id === env.id}
+                            onClick={() => setSelectedBg({ type: 'env', id: env.id })}
+                          />
+                        ) : (
+                          <button
+                            type="button"
+                            key={env.id}
+                            className={`background-thumb ${
+                              selectedBg.type === 'env' && selectedBg.id === env.id
+                                ? 'background-thumb--selected'
+                                : ''
+                            }`}
+                            onClick={() => setSelectedBg({ type: 'env', id: env.id })}
+                            title={env.label}
+                          >
+                            <img src={env.src} alt={env.label} loading="lazy" />
+                            <span className="background-thumb__label">{env.label}</span>
+                          </button>
+                        ),
+                      )}
                     </div>
                   </>
                 )}

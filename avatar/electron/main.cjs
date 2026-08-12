@@ -31,7 +31,7 @@ const {
 } = require('./vroid-oauth-server.cjs');
 const {
   pathExists,
-  readLibraryFile,
+  readLibraryFileAsync,
   resolveLibraryPath,
   scanAnimations,
   scanAvatars,
@@ -597,9 +597,9 @@ ipcMain.handle('library:scan-environments', (event, dirPath) => {
   return scanEnvironments(dirPath);
 });
 
-ipcMain.handle('library:read-file', (event, id) => {
+ipcMain.handle('library:read-file', async (event, id) => {
   assertTrustedLibrarySender(event);
-  const buffer = readLibraryFile(id);
+  const buffer = await readLibraryFileAsync(id);
   return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
 });
 

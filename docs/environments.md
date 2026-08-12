@@ -56,6 +56,10 @@ The Color fade row stays pinned under the environment list (**Use color** + **Re
 
 Built-ins are **never** replaced by a custom env directory (unlike avatars).
 
+Tiles in the Custom grid are **posters**, generated once per file and cached under Electron `userData/thumbnails/` (keyed by path, mtime, and size — the same cache avatar portraits use). A tile pulses while its poster is being made, and an animated file only ever animates on the stage. Nothing in the folder is read into memory until you select it, so folder size costs you disk, not RAM.
+
+Because the file is read at selection time, a large image takes a moment to appear. The stage keeps showing the current background until the new one is ready, then changes over in one step — so a slow read looks like a delay, never a blank stage.
+
 <p align="center">
   <img src="screenshots/AVATAR_M5_browsing_custom_environments.gif" alt="Browsing a custom environments folder in Appearance" height="400" />
 </p>

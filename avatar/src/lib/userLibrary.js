@@ -17,7 +17,7 @@ function toBlobUrl(mime, buffer) {
 /**
  * @param {string} fileName
  */
-function imageMime(fileName) {
+export function imageMime(fileName) {
   const lower = fileName.toLowerCase();
   if (lower.endsWith('.png')) return 'image/png';
   if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
@@ -147,6 +147,16 @@ export async function loadLibraryAnimations(dirPath) {
 
 /**
  * Load image entries from a user folder into EnvironmentEntry-shaped objects.
+ *
+ * This reads no image data. It used to pull every file in the folder fully into
+ * renderer memory as a blob url the moment the folder was configured — before
+ * the Custom expander had even been opened — and blob urls pin their bytes,
+ * so Chromium could not discard and refetch them the way it can an ordinary
+ * image. A folder of large gifs therefore held hundreds of MB resident for the
+ * session. Entries now start with `src: null`; the picker draws a cached poster
+ * (lib/environmentThumbnails.js) and only the environment actually selected
+ * gets its bytes read, via loadEnvironmentSource.
+ *
  * @param {string} dirPath
  * @returns {Promise<{ environments: object[], error: string | null }>}
  */
@@ -163,24 +173,48 @@ export async function loadLibraryEnvironments(dirPath) {
       };
     }
     const scanned = await api.scanEnvironments(dirPath);
-    const environments = [];
-    for (const entry of scanned) {
-      const buffer = await api.readFile(entry.id);
-      const blobUrl = toBlobUrl(imageMime(entry.fileName), buffer);
-      environments.push({
-        id: entry.id,
-        label: entry.label,
-        src: blobUrl,
-        glow: customEnvGlow,
-        custom: true,
-      });
-    }
+    const environments = scanned.map((entry) => ({
+      id: entry.id,
+      label: entry.label,
+      // Kept so the poster and the on-demand source can both work out the mime
+      // type without going back to the scan.
+      fileName: entry.fileName,
+      src: null,
+      glow: customEnvGlow,
+      custom: true,
+      // Distinguishes these from bundled custom/ media, which carries a url from
+      // the start. `src` cannot do that job: it fills in once this entry is the
+      // one on stage, and the picker must not start showing the full image then.
+      library: true,
+    }));
     return { environments, error: null };
   } catch (error) {
     return {
       environments: [],
       error: error instanceof Error ? error.message : 'Failed to load environment folder.',
     };
+  }
+}
+
+/**
+ * Read one environment image and mint a blob url for it. Only ever called for
+ * the environment currently on the stage: the picker uses posters instead, so
+ * at most one full-size image is resident at a time.
+ *
+ * @param {{ id: string, fileName: string }} entry
+ * @returns {Promise<string | null>}
+ */
+export async function loadEnvironmentSource(entry) {
+  const api = getLibraryApi();
+  if (!api) return null;
+
+  try {
+    const buffer = await api.readFile(entry.id);
+    return toBlobUrl(imageMime(entry.fileName), buffer);
+  } catch {
+    // The file went away between the scan and here; the stage keeps its glow
+    // and simply shows no image.
+    return null;
   }
 }
 
