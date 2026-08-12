@@ -23,6 +23,8 @@ Open Gear → **Appearance** → **Environments**.
 
 Credits for the three GIFs (GIPHY): see [Assets & credits](assets-and-credits.md#built-in-environment-gifs).
 
+The picker shows a **still poster** for each of these (committed under `src/assets/environments/thumbs/`), not the GIF — only the environment you actually select animates, and only on the stage. Regenerate the posters with `npm run thumbs` if you change a bundled GIF or the catalog; see [Contributing](../CONTRIBUTING.md#bundled-picker-thumbnails).
+
 <p align="center">
   <img src="screenshots/35-env-stars.png" alt="Stars" height="200" />
   <img src="screenshots/36-env-code.png" alt="Code" height="200" />

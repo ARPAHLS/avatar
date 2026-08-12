@@ -136,7 +136,8 @@ export function PalettePanel({
                     onClick={() => setSelectedBg({ type: 'env', id: env.id })}
                     title={env.label}
                   >
-                    <img src={env.src} alt={env.label} />
+                    {/* Poster, not the GIF: the stage owns the animation. */}
+                    <img src={env.thumb ?? env.src} alt={env.label} loading="lazy" />
                     <span className="background-thumb__label">{env.label}</span>
                   </button>
                 ))}

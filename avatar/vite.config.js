@@ -42,12 +42,12 @@ export default defineConfig(({ command }) => {
     plugins: [react(), stripCustomEnvs(includeCustom)],
     server: {
       watch: {
-        // `npm run thumbs` writes generated portraits into this directory while
-        // the dev server is running. Watching it means each write invalidates the
-        // module graph, reloads the generator, and starts the whole run again —
-        // an endless loop that also interrupts in-flight VRM loads. These are
+        // `npm run thumbs` writes generated artwork into these directories while
+        // the dev server is running. Watching them means each write invalidates
+        // the module graph, reloads the generator, and starts the whole run again
+        // — an endless loop that also interrupts in-flight VRM loads. These are
         // build assets; they never need hot reload.
-        ignored: ['**/src/assets/avatars/thumbs/**'],
+        ignored: ['**/src/assets/avatars/thumbs/**', '**/src/assets/environments/thumbs/**'],
       },
     },
   };

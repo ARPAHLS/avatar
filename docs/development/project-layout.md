@@ -44,7 +44,7 @@ End users personalize via **Settings → Directories** and **VRoid Hub** (see [U
 | `npm run build` | CI / web | Production Vite bundle |
 | `npm run lint` | Contributors / CI | ESLint (`src/`, `electron/**/*.cjs`, scripts; `--max-warnings=0`) |
 | `npm test` | Contributors / CI | Electron unit tests (`electron/*.test.cjs`), renderer unit tests (`src/**/*.test.mjs`), and build-tooling tests (`scripts/*.test.mjs`, which run three real `vite build`s, so the suite takes ~15s) |
-| `npm run thumbs` | Contributors | Re-render committed avatar portraits into `src/assets/avatars/thumbs/` |
+| `npm run thumbs` | Contributors | Re-render committed picker thumbnails into `src/assets/avatars/thumbs/` and `src/assets/environments/thumbs/` |
 
 ### Continuous integration
 
@@ -52,4 +52,4 @@ Pull requests and pushes to `main` run [`.github/workflows/ci.yml`](../../.githu
 
 Maintainer version bumps and GitHub Releases: [Release checklist](release-checklist.md).
 
-Run `npm run thumbs` whenever a bundled `.vrm` or the `config/avatars.js` catalog changes, and commit the PNGs — the Appearance picker reads those files rather than rendering a live preview. Custom-folder avatars are cached at runtime under Electron `userData/thumbnails/` instead. See [Contributing](../../CONTRIBUTING.md#bundled-avatar-thumbnails).
+Run `npm run thumbs` whenever a bundled `.vrm` or `.gif`, or the `config/avatars.js` / `config/environments.js` catalog, changes, and commit the PNGs — the Appearance picker reads those files rather than rendering a live preview or playing the stage GIF. Custom-folder assets are cached at runtime under Electron `userData/thumbnails/` instead. See [Contributing](../../CONTRIBUTING.md#bundled-picker-thumbnails).

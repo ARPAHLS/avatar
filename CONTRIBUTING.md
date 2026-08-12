@@ -54,13 +54,15 @@ A `src/` module is only testable if nothing in its import graph reaches a Vite-r
 
 Anything needing React, the DOM, or `URL.createObjectURL` has **no** automated coverage today and is verified by hand (`npm run dev:desktop`) — say so in the PR rather than leaving it implied.
 
-### Bundled avatar thumbnails
+### Bundled picker thumbnails
 
-The Appearance picker draws avatars as static images, not live VRM previews. Portraits for the bundled avatars are **committed** under `avatar/src/assets/avatars/thumbs/` (`avatar1.png` … `avatar3.png`).
+The Appearance picker draws avatars as static images, not live VRM previews, and environments as still posters, not the animated stage GIFs. Both are **committed**: portraits under `avatar/src/assets/avatars/thumbs/` (`avatar1.png` … `avatar3.png`), environment posters under `avatar/src/assets/environments/thumbs/` (one PNG per id in `src/config/environments.js`).
 
-If you change a bundled `.vrm`, or add or remove an entry in `src/config/avatars.js`, run `npm run thumbs` and commit the result — the picker will otherwise show a stale or missing portrait. The command opens Electron briefly, renders each avatar with the same renderer the app uses at runtime, writes the PNGs into the source tree, and exits. It is dev-only: the write channel is registered only for that run, so a packaged app cannot write into the source tree.
+Run `npm run thumbs` and commit the result if you change a bundled `.vrm` or `.gif`, or add or remove an entry in `src/config/avatars.js` or `src/config/environments.js` — the picker will otherwise show a stale or missing thumbnail. The command opens Electron briefly, renders both sets with the same code the app uses at runtime, writes the PNGs into the source tree, and exits. It is dev-only: the write channel is registered only for that run, so a packaged app cannot write into the source tree.
 
-Thumbnails for a user's own custom folder are **not** committed — they are rendered on demand and cached under Electron `userData/thumbnails/`.
+Both sets are globbed rather than imported by name, so a missing file degrades (the avatar picker renders one on the spot; the environment picker falls back to the GIF) instead of breaking the build. That matters because the generator itself imports those config modules — a named import for a poster that does not exist yet would stop the run that was meant to create it.
+
+Thumbnails for a user's own custom folders are **not** committed — they are generated on demand and cached under Electron `userData/thumbnails/`.
 
 ---
 

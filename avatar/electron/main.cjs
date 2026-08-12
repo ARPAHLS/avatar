@@ -615,16 +615,35 @@ ipcMain.handle('thumbnail:get', (event, id) => {
 // Dev-only asset generation (npm run thumbs). Registered only for that run, so
 // a packaged app has no channel that can write into the source tree at all.
 if (!app.isPackaged && process.env.AVATAR_GEN_THUMBS) {
-  ipcMain.handle('thumbnail:dev-write', (event, fileName, png) => {
+  // Both the directory and the shape of the name are fixed here rather than
+  // taken from the renderer, so this channel can only ever write generated
+  // artwork into the two directories that hold it.
+  const DEV_THUMB_TARGETS = {
+    avatars: { dir: '../src/assets/avatars/thumbs', pattern: /^avatar\d+\.png$/ },
+    environments: {
+      dir: '../src/assets/environments/thumbs',
+      // Environment ids are author-defined, so this bounds the shape instead of
+      // listing them: no separators and no dots means no path to escape into.
+      pattern: /^[a-z][a-z0-9-]{0,31}\.png$/,
+    },
+  };
+
+  ipcMain.handle('thumbnail:dev-write', (event, kind, fileName, png) => {
     assertTrustedLibrarySender(event);
-    if (!/^avatar\d+\.png$/.test(String(fileName))) {
+    // hasOwn, not a bare lookup: `__proto__` and friends would otherwise sail
+    // past this guard with something truthy off Object.prototype.
+    if (!Object.hasOwn(DEV_THUMB_TARGETS, String(kind))) {
+      throw new Error(`Refusing to write thumbnails for unknown kind: ${kind}`);
+    }
+    const target = DEV_THUMB_TARGETS[String(kind)];
+    if (!target.pattern.test(String(fileName))) {
       throw new Error(`Refusing to write unexpected thumbnail name: ${fileName}`);
     }
-    const dir = path.join(__dirname, '../src/assets/avatars/thumbs');
+    const dir = path.join(__dirname, target.dir);
     fs.mkdirSync(dir, { recursive: true });
-    const target = path.join(dir, fileName);
-    fs.writeFileSync(target, Buffer.from(png));
-    return target;
+    const filePath = path.join(dir, fileName);
+    fs.writeFileSync(filePath, Buffer.from(png));
+    return filePath;
   });
 }
 

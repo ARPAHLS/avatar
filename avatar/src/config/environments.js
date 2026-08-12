@@ -2,6 +2,25 @@ import starsGif from '../assets/environments/stars.gif';
 import codeGif from '../assets/environments/code.gif';
 import bloomGif from '../assets/environments/bloom.gif';
 
+// Still posters generated ahead of time (see npm run thumbs), so the picker
+// never plays a full stage GIF inside a 40px box. Globbed rather than imported
+// by name because the generator imports this module: a named import for a
+// poster that does not exist yet would fail to resolve, and the run that would
+// have produced it could never start. A missing file is not an error — the
+// picker falls back to the animated source.
+const thumbnailModules = import.meta.glob('../assets/environments/thumbs/*.png', {
+  eager: true,
+  import: 'default',
+});
+
+/** @param {string} id */
+function bundledEnvThumb(id) {
+  const match = Object.entries(thumbnailModules).find(([modulePath]) =>
+    modulePath.endsWith(`/${id}.png`),
+  );
+  return match ? /** @type {string} */ (match[1]) : null;
+}
+
 /** @typedef {{ strong: string, soft: string, highlight: string }} HoloGlow */
 
 /** Default lavender fade used for Color mode. */
@@ -23,7 +42,8 @@ const customGlow = {
  * @typedef {Object} EnvironmentEntry
  * @property {string} id
  * @property {string} label
- * @property {string} src Bundled GIF URL (Vite-resolved)
+ * @property {string} src Bundled GIF URL (Vite-resolved), used by the stage
+ * @property {string | null} [thumb] Still poster for the picker; falls back to `src`
  * @property {HoloGlow} glow
  * @property {boolean} [custom]
  */
@@ -34,6 +54,7 @@ export const environments = [
     id: 'stars',
     label: 'Stars',
     src: starsGif,
+    thumb: bundledEnvThumb('stars'),
     glow: {
       strong: 'rgba(130, 150, 230, 0.58)',
       soft: 'rgba(85, 105, 190, 0.26)',
@@ -44,6 +65,7 @@ export const environments = [
     id: 'code',
     label: 'Code',
     src: codeGif,
+    thumb: bundledEnvThumb('code'),
     glow: {
       strong: 'rgba(100, 220, 160, 0.45)',
       soft: 'rgba(40, 120, 80, 0.22)',
@@ -54,6 +76,7 @@ export const environments = [
     id: 'bloom',
     label: 'Bloom',
     src: bloomGif,
+    thumb: bundledEnvThumb('bloom'),
     glow: {
       strong: 'rgba(255, 190, 230, 0.58)',
       soft: 'rgba(210, 160, 245, 0.28)',
