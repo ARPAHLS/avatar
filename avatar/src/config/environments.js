@@ -2,6 +2,25 @@ import starsGif from '../assets/environments/stars.gif';
 import codeGif from '../assets/environments/code.gif';
 import bloomGif from '../assets/environments/bloom.gif';
 
+// Still posters generated ahead of time (see npm run thumbs), so the picker
+// never plays a full stage GIF inside a 40px box. Globbed rather than imported
+// by name because the generator imports this module: a named import for a
+// poster that does not exist yet would fail to resolve, and the run that would
+// have produced it could never start. A missing file is not an error — the
+// picker falls back to the animated source.
+const thumbnailModules = import.meta.glob('../assets/environments/thumbs/*.png', {
+  eager: true,
+  import: 'default',
+});
+
+/** @param {string} id */
+function bundledEnvThumb(id) {
+  const match = Object.entries(thumbnailModules).find(([modulePath]) =>
+    modulePath.endsWith(`/${id}.png`),
+  );
+  return match ? /** @type {string} */ (match[1]) : null;
+}
+
 /** @typedef {{ strong: string, soft: string, highlight: string }} HoloGlow */
 
 /** Default lavender fade used for Color mode. */
@@ -23,9 +42,12 @@ const customGlow = {
  * @typedef {Object} EnvironmentEntry
  * @property {string} id
  * @property {string} label
- * @property {string} src Bundled GIF URL (Vite-resolved)
+ * @property {string} src Bundled GIF URL (Vite-resolved), used by the stage
+ * @property {string | null} [thumb] Still poster for the picker; falls back to `src`
  * @property {HoloGlow} glow
  * @property {boolean} [custom]
+ * @property {boolean} [library] From a user-picked folder, so `src` is read on
+ * demand rather than resolved by Vite — see lib/userLibrary.js
  */
 
 /** @type {EnvironmentEntry[]} */
@@ -34,6 +56,7 @@ export const environments = [
     id: 'stars',
     label: 'Stars',
     src: starsGif,
+    thumb: bundledEnvThumb('stars'),
     glow: {
       strong: 'rgba(130, 150, 230, 0.58)',
       soft: 'rgba(85, 105, 190, 0.26)',
@@ -44,6 +67,7 @@ export const environments = [
     id: 'code',
     label: 'Code',
     src: codeGif,
+    thumb: bundledEnvThumb('code'),
     glow: {
       strong: 'rgba(100, 220, 160, 0.45)',
       soft: 'rgba(40, 120, 80, 0.22)',
@@ -54,6 +78,7 @@ export const environments = [
     id: 'bloom',
     label: 'Bloom',
     src: bloomGif,
+    thumb: bundledEnvThumb('bloom'),
     glow: {
       strong: 'rgba(255, 190, 230, 0.58)',
       soft: 'rgba(210, 160, 245, 0.28)',
@@ -122,20 +147,29 @@ export function getEnvironmentById(id) {
 
 /**
  * @param {EnvironmentSelection} selection
- * @returns {{ glow: HoloGlow | null, imageUrl: string | null, hidden: boolean }}
+ * @returns {{ glow: HoloGlow | null, imageUrl: string | null, hidden: boolean, pending: boolean }}
  */
 export function resolveHoloTheme(selection) {
   if (selection.type === 'none') {
-    return { glow: null, imageUrl: null, hidden: true };
+    return { glow: null, imageUrl: null, hidden: true, pending: false };
   }
 
   if (selection.type === 'env') {
     const env = getEnvironmentById(selection.id);
-    return { glow: env.glow, imageUrl: env.src, hidden: false };
+    // A custom-folder environment reads its bytes only once selected, which
+    // takes as long as the file is big. `pending` separates that from the cases
+    // that legitimately have no image, so the stage can hold what it is already
+    // showing instead of blanking — see AvatarStageShell.
+    return {
+      glow: env.glow,
+      imageUrl: env.src ?? null,
+      hidden: false,
+      pending: Boolean(env.library) && !env.src,
+    };
   }
 
   const hex = selection.value.length === 4 ? defaultColor : selection.value;
-  return { glow: glowFromHex(hex), imageUrl: null, hidden: false };
+  return { glow: glowFromHex(hex), imageUrl: null, hidden: false, pending: false };
 }
 
 /** @param {string} hex */

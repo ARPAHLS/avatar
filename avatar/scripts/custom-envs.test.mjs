@@ -51,7 +51,12 @@ test('a production build strips the custom/ glob', (context) => {
 
   assert.ok(result, 'expected the plugin to rewrite environments.js');
   assert.match(result.code, /const customModules = \{\};/);
-  assert.doesNotMatch(result.code, /import\.meta\.glob/);
+  // What must not survive is any glob that can reach into custom/. Asserting
+  // on the path rather than on `import.meta.glob` in general: environments.js
+  // also globs the committed thumbs/ posters, which are build assets that are
+  // meant to ship, and that glob has to stay.
+  assert.doesNotMatch(result.code, /assets\/environments\/custom/);
+  assert.match(result.code, /import\.meta\.glob\('\.\.\/assets\/environments\/thumbs/);
 });
 
 test('the dev server keeps the custom/ glob', (context) => {

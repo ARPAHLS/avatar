@@ -28,6 +28,7 @@ import {
 import { useAudioSource } from '../hooks/useAudioSource';
 import { getDesktopApi, getLibraryApi, isDesktopMode } from '../lib/desktopMode';
 import {
+  loadEnvironmentSource,
   loadLibraryAnimations,
   loadLibraryAvatars,
   loadLibraryEnvironments,
@@ -37,6 +38,7 @@ import {
 } from '../lib/userLibrary';
 import { loadUserSettings, resetUserSettings, saveUserSettings } from '../lib/userSettingsStore';
 import { revokeThumbnailUrls } from '../lib/thumbnails';
+import { revokeEnvironmentThumbnailUrls } from '../lib/environmentThumbnails';
 import { VrmAvatar } from './avatar/VrmAvatar';
 import { AvatarStageShell } from './avatar/AvatarStageShell';
 import { CameraController } from './ui/CameraController';
@@ -93,6 +95,8 @@ export function AvatarStage() {
   const libraryAvatarsRef = useRef([]);
   const libraryAnimationsRef = useRef([]);
   const libraryEnvironmentsRef = useRef([]);
+  /** Id of the environment whose full-size image is currently being read. */
+  const environmentSourceLoadRef = useRef(null);
   const panelRef = useRef(null);
   const drawerRef = useRef(null);
   const commandMenuRef = useRef(null);
@@ -440,6 +444,10 @@ export function AvatarStage() {
       // screen — but a remount in that window loaded nothing. Hold the old list
       // and drop it only once its replacement is in state (#39).
       const previous = libraryEnvironmentsRef.current;
+      // Posters are keyed by path, so a rescan has to drop them or an image
+      // replaced in place keeps serving its old one: the disk cache would catch
+      // the new mtime, but this session's url cache answers first.
+      revokeEnvironmentThumbnailUrls();
       const useLibrary =
         desktopMode &&
         directories.environments.mode === 'custom' &&
@@ -511,11 +519,77 @@ export function AvatarStage() {
   }, [directories.environments.mode, directories.environments.path]);
 
   useEffect(() => {
+    // Bytes are held for the environment on stage and, while one is being read,
+    // for the outgoing one the stage is still showing — never for the whole
+    // folder, which is what loadLibraryEnvironments used to do the moment the
+    // folder was configured. The picker draws posters instead.
+    const selectedId = selectedBg.type === 'env' ? selectedBg.id : null;
+
+    // The registry backs getEnvironmentById, which the holo field and the
+    // chrome tone both read during render, so it has to move with the state
+    // rather than trail it by an effect.
+    const publish = (next) => {
+      setLibraryCustomEnvironments(next);
+      setLibraryEnvironments(next);
+    };
+
+    const target = selectedId
+      ? libraryEnvironments.find((entry) => entry.id === selectedId)
+      : null;
+
+    // The stage holds the previous background until the incoming one is ready,
+    // so its url is still on screen and cannot be released yet.
+    if (!target || target.src) {
+      const stale = libraryEnvironments.filter((entry) => entry.src && entry.id !== selectedId);
+      if (stale.length > 0) {
+        revokeEnvironmentBlobUrls(stale);
+        publish(
+          libraryEnvironments.map((entry) =>
+            entry.src && entry.id !== selectedId ? { ...entry, src: null } : entry,
+          ),
+        );
+      }
+      return undefined;
+    }
+
+    // Publishing below re-runs this effect, and rapid switching can re-enter it
+    // for an id already being read. One marker cannot cover every interleaving,
+    // so the read itself checks again before it publishes.
+    if (environmentSourceLoadRef.current === target.id) return undefined;
+    environmentSourceLoadRef.current = target.id;
+
+    void (async () => {
+      try {
+        const url = await loadEnvironmentSource(target);
+        if (!url) return;
+        const current = libraryEnvironmentsRef.current;
+        const entry = current.find((candidate) => candidate.id === target.id);
+        // Gone in a rescan, or another read of the same file got there first.
+        if (!entry || entry.src) {
+          URL.revokeObjectURL(url);
+          return;
+        }
+        // Published even if the selection has moved on: the pass above releases
+        // it on the next run, which is cheaper than losing the read and having
+        // to redo it if the user comes back.
+        publish(current.map((item) => (item.id === target.id ? { ...item, src: url } : item)));
+      } finally {
+        if (environmentSourceLoadRef.current === target.id) {
+          environmentSourceLoadRef.current = null;
+        }
+      }
+    })();
+
+    return undefined;
+  }, [selectedBg, libraryEnvironments]);
+
+  useEffect(() => {
     return () => {
       revokeAvatarBlobUrls(libraryAvatarsRef.current);
       revokeThumbnailUrls();
       revokeAnimationBlobUrls(libraryAnimationsRef.current);
       revokeEnvironmentBlobUrls(libraryEnvironmentsRef.current);
+      revokeEnvironmentThumbnailUrls();
       setLibraryCustomEnvironments([]);
     };
   }, []);

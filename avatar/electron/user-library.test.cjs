@@ -7,6 +7,7 @@ const path = require("node:path");
 const test = require("node:test");
 const {
   readLibraryFile,
+  readLibraryFileAsync,
   scanAnimations,
   scanAvatars,
   scanEnvironments,
@@ -110,4 +111,19 @@ test("reading a clip that vanished after the scan throws", (context) => {
 
   assert.throws(() => readLibraryFile(entry.id));
   assert.throws(() => readLibraryFile("lib-anim-never-scanned-000000000000"));
+});
+
+// The IPC channel reads asynchronously so a large environment image cannot
+// block the main process, and with it the window. Same contract as the sync
+// read, or the renderer's error handling would only hold for one of them.
+test("the async read matches the sync one, including its failures", async (context) => {
+  const root = fixture(context, { "clip.vrma": "animation-bytes" });
+  const [entry] = scanAnimations(root);
+
+  assert.equal((await readLibraryFileAsync(entry.id)).toString(), "animation-bytes");
+
+  fs.rmSync(path.join(root, "clip.vrma"));
+
+  await assert.rejects(() => readLibraryFileAsync(entry.id));
+  await assert.rejects(() => readLibraryFileAsync("lib-anim-never-scanned-000000000000"));
 });

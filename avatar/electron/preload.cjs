@@ -37,8 +37,8 @@ contextBridge.exposeInMainWorld('voxDesktop', {
   getThumbnail: (id) => ipcRenderer.invoke('thumbnail:get', id),
   putThumbnail: (id, png) => ipcRenderer.invoke('thumbnail:put', id, png),
   // Only answered during `npm run thumbs`; rejects in any normal run.
-  devWriteThumbnail: (fileName, png) =>
-    ipcRenderer.invoke('thumbnail:dev-write', fileName, png),
+  devWriteThumbnail: (kind, fileName, png) =>
+    ipcRenderer.invoke('thumbnail:dev-write', kind, fileName, png),
 });
 
 contextBridge.exposeInMainWorld('voxVroidHub', {
