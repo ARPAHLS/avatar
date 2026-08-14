@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Clicking the avatar already on stage no longer hides it.** Appearance → **Avatars** cleared the ready flag on every click, but re-picking the current character does not change the model path, so the VRM never reloaded and the callback that brings the stage back never fired — the companion vanished until you picked a different avatar or restarted. The flag is now cleared only when the model actually reloads; a loaded VRoid Hub character still counts as one, since it owns the model path while active. (#6)
 - Local `custom/` environment media is dropped from **every** production build, not just `dist:win` — `npm run build` and `npm run desktop` no longer hash contributor trial GIFs into `dist/`. Only the dev server reads the folder; `AVATAR_INCLUDE_CUSTOM=1` opts a production build back in. Replaces the `AVATAR_SHIP=1` flag, which is removed. A reformat or rename of the glob now fails the build instead of silently bundling the folder, and `npm test` covers the embargo (`scripts/custom-envs.test.mjs`) — a clean checkout has an empty `custom/`, so a green build proves nothing on its own. (#13)
 
 ## [0.6.0] — 2026-08-07
