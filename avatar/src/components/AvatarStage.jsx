@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import {
   animationCatalog as bundledAnimations,
   defaultAnimationId,
   resolveAnimationId,
 } from '../config/animations';
-import { getDefaultAudioSourceId } from '../config/audioSources';
+import { getAudioSourceOptions, getDefaultAudioSourceId } from '../config/audioSources';
 import {
   customEnvironments,
   defaultColor,
+  environments,
   setLibraryCustomEnvironments,
 } from '../config/environments';
 import {
@@ -26,6 +27,7 @@ import {
   snapshotUserSettings,
 } from '../config/userSettings';
 import { useAudioSource } from '../hooks/useAudioSource';
+import { useStageCommands } from '../hooks/useStageCommands';
 import { getDesktopApi, getLibraryApi, isDesktopMode } from '../lib/desktopMode';
 import {
   loadEnvironmentSource,
@@ -281,11 +283,6 @@ export function AvatarStage() {
     return () => window.removeEventListener('blur', handleBlur);
   }, []);
 
-  const handleAnimationChange = useCallback((nextId) => {
-    setAnimationId(nextId);
-    setAnimationRequest((count) => count + 1);
-  }, []);
-
   const handleAvatarLoaded = useCallback(() => {
     setAvatarReady(true);
     void getDesktopApi()?.notifyReady?.();
@@ -303,6 +300,61 @@ export function AvatarStage() {
     desktopMode && directories.environments.mode === 'custom' && Boolean(directories.environments.path)
       ? libraryEnvironments
       : customEnvironments;
+
+  const avatarIds = useMemo(() => avatarCatalog.map((entry) => entry.id), [avatarCatalog]);
+  // What the picker can offer is what a command may ask for: the bundled set
+  // plus whichever custom list is live.
+  const environmentIds = useMemo(
+    () => [
+      ...environments.map((entry) => entry.id),
+      ...appearanceCustomEnvironments.map((entry) => entry.id),
+    ],
+    [appearanceCustomEnvironments],
+  );
+  // Desktop and browser expose different capture sources, and the runtime
+  // cannot change while the app is open.
+  const audioSourceIds = useMemo(() => getAudioSourceOptions().map((option) => option.id), []);
+
+  const commandContext = useMemo(
+    () => ({ animationCatalog, avatarIds, environmentIds, audioSourceIds }),
+    [animationCatalog, avatarIds, environmentIds, audioSourceIds],
+  );
+
+  // Single trigger surface: the panels below and, later, hotkeys and the local
+  // bus all reach the stage through this (Refs #6). The setters stay private.
+  const runCommand = useStageCommands({
+    context: commandContext,
+    setters: {
+      setAnimationId,
+      setAnimationRequest,
+      setAvatarReady,
+      setHubActive,
+      setSelectedAvatarId,
+      setSelectedSkinId,
+      setSelectedBg,
+      setAudioSourceId,
+    },
+  });
+
+  const handleAnimationChange = useCallback(
+    (nextId) => runCommand('animation.play', { id: nextId }),
+    [runCommand],
+  );
+
+  const handleAvatarChange = useCallback(
+    (avatarId) => runCommand('avatar.set', { id: avatarId }),
+    [runCommand],
+  );
+
+  const handleEnvironmentChange = useCallback(
+    (selection) => runCommand('environment.set', selection),
+    [runCommand],
+  );
+
+  const handleAudioSourceChange = useCallback(
+    (nextId) => runCommand('audio.source', { id: nextId }),
+    [runCommand],
+  );
 
   useEffect(() => {
     libraryAvatarsRef.current = libraryAvatars;
@@ -682,13 +734,6 @@ export function AvatarStage() {
     }
   }, []);
 
-  const handleAvatarChange = useCallback((avatarId) => {
-    setAvatarReady(false);
-    setHubActive(false);
-    setSelectedAvatarId(avatarId);
-    setSelectedSkinId(defaultSkinId);
-  }, []);
-
   const handleSelectHubCharacter = useCallback(
     (arrayBuffer, character) => {
       if (hubAvatar?.blobUrl) URL.revokeObjectURL(hubAvatar.blobUrl);
@@ -903,7 +948,7 @@ export function AvatarStage() {
               selectedAvatarId={selectedAvatarId}
               onAvatarChange={handleAvatarChange}
               selectedBg={selectedBg}
-              setSelectedBg={setSelectedBg}
+              onEnvironmentChange={handleEnvironmentChange}
               customEnvironmentList={appearanceCustomEnvironments}
               onSelectHubCharacter={handleSelectHubCharacter}
               onReactivateHubCharacter={handleReactivateHubCharacter}
@@ -920,7 +965,7 @@ export function AvatarStage() {
           {openPanel === 'voice' && (
             <VoicePanel
               audioSourceId={audioSourceId}
-              setAudioSourceId={setAudioSourceId}
+              onAudioSourceChange={handleAudioSourceChange}
               setAudioFile={setAudioFile}
               windowSourceId={windowSourceId}
               setWindowSourceId={setWindowSourceId}

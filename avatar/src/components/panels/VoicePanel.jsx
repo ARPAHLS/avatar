@@ -5,7 +5,7 @@ import { PanelSelect } from '../ui/PanelPrimitives';
 
 export function VoicePanel({
   audioSourceId,
-  setAudioSourceId,
+  onAudioSourceChange,
   setAudioFile,
   windowSourceId,
   setWindowSourceId,
@@ -46,7 +46,7 @@ export function VoicePanel({
       <PanelSelect
         id="audio-source-select"
         value={audioSourceId}
-        onChange={setAudioSourceId}
+        onChange={onAudioSourceChange}
         options={sourceOptions}
       />
       <p className="panel-hint">
