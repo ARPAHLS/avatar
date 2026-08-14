@@ -47,6 +47,39 @@ export function getAnimationById(id, catalog) {
 }
 
 /**
+ * Exact lookup for callers that have to know when a query *misses*: a trigger
+ * arriving from outside the picker (hotkey, local bus, keyword match) must be
+ * able to report an unknown clip rather than play something else.
+ *
+ * `getAnimationById` cannot serve that — it falls back to a real entry on
+ * purpose, so a typo there silently plays the catalog's first clip.
+ *
+ * Ids are matched before labels so a custom folder holding a file named after
+ * a bundled label can never shadow an exact id. `rest` is returned like any
+ * other entry; hiding it from the picker is `getSelectableAnimations`'s job,
+ * and holding a neutral pose is a legitimate thing to ask for.
+ * @param {AnimationEntry[]} catalog
+ * @param {unknown} query id, or label (trimmed, case-insensitive)
+ * @returns {AnimationEntry | null}
+ */
+export function findAnimation(catalog, query) {
+  if (!Array.isArray(catalog) || typeof query !== 'string') return null;
+
+  const trimmed = query.trim();
+  if (trimmed === '') return null;
+
+  const byId = catalog.find((entry) => entry.id === trimmed);
+  if (byId) return byId;
+
+  const folded = trimmed.toLowerCase();
+  return (
+    catalog.find(
+      (entry) => typeof entry.label === 'string' && entry.label.trim().toLowerCase() === folded,
+    ) ?? null
+  );
+}
+
+/**
  * @param {string} id
  * @param {AnimationEntry[]} catalog
  */
