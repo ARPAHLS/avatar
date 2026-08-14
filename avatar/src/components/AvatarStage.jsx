@@ -302,8 +302,7 @@ export function AvatarStage() {
       : customEnvironments;
 
   const avatarIds = useMemo(() => avatarCatalog.map((entry) => entry.id), [avatarCatalog]);
-  // What the picker can offer is what a command may ask for: the bundled set
-  // plus whichever custom list is live.
+  // What the picker can offer is what a command may ask for.
   const environmentIds = useMemo(
     () => [
       ...environments.map((entry) => entry.id),
@@ -311,8 +310,7 @@ export function AvatarStage() {
     ],
     [appearanceCustomEnvironments],
   );
-  // Desktop and browser expose different capture sources, and the runtime
-  // cannot change while the app is open.
+  // Runtime-dependent, but the runtime cannot change while the app is open.
   const audioSourceIds = useMemo(() => getAudioSourceOptions().map((option) => option.id), []);
 
   const commandContext = useMemo(
@@ -321,7 +319,7 @@ export function AvatarStage() {
   );
 
   // Single trigger surface: the panels below and, later, hotkeys and the local
-  // bus all reach the stage through this (Refs #6). The setters stay private.
+  // bus all reach the stage through this (Refs #6).
   const runCommand = useStageCommands({
     context: commandContext,
     setters: {

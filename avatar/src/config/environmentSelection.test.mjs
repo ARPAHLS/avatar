@@ -15,8 +15,6 @@ test('normalizeEnvironmentSelection passes the three usable shapes through', () 
 });
 
 test('normalizeEnvironmentSelection keeps ids it cannot verify', () => {
-  // A custom folder is scanned long after settings are read, so the saved id
-  // has to survive to be matched against the catalog once it exists.
   assert.deepEqual(normalizeEnvironmentSelection({ type: 'env', id: 'lib-env-desk-4f2' }), {
     type: 'env',
     id: 'lib-env-desk-4f2',
@@ -39,7 +37,6 @@ test('normalizeEnvironmentSelection accepts only hex colours', () => {
     type: 'color',
     value: '#ff0080',
   });
-  // `#rgb` stays valid: resolveHoloTheme has a branch for it.
   assert.deepEqual(normalizeEnvironmentSelection({ type: 'color', value: '#abc' }), {
     type: 'color',
     value: '#abc',

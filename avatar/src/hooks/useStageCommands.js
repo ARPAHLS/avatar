@@ -3,9 +3,8 @@ import { defaultSkinId } from '../config/avatars';
 import { resolveStageCommand } from '../lib/stageCommands';
 
 /**
- * The only place a stage command is applied. Every trigger surface — the
- * picker, the bar menu, and later hotkeys and the local bus (Refs #6) — goes
- * through `runCommand`, so the multi-setter sequences below exist once.
+ * The only place a stage action is applied, so the multi-setter sequences below
+ * exist once however the request arrived (Refs #6).
  *
  * @param {Object} args
  * @param {import('../lib/stageCommands').StageCommandContext} args.context
@@ -35,21 +34,16 @@ export function useStageCommands({ context, setters }) {
       switch (action.kind) {
         case 'animation.play':
           setAnimationId(action.animationId);
-          // Selecting the clip that is already playing has to restart it, and
-          // the id alone cannot say that — VrmAvatar's effect keys off this
-          // counter for exactly that case. Dropping it makes a repeated
-          // command look like it did nothing.
+          // Re-selecting the clip already playing has to restart it, which the
+          // id alone cannot express; VrmAvatar's effect keys off this counter.
           setAnimationRequest((count) => count + 1);
           break;
 
         case 'avatar.set':
-          // Order matters: hiding the stage first is what stops the old model
-          // showing through the load. Skipping it leaves the whole UI at
-          // opacity 0 when the path does not change and `onLoaded` never
-          // re-fires.
+          // Precedes the id change so the outgoing model does not show through
+          // the load; the stage comes back on VrmAvatar's `onLoaded`.
           setAvatarReady(false);
-          // A VRoid Hub character outranks the catalog while it is active, so
-          // it has to stand down or the selection would not take effect.
+          // An active Hub character outranks the catalog, so it stands down.
           setHubActive(false);
           setSelectedAvatarId(action.avatarId);
           setSelectedSkinId(defaultSkinId);

@@ -3,9 +3,8 @@ import codeGif from '../assets/environments/code.gif';
 import bloomGif from '../assets/environments/bloom.gif';
 import { defaultColor } from './environmentSelection';
 
-// Selection shape and colour live in an asset-free module so the settings
-// reader and `node --test` can reach them; re-exported here because this is
-// where callers already look for anything environment-related.
+// Defined in an asset-free module; re-exported because this is where callers
+// already look for anything environment-related.
 export { defaultColor, normalizeEnvironmentSelection } from './environmentSelection';
 
 // Still posters generated ahead of time (see npm run thumbs), so the picker

@@ -33,7 +33,6 @@ test('animation.play accepts an id or a label', () => {
     kind: 'animation.play',
     animationId: 'vrma-03',
   });
-  // The point of label matching: an agent knows the clip by name, not by id.
   assert.deepEqual(action(resolveStageCommand('animation.play', { id: 'Peace Sign' }, context)), {
     kind: 'animation.play',
     animationId: 'vrma-03',
@@ -52,7 +51,7 @@ test('animation.play reports a miss instead of playing something else', () => {
   assert.equal(result.code, 'unknown-animation');
   assert.match(result.error, /peace/);
 
-  // Custom folders replace the bundled catalog, so a bundled id is a real miss.
+  // Replace semantics: a bundled id is a real miss against a custom folder.
   assert.equal(
     resolveStageCommand('animation.play', { id: 'vrma-03' }, { ...context, animationCatalog: custom })
       .code,
@@ -84,7 +83,7 @@ test('avatar.set only accepts ids in the catalog', () => {
     avatarId: 'avatar2',
   });
   assert.equal(resolveStageCommand('avatar.set', { id: 'avatar9' }, context).code, 'unknown-avatar');
-  // Labels are deliberately not matched.
+  // Labels are deliberately not matched, unlike animations.
   assert.equal(resolveStageCommand('avatar.set', { id: 'Avatar 2' }, context).code, 'unknown-avatar');
   assert.equal(resolveStageCommand('avatar.set', {}, context).code, 'bad-payload');
 });
@@ -105,14 +104,12 @@ test('environment.set takes the selection as its payload', () => {
 });
 
 test('environment.set checks env ids against the catalog', () => {
-  // A custom-folder id is as valid as a bundled one once it has been scanned.
   assert.equal(resolveStageCommand('environment.set', { type: 'env', id: 'lib-env-desk-4f2' }, context).ok, true);
 
   const result = resolveStageCommand('environment.set', { type: 'env', id: 'bloom' }, context);
   assert.equal(result.code, 'unknown-environment');
   assert.match(result.error, /bloom/);
 
-  // Colours have no catalog to check, only a shape.
   assert.equal(resolveStageCommand('environment.set', { type: 'color', value: 'red' }, context).code, 'bad-payload');
   assert.equal(resolveStageCommand('environment.set', { type: 'gif' }, context).code, 'bad-payload');
 });
@@ -144,8 +141,13 @@ test('resolveStageCommand never throws on hostile input', () => {
     const result = resolveStageCommand(command, { id: 'vrma-03' }, context);
     assert.equal(result.ok, false);
   }
-  assert.equal(resolveStageCommand('animation.play', { id: 'vrma-03' }, undefined).ok, false);
-  assert.equal(resolveStageCommand('animation.play', { id: 'vrma-03' }, {}).ok, false);
+  // A null entry is not a missing one, so parameter defaults do not cover it.
+  for (const broken of [undefined, {}, { avatarIds: null }, { animationCatalog: 'nope' }]) {
+    assert.equal(resolveStageCommand('animation.play', { id: 'vrma-03' }, broken).ok, false);
+    assert.equal(resolveStageCommand('avatar.set', { id: 'avatar1' }, broken).ok, false);
+    assert.equal(resolveStageCommand('environment.set', { type: 'env', id: 'stars' }, broken).ok, false);
+    assert.equal(resolveStageCommand('audio.source', { id: 'none' }, broken).ok, false);
+  }
 });
 
 test('resolveStageCommand mutates nothing', () => {

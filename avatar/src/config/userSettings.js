@@ -150,9 +150,8 @@ export function normalizeUserSettings(raw) {
   if (!raw || typeof raw !== 'object') return defaults;
 
   const data = /** @type {Record<string, unknown>} */ (raw);
-  // Same validator the stage uses for a selection arriving from anywhere else,
-  // so a hand-edited config.yaml and a runtime selection cannot disagree about
-  // what counts as a usable environment.
+  // Same validator the stage uses, so config.yaml and a runtime selection
+  // cannot disagree about what is usable.
   const environment = normalizeEnvironmentSelection(data.environment) ?? defaults.environment;
 
   const cameraRaw = data.camera && typeof data.camera === 'object'
