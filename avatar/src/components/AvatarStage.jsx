@@ -322,6 +322,7 @@ export function AvatarStage() {
   // bus all reach the stage through this (Refs #6).
   const runCommand = useStageCommands({
     context: commandContext,
+    current: { selectedAvatarId, hubActive },
     setters: {
       setAnimationId,
       setAnimationRequest,

@@ -8,11 +8,14 @@ import { resolveStageCommand } from '../lib/stageCommands';
  *
  * @param {Object} args
  * @param {import('../lib/stageCommands').StageCommandContext} args.context
+ * @param {{ selectedAvatarId: string, hubActive: boolean }} args.current What
+ * is on stage now — needed to tell a real change from a no-op.
  * @param {Object} args.setters The stage's own `useState` setters.
  * @returns {(command: string, payload?: unknown) =>
  *   import('../lib/stageCommands').StageCommandResult}
  */
-export function useStageCommands({ context, setters }) {
+export function useStageCommands({ context, current, setters }) {
+  const { selectedAvatarId, hubActive } = current;
   const {
     setAnimationId,
     setAnimationRequest,
@@ -39,15 +42,20 @@ export function useStageCommands({ context, setters }) {
           setAnimationRequest((count) => count + 1);
           break;
 
-        case 'avatar.set':
-          // Precedes the id change so the outgoing model does not show through
-          // the load; the stage comes back on VrmAvatar's `onLoaded`.
-          setAvatarReady(false);
-          // An active Hub character outranks the catalog, so it stands down.
+        case 'avatar.set': {
+          // Only hide the stage when the model actually reloads. Re-selecting
+          // the avatar already on it leaves modelPath alone, so VrmAvatar's
+          // load effect never re-runs, `onLoaded` never fires, and the stage
+          // would stay hidden for good. A Hub character is the exception: it
+          // owns modelPath while active, so standing it down is a real reload.
+          if (hubActive || action.avatarId !== selectedAvatarId) {
+            setAvatarReady(false);
+          }
           setHubActive(false);
           setSelectedAvatarId(action.avatarId);
           setSelectedSkinId(defaultSkinId);
           break;
+        }
 
         case 'environment.set':
           setSelectedBg(action.selection);
@@ -65,6 +73,8 @@ export function useStageCommands({ context, setters }) {
     },
     [
       context,
+      selectedAvatarId,
+      hubActive,
       setAnimationId,
       setAnimationRequest,
       setAvatarReady,
