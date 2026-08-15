@@ -34,6 +34,11 @@ by clicking its name; it plays **once** and then the Animations selection comes
 back. Firing a card never changes `animationId`. Past five rows the deck gets a
 filter box, which only narrows what is listed — it never touches the file.
 
+<p align="center">
+  <img src="screenshots/83-settings-motion.png" alt="Motion deck with a row per clip" height="260" />
+  <img src="screenshots/84-settings-motion-add-filter.png" alt="Searching the animation catalog from Add motion" height="260" />
+</p>
+
 ```yaml
 motionDeck:
   - animationId: vrma-03
