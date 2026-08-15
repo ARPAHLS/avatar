@@ -385,6 +385,6 @@ Persistence details: [User settings](user-settings.md).
 
 ## 9. Keyboard / mouse notes
 
-- There is no global hotkey set yet — all actions are pointer-driven.  
+- Settings → **Motion** binds keys to clips; they fire while the AVATAR window has focus (see [User settings](user-settings.md#motion-deck-motiondeck)). Nothing is bound out of the box, and there is still no OS-wide hotkey — every other action is pointer-driven.  
 - Click outside a drawer/menu (or blur the window on desktop) to dismiss menus.  
 - The 3D canvas does not steal drag — move via the glass bar.
