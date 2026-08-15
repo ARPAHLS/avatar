@@ -161,14 +161,19 @@ export function MotionDeckPanel({
                       {chord}
                     </button>
                   ))}
+                  {/* A bare + while idle: spelling out "+ Key" on every row cost
+                      the name column more than the word was worth, and the slot
+                      says what it is by sitting among the chords. */}
                   <button
                     type="button"
                     className={`motion-deck__bind ${
                       recordingIndex === index ? 'motion-deck__bind--recording' : ''
                     }`}
+                    title="Bind a key"
+                    aria-label={`Bind a key to ${card.label || card.animationId}`}
                     onClick={() => actions.record(index)}
                   >
-                    {recordingIndex === index ? 'Press a key…' : '+ Key'}
+                    {recordingIndex === index ? 'Press a key…' : '+'}
                   </button>
                 </div>
 

@@ -135,13 +135,17 @@
   padding: 8px;
 }
 
+/* The name is what the row is for, so it gets a floor and the chords give way:
+   past it the deficit goes to them, and they wrap. A clip with two chords is
+   two lines, which is fine — one line was the aim, not a requirement worth
+   truncating a name over. */
 .motion-deck__play {
   display: flex;
   align-items: center;
   gap: 6px;
   flex: 1 1 auto;
-  min-width: 0;
-  padding: 4px 6px;
+  min-width: 110px;
+  padding: 4px 4px 4px 6px;
   border: 0;
   border-radius: 7px;
   background: transparent;
@@ -167,6 +171,7 @@
 }
 
 .motion-deck__label {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -191,30 +196,38 @@
    in and the note under Clear unavailable says what that means. */
 .motion-deck__badge {
   flex-shrink: 0;
-  padding: 1px 5px;
+  padding: 1px 4px;
   border-radius: 5px;
   background: rgba(122, 107, 150, 0.18);
   color: #7a6b96;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
-/* Chords sit against the right edge so the column reads down as a key list,
-   and wrap in place when a clip has several. */
+/* Chords sit against the right edge so the column reads down as a key list, and
+   wrap only once they are past half the row — a single chord and the bind slot
+   have to stay on the name's line or the row is two lines tall for nothing. */
 .motion-deck__keys {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 4px;
-  flex: 0 1 auto;
+  /* max-content, not auto: a wrap container that is itself a flex item resolves
+     an auto basis to min-content — one chip's width — so the bind slot dropped
+     to a second line on every row however much space was left over. */
+  flex: 0 1 max-content;
+  max-width: 62%;
 }
 
+/* Tight on purpose: the drawer is ~240px wide, so every pixel a chip takes is a
+   pixel off the clip's name. */
 .motion-deck__key,
 .motion-deck__bind {
-  padding: 3px 8px;
-  border-radius: 7px;
-  font-size: 11px;
+  padding: 2px 5px;
+  border-radius: 6px;
+  font-size: 10px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   cursor: pointer;
 }
@@ -244,9 +257,12 @@
 }
 
 .motion-deck__bind {
+  min-width: 20px;
   border: 1px dashed rgba(161, 138, 214, 0.75);
   background: transparent;
   color: #7a6b96;
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .motion-deck__bind:hover {
