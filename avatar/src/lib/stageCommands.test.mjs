@@ -32,17 +32,61 @@ test('animation.play accepts an id or a label', () => {
   assert.deepEqual(action(resolveStageCommand('animation.play', { id: 'vrma-03' }, context)), {
     kind: 'animation.play',
     animationId: 'vrma-03',
+    mode: 'select',
   });
   assert.deepEqual(action(resolveStageCommand('animation.play', { id: 'Peace Sign' }, context)), {
     kind: 'animation.play',
     animationId: 'vrma-03',
+    mode: 'select',
   });
   assert.deepEqual(
     action(
       resolveStageCommand('animation.play', { id: 'my wave' }, { ...context, animationCatalog: custom }),
     ),
-    { kind: 'animation.play', animationId: 'lib-anim-my_wave-aaa' },
+    { kind: 'animation.play', animationId: 'lib-anim-my_wave-aaa', mode: 'select' },
   );
+});
+
+test('animation.play defaults to select and takes once explicitly', () => {
+  assert.deepEqual(action(resolveStageCommand('animation.play', { id: 'vrma-03', mode: 'once' }, context)), {
+    kind: 'animation.play',
+    animationId: 'vrma-03',
+    mode: 'once',
+  });
+  // Absent and explicit-select mean the same thing, so a caller written before
+  // one-shots existed keeps working.
+  assert.equal(action(resolveStageCommand('animation.play', { id: 'vrma-03' }, context)).mode, 'select');
+  assert.equal(
+    action(resolveStageCommand('animation.play', { id: 'vrma-03', mode: undefined }, context)).mode,
+    'select',
+  );
+
+  for (const mode of ['loop', '', 'ONCE', 1, {}]) {
+    assert.equal(
+      resolveStageCommand('animation.play', { id: 'vrma-03', mode }, context).code,
+      'bad-payload',
+      `mode ${JSON.stringify(mode)} should not be accepted`,
+    );
+  }
+});
+
+test('animation.play refuses a one-shot that cannot end on its own', () => {
+  // The Default sequence loops for as long as it is selected, so there is no
+  // frame at which the selection underneath could come back.
+  const result = resolveStageCommand('animation.play', { id: 'default', mode: 'once' }, context);
+  assert.equal(result.code, 'not-playable-once');
+  assert.match(result.error, /Default/);
+
+  // Still selectable the ordinary way.
+  assert.equal(resolveStageCommand('animation.play', { id: 'default' }, context).ok, true);
+});
+
+test('animation.stop takes no payload and cannot fail', () => {
+  for (const payload of [undefined, null, {}, { id: 'nonsense' }, 'junk']) {
+    assert.deepEqual(action(resolveStageCommand('animation.stop', payload, context)), {
+      kind: 'animation.stop',
+    });
+  }
 });
 
 test('animation.play reports a miss instead of playing something else', () => {
@@ -69,11 +113,12 @@ test('animation.default resolves against the live catalog', () => {
   assert.deepEqual(action(resolveStageCommand('animation.default', {}, context)), {
     kind: 'animation.play',
     animationId: 'default',
+    mode: 'select',
   });
   // No bundled Default sequence in a custom folder — fall back, do not fail.
   assert.deepEqual(
     action(resolveStageCommand('animation.default', {}, { ...context, animationCatalog: custom })),
-    { kind: 'animation.play', animationId: 'lib-anim-my_wave-aaa' },
+    { kind: 'animation.play', animationId: 'lib-anim-my_wave-aaa', mode: 'select' },
   );
 });
 
@@ -128,7 +173,7 @@ test('audio.source is validated against the current runtime', () => {
 });
 
 test('an unknown command names the ones that exist', () => {
-  const result = resolveStageCommand('animation.stop', {}, context);
+  const result = resolveStageCommand('animation.pause', {}, context);
   assert.equal(result.code, 'unknown-command');
   for (const command of STAGE_COMMANDS) {
     assert.match(result.error, new RegExp(command.replace('.', '\\.')));

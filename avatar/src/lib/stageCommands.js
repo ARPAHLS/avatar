@@ -29,7 +29,14 @@ import { normalizeEnvironmentSelection } from '../config/environmentSelection.js
  */
 
 /**
- * @typedef {{ kind: 'animation.play', animationId: string }
+ * `select` changes what the stage is set to and is persisted; `once` overlays a
+ * single pass and leaves the selection alone.
+ * @typedef {'select' | 'once'} AnimationMode
+ */
+
+/**
+ * @typedef {{ kind: 'animation.play', animationId: string, mode: AnimationMode }
+ *   | { kind: 'animation.stop' }
  *   | { kind: 'avatar.set', avatarId: string }
  *   | { kind: 'environment.set', selection: EnvironmentSelection }
  *   | { kind: 'audio.source', audioSourceId: string }} StageAction
@@ -42,12 +49,14 @@ import { normalizeEnvironmentSelection } from '../config/environmentSelection.js
 
 /**
  * @typedef {'unknown-command' | 'bad-payload' | 'unknown-animation'
- *   | 'unknown-avatar' | 'unknown-environment' | 'unknown-audio-source'} StageErrorCode
+ *   | 'unknown-avatar' | 'unknown-environment' | 'unknown-audio-source'
+ *   | 'not-playable-once'} StageErrorCode
  */
 
 export const STAGE_COMMANDS = Object.freeze([
   'animation.play',
   'animation.default',
+  'animation.stop',
   'avatar.set',
   'environment.set',
   'audio.source',
@@ -75,6 +84,19 @@ function readId(payload) {
 }
 
 /**
+ * Absent means `select`, so every caller written before one-shots existed keeps
+ * its meaning.
+ * @param {unknown} payload
+ * @returns {AnimationMode | null} null when present but not a known mode
+ */
+function readMode(payload) {
+  if (!payload || typeof payload !== 'object') return 'select';
+  const raw = /** @type {Record<string, unknown>} */ (payload).mode;
+  if (raw === undefined || raw === null) return 'select';
+  return raw === 'select' || raw === 'once' ? raw : null;
+}
+
+/**
  * Reports acceptance only: a VRM or an environment image may still be loading
  * when this returns.
  *
@@ -97,19 +119,33 @@ export function resolveStageCommand(command, payload, context) {
       const query = readId(payload);
       if (!query) return fail('bad-payload', 'animation.play needs an id: { "id": "vrma-03" }.');
 
+      const mode = readMode(payload);
+      if (!mode) return fail('bad-payload', 'animation.play mode must be "select" or "once".');
+
       // Labels too: a custom folder hashes its ids from file paths, so the
       // label is the only name a caller can be expected to know.
       const entry = findAnimation(animationCatalog, query);
       if (!entry) return fail('unknown-animation', `No animation matches "${query}".`);
 
-      return { ok: true, action: { kind: 'animation.play', animationId: entry.id } };
+      // A one-shot has to end by itself for the selection to come back, and the
+      // Default sequence loops for as long as it is selected.
+      if (mode === 'once' && !(entry.source === 'vrma' && entry.vrmaUrl)) {
+        return fail('not-playable-once', `"${entry.label}" is not a single clip; play it with mode "select".`);
+      }
+
+      return { ok: true, action: { kind: 'animation.play', animationId: entry.id, mode } };
     }
 
     case 'animation.default': {
       // A custom folder has no Default sequence; fall back rather than fail.
       const animationId = resolveAnimationId(animationCatalog, defaultAnimationId);
-      return { ok: true, action: { kind: 'animation.play', animationId } };
+      return { ok: true, action: { kind: 'animation.play', animationId, mode: 'select' } };
     }
+
+    case 'animation.stop':
+      // Ends a one-shot early. Cancelling something already finished is not an
+      // error, so this takes no payload and cannot fail.
+      return { ok: true, action: { kind: 'animation.stop' } };
 
     case 'avatar.set': {
       // Ids only: bundled labels are "Avatar 1"…"Avatar 3" and a folder's are

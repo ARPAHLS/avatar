@@ -19,6 +19,7 @@ export function useStageCommands({ context, current, setters }) {
   const {
     setAnimationId,
     setAnimationRequest,
+    setMotionOverlay,
     setAvatarReady,
     setHubActive,
     setSelectedAvatarId,
@@ -36,10 +37,27 @@ export function useStageCommands({ context, current, setters }) {
 
       switch (action.kind) {
         case 'animation.play':
+          if (action.mode === 'once') {
+            // Not `setAnimationId`: a one-shot leaves the menu selection, and
+            // therefore config.yaml, untouched. The token is what fires the
+            // same clip twice, which the id alone cannot ask for.
+            setMotionOverlay((overlay) => ({
+              animationId: action.animationId,
+              token: (overlay?.token ?? 0) + 1,
+            }));
+            break;
+          }
+
+          // A deliberate pick outranks whatever gesture is mid-flight.
+          setMotionOverlay(null);
           setAnimationId(action.animationId);
           // Re-selecting the clip already playing has to restart it, which the
           // id alone cannot express; VrmAvatar's effect keys off this counter.
           setAnimationRequest((count) => count + 1);
+          break;
+
+        case 'animation.stop':
+          setMotionOverlay(null);
           break;
 
         case 'avatar.set': {
@@ -77,6 +95,7 @@ export function useStageCommands({ context, current, setters }) {
       hubActive,
       setAnimationId,
       setAnimationRequest,
+      setMotionOverlay,
       setAvatarReady,
       setHubActive,
       setSelectedAvatarId,

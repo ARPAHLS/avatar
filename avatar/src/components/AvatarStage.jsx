@@ -60,6 +60,9 @@ export function AvatarStage() {
   const [settingsReady, setSettingsReady] = useState(false);
   const [animationId, setAnimationId] = useState(defaultAnimationId);
   const [animationRequest, setAnimationRequest] = useState(0);
+  // A one-shot on top of the selection above. Never persisted: `animationId` is
+  // what config.yaml stores, and a gesture must not overwrite it.
+  const [motionOverlay, setMotionOverlay] = useState(null);
   const [camera, setCamera] = useState({ ...defaultCamera });
   const [light, setLight] = useState({ ...defaultLight });
   const [avatar, setAvatar] = useState({ ...defaultAvatar });
@@ -326,6 +329,7 @@ export function AvatarStage() {
     setters: {
       setAnimationId,
       setAnimationRequest,
+      setMotionOverlay,
       setAvatarReady,
       setHubActive,
       setSelectedAvatarId,
@@ -339,6 +343,8 @@ export function AvatarStage() {
     (nextId) => runCommand('animation.play', { id: nextId }),
     [runCommand],
   );
+
+  const handleMotionOverlayEnd = useCallback(() => setMotionOverlay(null), []);
 
   const handleAvatarChange = useCallback(
     (avatarId) => runCommand('avatar.set', { id: avatarId }),
@@ -810,6 +816,12 @@ export function AvatarStage() {
     }
   }, [modelPath, hubActive]);
 
+  // The mixer belongs to the VRM, so a gesture cannot outlive the model it was
+  // playing on — nor the catalog holding the url it was loaded from.
+  useEffect(() => {
+    setMotionOverlay(null);
+  }, [modelPath, animationCatalog]);
+
   async function handleOverlayModeToggle() {
     const next = !overlayMode;
     setOverlayMode(next);
@@ -922,6 +934,8 @@ export function AvatarStage() {
               animationId={animationId}
               animationCatalog={animationCatalog}
               animationRequest={animationRequest}
+              motionOverlay={motionOverlay}
+              onMotionOverlayEnd={handleMotionOverlayEnd}
               avatarPosition={avatar.position}
               avatarRotation={avatar.rotation}
               audioLevel={level}

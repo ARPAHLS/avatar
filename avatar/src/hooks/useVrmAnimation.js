@@ -99,8 +99,11 @@ export function useVrmAnimation(vrm) {
         if (playback === 'once' && onComplete) {
           const handleFinished = ({ action: finishedAction }) => {
             if (finishedAction !== action) return;
-            if (generation !== requestGeneration.current) return;
+            // Detach first: a superseded generation used to return early and
+            // leave its closure on the mixer for the life of the VRM, which a
+            // hotkey interrupting a gesture can now do on every key press.
             mixer.current?.removeEventListener('finished', handleFinished);
+            if (generation !== requestGeneration.current) return;
             onComplete();
           };
           mixer.current.addEventListener('finished', handleFinished);
