@@ -1,0 +1,255 @@
+/* Imported by the panel rather than by the global stylesheet, so the feature
+   stays one folder.
+
+   Colours follow `panel-select-menu__option`, not the `--surface` /
+   `--text-panel` tokens: those are a dark chip with near-white text, and the
+   drawer this sits in is rgba(255, 255, 255, 0.72). */
+
+.motion-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #4f3f70;
+}
+
+.motion-deck__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 4px 0 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(214, 200, 247, 0.5);
+  color: #4f3f70;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.motion-deck__notice-close {
+  display: flex;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 2px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #6b5a8e;
+  cursor: pointer;
+}
+
+.motion-deck__notice-close:hover {
+  background: rgba(255, 255, 255, 0.6);
+  color: #4f3f70;
+}
+
+.motion-deck__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.motion-deck__card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid rgba(161, 138, 214, 0.38);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* Still readable: an unavailable card has to be able to say why it is one. */
+.motion-deck__card--missing {
+  border-style: dashed;
+  border-color: rgba(122, 107, 150, 0.45);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.motion-deck__card-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.motion-deck__play {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #4f3f70;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.motion-deck__play svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.motion-deck__play:hover:not(:disabled) {
+  background: rgba(214, 200, 247, 0.55);
+}
+
+.motion-deck__play:disabled {
+  color: #7a6b96;
+  cursor: default;
+}
+
+.motion-deck__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.motion-deck__remove {
+  display: flex;
+  padding: 3px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #7a6b96;
+  cursor: pointer;
+}
+
+.motion-deck__remove:hover {
+  background: rgba(214, 200, 247, 0.55);
+  color: #4f3f70;
+}
+
+.motion-deck__missing {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #7a6b96;
+}
+
+.motion-deck__keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.motion-deck__key,
+.motion-deck__bind {
+  padding: 3px 8px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  cursor: pointer;
+}
+
+/* A bound key is solid: it is a thing that exists, unlike the slot next to it. */
+.motion-deck__key {
+  border: 1px solid rgba(161, 138, 214, 0.7);
+  background: rgba(161, 138, 214, 0.5);
+  color: #3f3458;
+  font-weight: 600;
+}
+
+/* Always present, so "click to clear" is not a tooltip-only secret, and always
+   the same width, so nothing shifts under the cursor on hover. */
+.motion-deck__key::after {
+  content: '×';
+  margin-left: 5px;
+  opacity: 0.5;
+}
+
+.motion-deck__key:hover {
+  background: rgba(214, 200, 247, 0.75);
+}
+
+.motion-deck__key:hover::after {
+  opacity: 1;
+}
+
+.motion-deck__bind {
+  border: 1px dashed rgba(161, 138, 214, 0.75);
+  background: transparent;
+  color: #7a6b96;
+}
+
+.motion-deck__bind:hover {
+  background: rgba(214, 200, 247, 0.45);
+  color: #4f3f70;
+}
+
+.motion-deck__bind--recording {
+  border-style: solid;
+  border-color: #a18ad6;
+  background: rgba(161, 138, 214, 0.65);
+  color: #2f2640;
+  font-weight: 600;
+  box-shadow: 0 0 0 3px rgba(161, 138, 214, 0.22);
+}
+
+/* Reads as its own surface, like the app's select popup — the picker is a
+   different mode, not more rows of the deck. */
+.motion-deck__picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid rgba(161, 138, 214, 0.45);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 10px 28px rgba(80, 60, 120, 0.18);
+}
+
+.motion-deck__search {
+  padding: 6px 8px;
+  border: 1px solid rgba(161, 138, 214, 0.45);
+  border-radius: 8px;
+  background: #fff;
+  color: #4f3f70;
+  font-size: 13px;
+}
+
+.motion-deck__search::placeholder {
+  color: #8d7fae;
+}
+
+.motion-deck__search:focus {
+  outline: none;
+  border-color: #a18ad6;
+  box-shadow: 0 0 0 2px rgba(161, 138, 214, 0.25);
+}
+
+.motion-deck__options {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 148px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 120, 180, 0.45) transparent;
+}
+
+.motion-deck__options::-webkit-scrollbar {
+  width: 4px;
+}
+
+.motion-deck__options::-webkit-scrollbar-thumb {
+  background: rgba(140, 120, 180, 0.45);
+  border-radius: 999px;
+}
+
+.motion-deck__option {
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #4f3f70;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.motion-deck__option:hover {
+  background: rgba(214, 200, 247, 0.55);
+}

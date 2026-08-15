@@ -18,7 +18,7 @@ Autosave runs shortly after you change something (~400 ms debounce).
 | Area | Fields |
 | :--- | :--- |
 | Character | `avatarId` (and reserved `skinId: default`) |
-| Motion | `animationId` |
+| Motion | `animationId`, `motionDeck` (see below) |
 | Backdrop | `environment` (`env` + id, `color` + hex, or `none`) |
 | Camera | `position`, `lookAt`, `fov` |
 | Light | `intensity`, `color`, `position` |
@@ -26,6 +26,45 @@ Autosave runs shortly after you change something (~400 ms debounce).
 | Voice | `audioSourceId`, `windowSourceId` (when picking a window) |
 | Desktop | `overlayMode`, `windowScale` |
 | Directories (desktop) | `directories.avatars` / `animations` / `environments` (`mode` + `path`) |
+
+### Motion Deck (`motionDeck`)
+
+Settings → **Motion**. Each card is a clip you can fire with a key or by
+clicking it; it plays **once** and then the Animations selection comes back.
+Firing a card never changes `animationId`.
+
+```yaml
+motionDeck:
+  - animationId: vrma-03
+    label: Peace Sign
+    keys:
+      - F3
+      - Ctrl+Shift+P
+  - animationId: lib-anim-wave-4f2a9c1b7e03
+    label: wave
+    keys:
+      - F4
+```
+
+| Field | |
+| :--- | :--- |
+| `animationId` | id from the animation catalog. A custom folder's ids are derived from the file path |
+| `label` | remembered clip name. Shown when the id cannot be resolved, and used to re-point the card if you move or rename the animations folder |
+| `keys` | chords, e.g. `F3`, `Ctrl+Shift+P`, `Alt+1`. Modifier names `Ctrl` / `Alt` / `Shift` / `Meta` (`Cmd`, `Win` and `Control` are read too). Bare `Escape`, `Tab`, `Enter` and `Space` are not accepted — the app's own UI needs them |
+
+A chord belongs to one card: binding one that is already taken moves it, and a
+hand-edited file that assigns the same chord twice gives it to the first card.
+There is no limit on cards worth designing around — a deck is expected to be
+short, but it also accumulates across animation folders, so it is not capped.
+
+**Switching animation folders does not delete cards.** Cards whose clip is not
+in the current folder are shown as *unavailable* and their keys do nothing, but
+they stay in `config.yaml` and come back when the folder does. Settings →
+Motion → **Clear unavailable** is the only thing that removes them, apart from
+**Reset all settings**.
+
+Keys are only active while the AVATAR window has focus, and are ignored while
+you are typing in a field.
 
 ### Not saved
 
@@ -59,6 +98,7 @@ Autosave runs shortly after you change something (~400 ms debounce).
 | Overlay | On |
 | Window scale | ×1 |
 | Directories | Avatars / Animations / Environments → `default` (no custom paths) |
+| Motion Deck | Empty |
 
 ## How to reset
 
@@ -134,6 +174,7 @@ directories:
   environments:
     mode: default
     path: null
+motionDeck: []
 ```
 
 You normally never edit this by hand — use the UI. Hand-edits are fine if the app is closed; invalid values fall back to defaults on load.

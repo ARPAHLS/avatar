@@ -52,6 +52,11 @@ import { CameraPanel } from './panels/CameraPanel';
 import { DesktopPanel } from './panels/DesktopPanel';
 import { DirectoriesPanel } from './panels/DirectoriesPanel';
 import { VroidHubPanel } from './panels/VroidHubPanel';
+// Motion Deck (#24). Held here only because it is persisted with the rest of
+// the settings; everything else about it is in src/motion-deck/.
+import { MotionDeckPanel } from '../motion-deck/MotionDeckPanel';
+import { createEmptyDeck } from '../motion-deck/motionDeck';
+import { useMotionDeck } from '../motion-deck/useMotionDeck';
 
 const desktopMode = isDesktopMode();
 const SAVE_DEBOUNCE_MS = 400;
@@ -93,6 +98,7 @@ export function AvatarStage() {
     notice: null,
   });
   const [directories, setDirectories] = useState(createDefaultDirectories);
+  const [motionDeck, setMotionDeck] = useState(createEmptyDeck);
   const [libraryAvatars, setLibraryAvatars] = useState([]);
   const [libraryAnimations, setLibraryAnimations] = useState([]);
   const [libraryEnvironments, setLibraryEnvironments] = useState([]);
@@ -144,6 +150,7 @@ export function AvatarStage() {
     document.documentElement.classList.toggle('vox-desktop-windowed', !settings.overlayMode);
     setWindowScale(normalizeWindowScale(settings.windowScale));
     setDirectories(settings.directories ?? createDefaultDirectories());
+    setMotionDeck(settings.motionDeck ?? createEmptyDeck());
   }, []);
 
   useEffect(() => {
@@ -226,6 +233,7 @@ export function AvatarStage() {
         overlayMode,
         windowScale,
         directories,
+        motionDeck,
       });
       void saveUserSettings(snapshot);
     }, SAVE_DEBOUNCE_MS);
@@ -245,6 +253,7 @@ export function AvatarStage() {
     overlayMode,
     windowScale,
     directories,
+    motionDeck,
   ]);
 
   useEffect(() => {
@@ -345,6 +354,13 @@ export function AvatarStage() {
   );
 
   const handleMotionOverlayEnd = useCallback(() => setMotionOverlay(null), []);
+
+  const motionDeckState = useMotionDeck({
+    deck: motionDeck,
+    onDeckChange: setMotionDeck,
+    animationCatalog,
+    runCommand,
+  });
 
   const handleAvatarChange = useCallback(
     (avatarId) => runCommand('avatar.set', { id: avatarId }),
@@ -1029,6 +1045,9 @@ export function AvatarStage() {
                   />
                 </>
               )}
+              <Divider />
+              <p className="settings-section-title">Motion</p>
+              <MotionDeckPanel {...motionDeckState} animationCatalog={animationCatalog} />
               <Divider />
               <p className="settings-section-title">VRoid Hub</p>
               <VroidHubPanel
