@@ -10,6 +10,7 @@ import { bundledVrmaUrls } from './vrmaAssets';
 export {
   createVrmaResolver,
   defaultAnimationId,
+  findAnimation,
   getAnimationById,
   getSelectableAnimations,
   resolveAnimationId,

@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   createVrmaResolver,
   defaultAnimationId,
+  findAnimation,
   getAnimationById,
   getSelectableAnimations,
   resolveAnimationId,
@@ -46,6 +47,38 @@ test('getAnimationById never returns undefined', () => {
   assert.equal(getAnimationById('nope', custom).id, 'lib-anim-my_wave-aaa');
   assert.equal(getAnimationById('nope', []).id, 'rest');
   assert.equal(getAnimationById('rest', []), restAnimation);
+});
+
+test('findAnimation matches ids and labels', () => {
+  assert.equal(findAnimation(bundled, 'vrma-02')?.label, 'Greeting');
+  assert.equal(findAnimation(bundled, 'Greeting')?.id, 'vrma-02');
+  assert.equal(findAnimation(bundled, '  greeting  ')?.id, 'vrma-02');
+  assert.equal(findAnimation(custom, 'MY WAVE')?.id, 'lib-anim-my_wave-aaa');
+  // Not selectable, but still a legitimate thing to ask the avatar to do.
+  assert.equal(findAnimation(bundled, 'rest')?.id, 'rest');
+});
+
+// The whole reason this exists next to getAnimationById, which answers with the
+// catalog's first entry rather than admitting it found nothing.
+test('findAnimation returns null on a miss', () => {
+  assert.equal(findAnimation(bundled, 'Greetings'), null);
+  assert.equal(findAnimation(custom, 'vrma-02'), null);
+  assert.equal(findAnimation([], 'rest'), null);
+  assert.equal(findAnimation(bundled, ''), null);
+  assert.equal(findAnimation(bundled, '   '), null);
+  assert.equal(findAnimation(bundled, undefined), null);
+  assert.equal(findAnimation(bundled, 42), null);
+  assert.equal(findAnimation(undefined, 'rest'), null);
+});
+
+// A folder holding `Greeting.vrma` must not steal an exact id from the catalog.
+test('findAnimation prefers an id over a label', () => {
+  const shadowed = [
+    { id: 'lib-anim-greeting-aaa', label: 'vrma-02', source: 'vrma', vrmaUrl: 'blob:1' },
+    { id: 'vrma-02', label: 'Greeting', source: 'vrma', vrmaUrl: 'blob:2' },
+  ];
+
+  assert.equal(findAnimation(shadowed, 'vrma-02')?.vrmaUrl, 'blob:2');
 });
 
 test('resolveVrmaUrl only answers for vrma entries', () => {

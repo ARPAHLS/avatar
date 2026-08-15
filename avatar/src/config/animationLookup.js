@@ -47,6 +47,32 @@ export function getAnimationById(id, catalog) {
 }
 
 /**
+ * Exact lookup, for callers that must know when a query misses — unlike
+ * `getAnimationById`, which falls back on purpose and so would answer a typo
+ * with the catalog's first clip. Ids beat labels, so a custom folder cannot
+ * shadow one.
+ * @param {AnimationEntry[]} catalog
+ * @param {unknown} query id, or label (trimmed, case-insensitive)
+ * @returns {AnimationEntry | null}
+ */
+export function findAnimation(catalog, query) {
+  if (!Array.isArray(catalog) || typeof query !== 'string') return null;
+
+  const trimmed = query.trim();
+  if (trimmed === '') return null;
+
+  const byId = catalog.find((entry) => entry.id === trimmed);
+  if (byId) return byId;
+
+  const folded = trimmed.toLowerCase();
+  return (
+    catalog.find(
+      (entry) => typeof entry.label === 'string' && entry.label.trim().toLowerCase() === folded,
+    ) ?? null
+  );
+}
+
+/**
  * @param {string} id
  * @param {AnimationEntry[]} catalog
  */

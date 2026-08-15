@@ -14,7 +14,7 @@ export function PalettePanel({
   selectedAvatarId,
   onAvatarChange,
   selectedBg,
-  setSelectedBg,
+  onEnvironmentChange,
   customEnvironmentList = [],
   onSelectHubCharacter,
   onReactivateHubCharacter,
@@ -134,7 +134,7 @@ export function PalettePanel({
                         ? 'background-thumb--selected'
                         : ''
                     }`}
-                    onClick={() => setSelectedBg({ type: 'env', id: env.id })}
+                    onClick={() => onEnvironmentChange({ type: 'env', id: env.id })}
                     title={env.label}
                   >
                     {/* Poster, not the GIF: the stage owns the animation. */}
@@ -147,7 +147,7 @@ export function PalettePanel({
                   className={`background-thumb ${
                     selectedBg.type === 'none' ? 'background-thumb--selected' : ''
                   }`}
-                  onClick={() => setSelectedBg({ type: 'none' })}
+                  onClick={() => onEnvironmentChange({ type: 'none' })}
                   title="No background"
                 >
                   <span className="background-thumb__none" aria-hidden="true" />
@@ -187,7 +187,7 @@ export function PalettePanel({
                             key={env.id}
                             entry={env}
                             selected={selectedBg.type === 'env' && selectedBg.id === env.id}
-                            onClick={() => setSelectedBg({ type: 'env', id: env.id })}
+                            onClick={() => onEnvironmentChange({ type: 'env', id: env.id })}
                           />
                         ) : (
                           <button
@@ -198,7 +198,7 @@ export function PalettePanel({
                                 ? 'background-thumb--selected'
                                 : ''
                             }`}
-                            onClick={() => setSelectedBg({ type: 'env', id: env.id })}
+                            onClick={() => onEnvironmentChange({ type: 'env', id: env.id })}
                             title={env.label}
                           >
                             <img src={env.src} alt={env.label} loading="lazy" />
@@ -219,7 +219,7 @@ export function PalettePanel({
                 <input
                   type="color"
                   value={colorValue}
-                  onChange={(event) => setSelectedBg({ type: 'color', value: event.target.value })}
+                  onChange={(event) => onEnvironmentChange({ type: 'color', value: event.target.value })}
                 />
                 <span>Color fade</span>
               </label>
@@ -229,14 +229,14 @@ export function PalettePanel({
                   className={`panel-button environment-color-select ${
                     selectedBg.type === 'color' ? 'environment-color-select--active' : ''
                   }`}
-                  onClick={() => setSelectedBg({ type: 'color', value: colorValue })}
+                  onClick={() => onEnvironmentChange({ type: 'color', value: colorValue })}
                 >
                   Use color
                 </button>
                 <button
                   type="button"
                   className="panel-button environment-color-reset"
-                  onClick={() => setSelectedBg({ type: 'color', value: defaultColor })}
+                  onClick={() => onEnvironmentChange({ type: 'color', value: defaultColor })}
                 >
                   Reset
                 </button>

@@ -1,6 +1,11 @@
 import starsGif from '../assets/environments/stars.gif';
 import codeGif from '../assets/environments/code.gif';
 import bloomGif from '../assets/environments/bloom.gif';
+import { defaultColor } from './environmentSelection';
+
+// Defined in an asset-free module; re-exported because this is where callers
+// already look for anything environment-related.
+export { defaultColor, normalizeEnvironmentSelection } from './environmentSelection';
 
 // Still posters generated ahead of time (see npm run thumbs), so the picker
 // never plays a full stage GIF inside a 40px box. Globbed rather than imported
@@ -29,8 +34,6 @@ export const defaultHoloGlow = {
   soft: 'rgba(175, 145, 230, 0.28)',
   highlight: 'rgba(255, 255, 255, 0.14)',
 };
-
-export const defaultColor = '#e9e1fa';
 
 const customGlow = {
   strong: 'rgba(190, 175, 230, 0.52)',
@@ -142,7 +145,7 @@ export function getEnvironmentById(id) {
 }
 
 /**
- * @typedef {{ type: 'env', id: string } | { type: 'color', value: string } | { type: 'none' }} EnvironmentSelection
+ * @typedef {import('./environmentSelection').EnvironmentSelection} EnvironmentSelection
  */
 
 /**

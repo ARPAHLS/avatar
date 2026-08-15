@@ -2,7 +2,7 @@ import { defaultAnimationId } from './animations';
 import { getDefaultAudioSourceId } from './audioSources';
 import { defaultAvatarId, defaultSkinId } from './avatars';
 import { defaultAvatar, defaultCamera, defaultLight } from './defaults';
-import { defaultColor } from './environments';
+import { defaultColor, normalizeEnvironmentSelection } from './environmentSelection';
 import { defaultWindowScale, normalizeWindowScale } from './windowScale';
 
 // 2: avatarTransform.rotation is the user's framing rotation only. Version 1
@@ -150,21 +150,9 @@ export function normalizeUserSettings(raw) {
   if (!raw || typeof raw !== 'object') return defaults;
 
   const data = /** @type {Record<string, unknown>} */ (raw);
-  const envRaw = data.environment && typeof data.environment === 'object'
-    ? /** @type {Record<string, unknown>} */ (data.environment)
-    : null;
-
-  let environment = defaults.environment;
-  if (envRaw) {
-    const type = asString(envRaw.type, 'color');
-    if (type === 'none') {
-      environment = { type: 'none' };
-    } else if (type === 'env') {
-      environment = { type: 'env', id: asString(envRaw.id, 'stars') };
-    } else if (type === 'color') {
-      environment = { type: 'color', value: asString(envRaw.value, defaultColor) };
-    }
-  }
+  // Same validator the stage uses, so config.yaml and a runtime selection
+  // cannot disagree about what is usable.
+  const environment = normalizeEnvironmentSelection(data.environment) ?? defaults.environment;
 
   const cameraRaw = data.camera && typeof data.camera === 'object'
     ? /** @type {Record<string, unknown>} */ (data.camera)
