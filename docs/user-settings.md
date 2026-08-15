@@ -29,9 +29,10 @@ Autosave runs shortly after you change something (~400 ms debounce).
 
 ### Motion Deck (`motionDeck`)
 
-Settings → **Motion**. Each card is a clip you can fire with a key or by
-clicking it; it plays **once** and then the Animations selection comes back.
-Firing a card never changes `animationId`.
+Settings → **Motion**. Each row of the deck is a clip you can fire with a key or
+by clicking its name; it plays **once** and then the Animations selection comes
+back. Firing a card never changes `animationId`. Past five rows the deck gets a
+filter box, which only narrows what is listed — it never touches the file.
 
 ```yaml
 motionDeck:

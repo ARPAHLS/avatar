@@ -42,42 +42,106 @@
   color: #4f3f70;
 }
 
-.motion-deck__cards {
+/* The deck is one surface with a row per clip: the whole point of the panel is
+   the name-to-chord pairing, and a card each buries twenty of those in a column
+   taller than the drawer. */
+.motion-deck__table {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-}
-
-.motion-deck__card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 8px;
   border: 1px solid rgba(161, 138, 214, 0.38);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.55);
+  overflow: hidden;
 }
 
-/* Still readable: an unavailable card has to be able to say why it is one. */
-.motion-deck__card--missing {
-  border-style: dashed;
-  border-color: rgba(122, 107, 150, 0.45);
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.motion-deck__card-head {
+.motion-deck__filter {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 5px 8px;
+  border-bottom: 1px solid rgba(161, 138, 214, 0.28);
+  color: #8d7fae;
+}
+
+.motion-deck__filter-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: #4f3f70;
+  font-size: 12px;
+}
+
+.motion-deck__filter-input:focus {
+  outline: none;
+}
+
+.motion-deck__filter-input::placeholder {
+  color: #8d7fae;
+}
+
+.motion-deck__filter-clear {
+  display: flex;
+  flex-shrink: 0;
+  padding: 2px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #7a6b96;
+  cursor: pointer;
+}
+
+.motion-deck__filter-clear:hover {
+  background: rgba(214, 200, 247, 0.55);
+  color: #4f3f70;
+}
+
+/* Scrolls itself rather than the drawer, so Add motion stays put under a deck
+   of any length. */
+.motion-deck__rows {
+  display: flex;
+  flex-direction: column;
+  max-height: 264px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 120, 180, 0.45) transparent;
+}
+
+.motion-deck__rows::-webkit-scrollbar {
+  width: 4px;
+}
+
+.motion-deck__rows::-webkit-scrollbar-thumb {
+  background: rgba(140, 120, 180, 0.45);
+  border-radius: 999px;
+}
+
+.motion-deck__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 5px 3px 3px;
+}
+
+.motion-deck__row + .motion-deck__row {
+  border-top: 1px solid rgba(161, 138, 214, 0.2);
+}
+
+.motion-deck__row--missing {
+  background: rgba(122, 107, 150, 0.07);
+}
+
+.motion-deck__empty {
+  padding: 8px;
 }
 
 .motion-deck__play {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
-  padding: 3px 6px;
+  padding: 4px 6px;
   border: 0;
   border-radius: 7px;
   background: transparent;
@@ -123,16 +187,27 @@
   color: #4f3f70;
 }
 
-.motion-deck__missing {
-  font-size: 11px;
-  line-height: 1.4;
+/* A row has no space for the sentence a card carried; it says which state it is
+   in and the note under Clear unavailable says what that means. */
+.motion-deck__badge {
+  flex-shrink: 0;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(122, 107, 150, 0.18);
   color: #7a6b96;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
+/* Chords sit against the right edge so the column reads down as a key list,
+   and wrap in place when a clip has several. */
 .motion-deck__keys {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 4px;
+  flex: 0 1 auto;
 }
 
 .motion-deck__key,
