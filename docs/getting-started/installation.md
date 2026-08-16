@@ -6,9 +6,9 @@ Three ways to run AVATAR, simplest first.
 
 No Node.js. Download and run:
 
-**[AVATAR-Setup-0.6.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.6.0/AVATAR-Setup-0.6.0.exe)**
+**[AVATAR-Setup-0.7.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.7.0/AVATAR-Setup-0.7.0.exe)**
 
-Also listed on [Releases](https://github.com/ARPAHLS/avatar/releases/tag/v0.6.0). Accept the EULA, finish the wizard, launch **AVATAR**.
+Also listed on [Releases](https://github.com/ARPAHLS/avatar/releases/tag/v0.7.0). Accept the EULA, finish the wizard, launch **AVATAR**.
 
 <p align="center">
   <img src="../screenshots/installer.png" alt="AVATAR Windows installer — license agreement" width="100%" />

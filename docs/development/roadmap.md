@@ -12,7 +12,6 @@ Near-term product work on the desktop companion.
 
 - [ ] Local agent/event bus so external tools can drive the avatar (#6)
 - [ ] Keyword → animation mapping table (#7) — thin consumer of the bus; intent detection stays pluggable
-- [ ] Animation hotkeys / keybindings (#24)
 - [ ] Additive Animations menu — keep bundled clips, append custom, scroll + search (#46)
 - [ ] Optional idle VRMA loop (#8)
 - [ ] VRM facial expressions (presets + triggers) (#43)
@@ -78,15 +77,18 @@ Longer arc — plug-and-play adapters, not hard-coded models. See also [Your AI 
 
 ---
 
-## Landed on main since v0.6.0
+## Landed on main since v0.7.0
 
+## v0.7.0 — Shipped
+
+- [x] Motion Deck — one-shot hotkeys without changing Animations selection (#24, #51)
+- [x] Stage command layer + `animation.play` `mode: once` (#6, #50, #51)
 - [x] Custom animations folder — Settings → Directories → Animations (#23, #45)
 - [x] Production builds omit `custom/` env media by default (#13, #44)
 - [x] Maintainer release checklist (#28, #47)
 - [x] Environment picker still posters + lazy custom folder reads (#22 related, #49)
 - [x] README badge cleanup (drop CI badge; VRM Docs → vrm.dev/en)
-
----
+- [x] Avatar re-select no longer hides the stage (#6, #50)
 
 ## v0.6.0 — Shipped
 
