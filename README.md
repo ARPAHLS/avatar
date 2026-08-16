@@ -123,7 +123,7 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 
 <p align="center">
   <img src="docs/screenshots/AVATAR_M5_Animations_Select_Greeting.gif" alt="Selecting Greeting from the Animations menu" height="400" />
-  <img src="docs/screenshots/AVATAR_M5_loop.gif" alt="Default animation loop on the companion stage" height="400" />
+  <img src="docs/screenshots/AVATAR_31_speak.gif" alt="Speaking" height="400" />
 </p>
 
 ### Swap avatars
