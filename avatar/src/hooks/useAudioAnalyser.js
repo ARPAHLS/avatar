@@ -43,6 +43,8 @@ export function useAudioAnalyser(enabled) {
   const analyserRef = useRef(null);
   const bufferRef = useRef(null);
   const lastSpeechRef = useRef(0);
+  // Always current RMS for chrome that must not depend on React (live dot).
+  const levelRef = useRef(0);
 
   const attach = useCallback((sourceNode, audioContext, options = {}) => {
     if (!sourceNode || !audioContext) return;
@@ -54,6 +56,7 @@ export function useAudioAnalyser(enabled) {
   const detach = useCallback(() => {
     analyserRef.current = null;
     bufferRef.current = null;
+    levelRef.current = 0;
     setLevel(0);
     setSpeaking(false);
   }, []);
@@ -70,6 +73,7 @@ export function useAudioAnalyser(enabled) {
       const buffer = bufferRef.current;
       if (analyser && buffer) {
         const nextLevel = measureLevel(analyser, buffer);
+        levelRef.current = nextLevel;
         setLevel(nextLevel);
         const now = performance.now();
         if (nextLevel > SPEAKING_THRESHOLD) {
@@ -88,5 +92,5 @@ export function useAudioAnalyser(enabled) {
     };
   }, [detach, enabled]);
 
-  return { attach, detach, level, speaking };
+  return { attach, detach, level, levelRef, speaking };
 }

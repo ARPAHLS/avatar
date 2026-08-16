@@ -295,28 +295,63 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  flex-shrink: 0;
+  /* Amplitude 0…1 while --live; ignored for waiting / error. */
+  --live-level: 0;
   background: #84cc16;
   box-shadow:
-    0 0 6px rgba(132, 204, 22, 0.85),
-    0 0 12px rgba(163, 230, 53, 0.55);
-  animation: avatar-live-dot-pulse 1.8s ease-in-out infinite;
+    0 0 6px rgba(132, 204, 22, 0.55),
+    0 0 12px rgba(163, 230, 53, 0.35);
 }
 
-@keyframes avatar-live-dot-pulse {
+/* Soft amber — source on, capture not ready yet. */
+.avatar-glass-bar__live-dot--waiting {
+  background: #e4c46a;
+  box-shadow:
+    0 0 5px rgba(228, 196, 106, 0.55),
+    0 0 10px rgba(228, 196, 106, 0.28);
+  animation: avatar-live-dot-breathe 2.4s ease-in-out infinite;
+}
+
+/* Capture healthy: pastel mint at silence → brighter lime as level rises. */
+.avatar-glass-bar__live-dot--live {
+  background: color-mix(in srgb, #9bb8a8, #84cc16 calc(var(--live-level) * 100%));
+  box-shadow:
+    0 0 calc(4px + (var(--live-level) * 6px)) color-mix(in srgb, #9bb8a8, #84cc16 calc(var(--live-level) * 100%)),
+    0 0 calc(8px + (var(--live-level) * 10px)) color-mix(in srgb, transparent, #a3e635 calc(var(--live-level) * 55%));
+  transform: scale(calc(1 + (var(--live-level) * 0.22)));
+  opacity: calc(0.72 + (var(--live-level) * 0.28));
+  animation: none;
+}
+
+/* Soft coral — permission / device / capture failure. */
+.avatar-glass-bar__live-dot--error {
+  background: #f0a4a4;
+  box-shadow:
+    0 0 5px rgba(240, 164, 164, 0.6),
+    0 0 10px rgba(240, 164, 164, 0.3);
+  animation: avatar-live-dot-breathe 2.8s ease-in-out infinite;
+}
+
+@keyframes avatar-live-dot-breathe {
   0%,
   100% {
     transform: scale(1);
-    opacity: 1;
-    box-shadow:
-      0 0 6px rgba(132, 204, 22, 0.85),
-      0 0 12px rgba(163, 230, 53, 0.55);
+    opacity: 0.85;
   }
   50% {
-    transform: scale(1.15);
-    opacity: 0.75;
-    box-shadow:
-      0 0 10px rgba(163, 230, 53, 1),
-      0 0 18px rgba(190, 242, 100, 0.65);
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-glass-bar__live-dot--waiting,
+  .avatar-glass-bar__live-dot--error,
+  .avatar-glass-bar__live-dot--live {
+    animation: none;
+    transform: none;
+    opacity: 1;
   }
 }
 

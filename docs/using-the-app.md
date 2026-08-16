@@ -71,7 +71,16 @@ Scale is remembered in `config.yaml`.
 
 ### Live lip-sync dot
 
-A **green pulsing dot** appears when lip sync is actively capturing (`Audio source` not Off, status **Capturing (local)**). Hover title: *Lip sync active*.
+When an audio source is selected (not **Off**), an 8px dot sits left of the gear:
+
+| Look | Meaning | Hover label |
+| :--- | :--- | :--- |
+| Soft **amber** | Waiting — source on, capture not ready yet | *Lip sync waiting for audio* |
+| Soft **mint** | Capturing, quiet | *Lip sync listening* |
+| Brighter **green** + stronger glow | Capturing, audio rising | *Lip sync active* |
+| Soft **coral** | Capture error (open **Voice**) | *Lip sync error — open Voice* |
+
+Loudness drives the green intensity while capturing; silence eases back to mint. With **reduced motion**, colors stay and the pulse freezes.
 
 ### Gear menu
 
@@ -388,7 +397,7 @@ Persistence details: [User settings](user-settings.md).
 1. Place the companion with drag or the snap pad.  
 2. Set scale ×0.5 / ×1 / ×2.  
 3. Appearance → pick avatar and environment. Optional: Settings → Directories for local folders, and/or Settings → connect VRoid Hub then Appearance → pick a Hub character.  
-4. Voice → Device output (or window/mic) until the green dot appears when sound plays.  
+4. Voice → Device output (or window/mic) until the live dot turns mint/green when sound plays.  
 5. Leave **Default** animation running, or pick a single clip.  
 6. Nudge Camera if framing feels off; use section resets or **Reset all** if you want a clean slate.
 

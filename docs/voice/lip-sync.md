@@ -21,7 +21,15 @@ Pick the input first: [Audio sources](audio-sources.md). Everyday steps: [Using 
 
 ## Live UI
 
-Glass bar **green pulsing dot** = capture active and lip sync enabled.  
+Glass-bar **live dot** (left of the gear) reflects capture status and loudness — not a binary “on” light:
+
+| Dot | Meaning |
+| :--- | :--- |
+| Hidden | Audio source **Off** |
+| Soft amber | Source selected; waiting / starting |
+| Soft mint → brighter green | Capturing; green tracks analyser level |
+| Soft coral | Capture error — check Gear → **Voice** |
+
 Voice drawer shows a **plain-language status** (for example **Capturing (local)** or **Starting capture…**), a short **local-only privacy** note, and **Restart audio capture**. Permission failures include actionable copy (desktop can open system privacy settings). Details: [Audio sources → Privacy](audio-sources.md#privacy-what-stays-local).
 
 <p align="center">
@@ -32,5 +40,5 @@ Voice drawer shows a **plain-language status** (for example **Capturing (local)*
 ## Tips
 
 - Prefer **Device output** on desktop when watching videos or chatting with an AI that plays audio through the system.  
-- If the mouth never moves, confirm the green dot, OS mute, and that the selected window (if any) is actually producing sound.  
+- If the mouth never moves, confirm the live dot is mint/green (not amber waiting or coral error), OS mute, and that the selected window (if any) is actually producing sound.  
 - Extremely quiet sources may need higher OS volume or a closer mic.

@@ -34,7 +34,7 @@ On first launch you get **Avatar 1**, **Default** animation (Greeting, then a lo
 ## 3. Try the essentials (2 minutes)
 
 1. Gear → **Appearance** → pick **Avatar 2** or **3**, then an environment (**Code**, **Stars**, **None**, …).  
-2. Gear → **Voice** → leave **Device output (auto)** (or pick a window / mic). Play music or a video — watch the mouth and the green dot.  
+2. Gear → **Voice** → leave **Device output (auto)** (or pick a window / mic). Play music or a video — watch the mouth and the live dot (mint when quiet, greener when loud).  
 3. Gear → **Animations** → try **Peace Sign**, then back to **Default**.  
 4. Gear → **Settings** → click a **3×3** cell to snap; drag the bar afterward and notice the pad deselects.  
 5. Scale menu → try **×0.5** then back to **×1**.  

@@ -18,7 +18,7 @@ export function useAudioSource(sourceId, audioFile = null, options = {}) {
   const audioElementRef = useRef(null);
   const enabled = sourceId !== 'none';
 
-  const { attach, detach, level, speaking } = useAudioAnalyser(enabled);
+  const { attach, detach, level, levelRef, speaking } = useAudioAnalyser(enabled);
 
   const cleanup = useCallback(async () => {
     detach();
@@ -152,6 +152,7 @@ export function useAudioSource(sourceId, audioFile = null, options = {}) {
 
   return {
     level,
+    levelRef,
     speaking,
     status,
     error,
