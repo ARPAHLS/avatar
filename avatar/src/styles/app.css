@@ -1307,7 +1307,7 @@
 }
 
 .voice-status {
-  text-transform: capitalize;
+  font-weight: 500;
 }
 
 .voice-status--active {

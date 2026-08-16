@@ -22,7 +22,7 @@ Pick the input first: [Audio sources](audio-sources.md). Everyday steps: [Using 
 ## Live UI
 
 Glass bar **green pulsing dot** = capture active and lip sync enabled.  
-Voice drawer shows status text (`idle`, `starting`, `active`, `error`, …) and **Restart audio capture**.
+Voice drawer shows a **plain-language status** (for example **Capturing (local)** or **Starting capture…**), a short **local-only privacy** note, and **Restart audio capture**. Permission failures include actionable copy (desktop can open system privacy settings). Details: [Audio sources → Privacy](audio-sources.md#privacy-what-stays-local).
 
 <p align="center">
   <img src="../screenshots/11-bar-live-dot.png" alt="Live dot" height="100" />

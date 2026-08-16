@@ -20,7 +20,7 @@ Near-term product work on the desktop companion.
 
 - [ ] Reactive glass-bar live dot (amplitude + capture status) (#42)
 - [ ] Improve lip-sync beyond amplitude cycling (#9)
-- [ ] Clearer capture-permission and privacy copy (#12)
+- [x] Clearer capture-permission and privacy copy (#12)
 
 ### Appearance & performance
 
@@ -78,6 +78,8 @@ Longer arc — plug-and-play adapters, not hard-coded models. See also [Your AI 
 ---
 
 ## Landed on main since v0.7.0
+
+- [x] Clearer Voice capture-permission and privacy copy (#12)
 
 ## v0.7.0 — Shipped
 

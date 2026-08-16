@@ -41,7 +41,7 @@ const desktopOptions = [
     id: 'system',
     label: 'Device output (auto)',
     description:
-      'Captures whatever audio your PC is playing — music, Chrome, assistants, games. Uses Windows/macOS loopback in the desktop app.',
+      'Captures whatever audio your PC is playing — music, Chrome, assistants, games. Uses OS loopback in the desktop app; levels stay on this device.',
     requiresPermission: true,
   },
   {

@@ -246,6 +246,12 @@ function assertTrustedLibrarySender(event) {
   }
 }
 
+function assertTrustedDesktopSender(event) {
+  if (!mainWindow || mainWindow.isDestroyed() || event.senderFrame !== mainWindow.webContents.mainFrame) {
+    throw new Error('Rejected desktop IPC call from an untrusted sender.');
+  }
+}
+
 function getLogoPath() {
   return path.join(__dirname, '../public/AVATAR_LOGO_150.png');
 }
@@ -515,6 +521,22 @@ ipcMain.handle('desktop:sample-luma', async () => {
   } catch {
     return null;
   }
+});
+
+// Allowlisted OS privacy panes only — never a free-form URL from the renderer.
+ipcMain.handle('shell:open-privacy-settings', (event) => {
+  assertTrustedDesktopSender(event);
+  if (process.platform === 'win32') {
+    void shell.openExternal('ms-settings:privacy-microphone');
+    return true;
+  }
+  if (process.platform === 'darwin') {
+    void shell.openExternal(
+      'x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone',
+    );
+    return true;
+  }
+  return false;
 });
 
 ipcMain.handle('window:snap', (_event, corner) => {

@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **Voice panel and docs spell out capture status and privacy.** Gear → **Voice** shows plain-language status (`Starting capture…`, `Capturing (local)`, …) instead of raw tokens, keeps a local-only privacy note next to the source picker, and turns permission failures into actionable copy (with a desktop button into system privacy settings on Windows/macOS). [Audio sources](docs/voice/audio-sources.md) expands permissions troubleshooting and a short “what stays local” section; the README privacy line matches. (#12)
+
 ### Fixed
 
 ## [0.7.0] — 2026-08-16

@@ -194,7 +194,7 @@ Beyond the bundled samples, you can bring your own characters and backdrops: **S
 
 ## Privacy
 
-Runs locally. Audio uses Web APIs / Electron loopback; nothing is uploaded. See [audio sources](docs/voice/audio-sources.md) for capture options.
+Runs locally. Audio uses Web APIs / Electron loopback so the mouth can follow what you hear; **AVATAR only measures levels on this device for lip sync — nothing is uploaded.** Capture may ask for microphone or screen/audio permission; that stays in the local process. Details: [audio sources — privacy](docs/voice/audio-sources.md#privacy-what-stays-local).
 
 ---
 
