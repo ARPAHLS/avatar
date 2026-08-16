@@ -6,6 +6,7 @@ import { defaultAvatar } from '../../config/defaults';
 import {
   animationCatalog as bundledAnimations,
   createVrmaResolver,
+  findAnimation,
   getAnimationById,
 } from '../../config/animations';
 import { useAmplitudeLipSync, resetLipSyncExpressions } from '../../hooks/useAmplitudeLipSync';
@@ -20,6 +21,8 @@ export function VrmAvatar({
   animationId = 'rest',
   animationCatalog = bundledAnimations,
   animationRequest = 0,
+  motionOverlay = null,
+  onMotionOverlayEnd,
   avatarPosition,
   avatarRotation,
   audioLevel = 0,
@@ -30,6 +33,12 @@ export function VrmAvatar({
   const group = useRef(null);
   const [vrm, setVrm] = useState(null);
   const activeAnimationRef = useRef(animationId);
+  // What the selection was when a one-shot took the stage, so the effect can
+  // tell "the gesture ended" from "the selection changed" once it clears.
+  const resumeRef = useRef(null);
+  const overlayId = motionOverlay?.animationId ?? null;
+  // Read only by the effect's dependency list: it is what re-fires the same clip.
+  const overlayToken = motionOverlay?.token ?? 0;
 
   const { play, playSequence, cancel, returnToRest, update: updateMixer } = useVrmAnimation(vrm);
   const updateLipSync = useAmplitudeLipSync(vrm);
@@ -96,12 +105,37 @@ export function VrmAvatar({
   useEffect(() => {
     if (!vrm) return undefined;
 
+    if (overlayId) {
+      // Set before the bail-out below: the previous run's cleanup has already
+      // cancelled the sequence either way, so both paths are a resume.
+      resumeRef.current = { animationId, animationRequest };
+
+      // Exact, unlike the selection below: `getAnimationById` falls back to the
+      // first clip, and a gesture should end rather than become another one.
+      const overlayEntry = findAnimation(animationCatalog, overlayId);
+      if (overlayEntry?.source !== 'vrma' || !overlayEntry.vrmaUrl) {
+        onMotionOverlayEnd?.();
+        return undefined;
+      }
+
+      void play(overlayEntry.vrmaUrl, 'once', () => onMotionOverlayEnd?.());
+      return undefined;
+    }
+
+    // A pick made while a gesture was running is a fresh start, not a resume.
+    const resume = resumeRef.current;
+    resumeRef.current = null;
+    const resuming =
+      resume?.animationId === animationId && resume?.animationRequest === animationRequest;
+
     const entry = getAnimationById(animationId, animationCatalog);
     activeAnimationRef.current = animationId;
 
     if (entry.source === 'sequence') {
       const stopSequence = playSequence(
-        entry.intro ?? [],
+        // The intro is a greeting. Playing it every time a gesture hands the
+        // stage back would have the avatar say hello after each hotkey.
+        resuming ? [] : (entry.intro ?? []),
         entry.sequence ?? [],
         createVrmaResolver(animationCatalog),
       );
@@ -116,7 +150,19 @@ export function VrmAvatar({
 
     returnToRest();
     return undefined;
-  }, [animationCatalog, animationId, animationRequest, cancel, play, playSequence, returnToRest, vrm]);
+  }, [
+    animationCatalog,
+    animationId,
+    animationRequest,
+    cancel,
+    onMotionOverlayEnd,
+    overlayId,
+    overlayToken,
+    play,
+    playSequence,
+    returnToRest,
+    vrm,
+  ]);
 
   useFrame((_, delta) => {
     if (!vrm) return;

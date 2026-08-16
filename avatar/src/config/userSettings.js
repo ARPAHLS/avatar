@@ -4,6 +4,7 @@ import { defaultAvatarId, defaultSkinId } from './avatars';
 import { defaultAvatar, defaultCamera, defaultLight } from './defaults';
 import { defaultColor, normalizeEnvironmentSelection } from './environmentSelection';
 import { defaultWindowScale, normalizeWindowScale } from './windowScale';
+import { createEmptyDeck, normalizeMotionDeck } from '../motion-deck/motionDeck';
 
 // 2: avatarTransform.rotation is the user's framing rotation only. Version 1
 // seeded it from a default that had the VRM 0.0 180° facing flip baked in, so
@@ -53,6 +54,7 @@ export function createDefaultUserSettings() {
     overlayMode: true,
     windowScale: defaultWindowScale,
     directories: createDefaultDirectories(),
+    motionDeck: createEmptyDeck(),
   };
 }
 
@@ -196,6 +198,9 @@ export function normalizeUserSettings(raw) {
     overlayMode: data.overlayMode !== false,
     windowScale: normalizeWindowScale(asNumber(data.windowScale, defaults.windowScale)),
     directories: normalizeDirectories(data.directories),
+    // Shape only: cards are deliberately not checked against the animation
+    // catalog. See src/motion-deck/motionDeck.js.
+    motionDeck: normalizeMotionDeck(data.motionDeck),
   };
 }
 
@@ -221,5 +226,6 @@ export function snapshotUserSettings(state) {
     overlayMode: state.overlayMode,
     windowScale: state.windowScale,
     directories: state.directories,
+    motionDeck: state.motionDeck,
   });
 }

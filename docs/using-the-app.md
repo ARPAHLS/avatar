@@ -335,6 +335,16 @@ A folder with no matching files is **not** applied (error notice; previous sourc
 
 With **Animations → Custom** active, the bundled **Default** greeting sequence and the VRMA Motion Pack are hidden — the folder is the whole menu. Your saved clip is matched by file path, so it survives a rescan; if that file is gone, the first clip in the folder is selected instead. Back on **Default**, the selection returns to the bundled **Default** sequence. Making your own `.vrma`: [VRMA animations](animations/vrma.md).
 
+### Motion
+
+A shortlist of clips you can fire without changing what Gear → **Animations** is set to. **Add motion** picks a clip from the current catalog; each row takes any number of keys (**+** on the row, then press the chord). Pressing a chord — or clicking the row's name — plays that clip **once**, then the Animations selection comes back.
+
+<p align="center">
+  <img src="screenshots/83-settings-motion.png" alt="Motion deck with a row per clip" height="260" />
+</p>
+
+Rows are yours, not a view of the folder: switching **Directories → Animations** does not delete them. A row whose clip is not in the current folder reads *unavailable* and keeps its keys reserved until that folder comes back; **Clear unavailable** is the only sweep. Past five rows the deck gets a filter box for reaching one without scrolling. Details and the `config.yaml` shape: [User settings](user-settings.md#motion-deck-motiondeck).
+
 ### VRoid Hub (desktop)
 
 Register your own VRoid Hub OAuth app, paste Client ID / secret,
@@ -385,6 +395,6 @@ Persistence details: [User settings](user-settings.md).
 
 ## 9. Keyboard / mouse notes
 
-- There is no global hotkey set yet — all actions are pointer-driven.  
+- Settings → **Motion** binds keys to clips; they fire while the AVATAR window has focus (see [User settings](user-settings.md#motion-deck-motiondeck)). Nothing is bound out of the box, and there is still no OS-wide hotkey — every other action is pointer-driven.  
 - Click outside a drawer/menu (or blur the window on desktop) to dismiss menus.  
 - The 3D canvas does not steal drag — move via the glass bar.
