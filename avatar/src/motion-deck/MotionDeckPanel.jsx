@@ -1,14 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Play, Plus, Search, X } from 'lucide-react';
 import { getSelectableAnimations } from '../config/animations';
 import './motionDeck.css';
+import { useContainNestedWheel } from './useContainNestedWheel';
 
 // Below this the filter is noise: you can see the whole deck at once.
 const FILTER_THRESHOLD = 5;
 
 /**
- * Settings → Motion. The deck is a shortlist the user builds, not a view of the
- * catalog, so this panel never grows with the animation folder.
+ * Settings → Animation hotkeys. The deck is a shortlist the user builds, not a
+ * view of the catalog, so this panel never grows with the animation folder.
  *
  * One row per clip inside a single surface, rather than a card each: a deck of
  * twenty is a list you scan for a name, and the pairing of name to chord is the
@@ -31,6 +32,12 @@ export function MotionDeckPanel({
   const [adding, setAdding] = useState(false);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('');
+  const rowsRef = useRef(null);
+  const pickerRef = useRef(null);
+  const optionsRef = useRef(null);
+
+  useContainNestedWheel(rowsRef, undefined, cards.length > 0 && !adding);
+  useContainNestedWheel(pickerRef, optionsRef, adding);
 
   // Closing the drawer unmounts this while recording may still be armed, and
   // the pill saying so goes with it.
@@ -74,8 +81,9 @@ export function MotionDeckPanel({
   return (
     <div className="motion-deck">
       <p className="panel-note panel-note--compact">
-        Motions you can fire without changing what Gear → Animations is set to. Each one plays
-        once, then the selection comes back. Keys work while the AVATAR window has focus.
+        Bind keys to fire a clip once without changing Gear → Animations. When it
+        finishes, the selection comes back. Keys work while the AVATAR window has
+        focus.
       </p>
 
       {notice && (
@@ -93,7 +101,9 @@ export function MotionDeckPanel({
       )}
 
       {cards.length === 0 ? (
-        !adding && <p className="panel-note panel-note--compact">No motions on the deck yet.</p>
+        !adding && (
+          <p className="panel-note panel-note--compact">No animation hotkeys yet.</p>
+        )
       ) : (
         <div className="motion-deck__table">
           {cards.length > FILTER_THRESHOLD && (
@@ -102,7 +112,7 @@ export function MotionDeckPanel({
               <input
                 type="text"
                 className="motion-deck__filter-input"
-                placeholder={`Filter ${cards.length} motions…`}
+                placeholder={`Filter ${cards.length} hotkeys…`}
                 value={filter}
                 // A key press while recording is the binding, wherever the caret
                 // is — arming the filter box would eat the first letter typed.
@@ -122,7 +132,7 @@ export function MotionDeckPanel({
             </div>
           )}
 
-          <div className="motion-deck__rows">
+          <div className="motion-deck__rows" ref={rowsRef}>
             {rows.map(({ card, index }) => (
               <div
                 key={`${card.animationId}-${index}`}
@@ -190,7 +200,7 @@ export function MotionDeckPanel({
 
             {rows.length === 0 && (
               <p className="panel-note panel-note--compact motion-deck__empty">
-                No motion on the deck matches “{filter.trim()}”.
+                No hotkey matches “{filter.trim()}”.
               </p>
             )}
           </div>
@@ -198,7 +208,7 @@ export function MotionDeckPanel({
       )}
 
       {adding ? (
-        <div className="motion-deck__picker">
+        <div className="motion-deck__picker" ref={pickerRef}>
           <input
             type="text"
             className="motion-deck__search"
@@ -207,7 +217,7 @@ export function MotionDeckPanel({
             autoFocus
             onChange={(event) => setQuery(event.target.value)}
           />
-          <div className="motion-deck__options">
+          <div className="motion-deck__options" ref={optionsRef}>
             {options.map((entry) => (
               <button
                 key={entry.id}
@@ -233,7 +243,7 @@ export function MotionDeckPanel({
         <div className="panel-actions">
           <button type="button" className="panel-button" onClick={() => setAdding(true)}>
             <Plus size={14} strokeWidth={2.5} />
-            Add motion
+            Add animation
           </button>
         </div>
       )}
@@ -241,7 +251,7 @@ export function MotionDeckPanel({
       {hasMissing && (
         <>
           <p className="panel-note panel-note--compact">
-            Unavailable motions are not in the current animations folder. They keep their keys
+            Unavailable entries are not in the current animations folder. They keep their keys
             reserved and come back when the folder does.
           </p>
           <button

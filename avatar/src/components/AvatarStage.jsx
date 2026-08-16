@@ -1046,7 +1046,7 @@ export function AvatarStage() {
                 </>
               )}
               <Divider />
-              <p className="settings-section-title">Motion</p>
+              <p className="settings-section-title">Animation hotkeys</p>
               <MotionDeckPanel {...motionDeckState} animationCatalog={animationCatalog} />
               <Divider />
               <p className="settings-section-title">VRoid Hub</p>

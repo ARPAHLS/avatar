@@ -29,14 +29,14 @@ Autosave runs shortly after you change something (~400 ms debounce).
 
 ### Motion Deck (`motionDeck`)
 
-Settings → **Motion**. Each row of the deck is a clip you can fire with a key or
+Settings → **Animation hotkeys**. Each row of the deck is a clip you can fire with a key or
 by clicking its name; it plays **once** and then the Animations selection comes
 back. Firing a card never changes `animationId`. Past five rows the deck gets a
 filter box, which only narrows what is listed — it never touches the file.
 
 <p align="center">
-  <img src="screenshots/83-settings-motion.png" alt="Motion deck with a row per clip" height="260" />
-  <img src="screenshots/84-settings-motion-add-filter.png" alt="Searching the animation catalog from Add motion" height="260" />
+  <img src="screenshots/83-settings-motion.png" alt="Animation hotkeys with a row per clip" height="260" />
+  <img src="screenshots/84-settings-motion-add-filter.png" alt="Searching the animation catalog from Add animation" height="260" />
 </p>
 
 ```yaml
@@ -66,7 +66,7 @@ short, but it also accumulates across animation folders, so it is not capped.
 **Switching animation folders does not delete cards.** Cards whose clip is not
 in the current folder are shown as *unavailable* and their keys do nothing, but
 they stay in `config.yaml` and come back when the folder does. Settings →
-Motion → **Clear unavailable** is the only thing that removes them, apart from
+Animation hotkeys → **Clear unavailable** is the only thing that removes them, apart from
 **Reset all settings**.
 
 Keys are only active while the AVATAR window has focus, and are ignored while

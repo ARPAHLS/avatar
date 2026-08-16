@@ -2,7 +2,7 @@
 
 A short, user-built list of clips that can be fired — by key or by click —
 without changing what Gear → **Animations** is set to. Each fires once and hands
-the stage back to the selection. Settings → **Motion**. (#24)
+the stage back to the selection. Settings → **Animation hotkeys**. (#24)
 
 ## What is in here
 
@@ -11,10 +11,12 @@ the stage back to the selection. Settings → **Motion**. (#24)
 | `chords.js` | keyboard chords as text, keyed off `event.code` |
 | `motionDeck.js` | the deck itself: normalize, resolve, bind, heal |
 | `useMotionDeck.js` | the one key listener, plus the panel's actions |
-| `MotionDeckPanel.jsx` | Settings → Motion |
+| `MotionDeckPanel.jsx` | Settings → Animation hotkeys |
+| `containNestedWheel.js` / `useContainNestedWheel.js` | nested list wheel vs GlassDrawer |
 | `motionDeck.css` | imported by the panel, not by the global stylesheet |
 
-`chords.js` and `motionDeck.js` are pure and covered by `node --test`.
+`chords.js`, `motionDeck.js`, and `containNestedWheel.js` are pure and covered by
+`node --test`.
 
 ## What it is built on, and what it is not
 
@@ -39,8 +41,8 @@ Delete this folder, then remove:
   `snapshotUserSettings` (4 lines).
 - `src/components/AvatarStage.jsx` — the three `motion-deck` imports, the
   `motionDeck` state, `useMotionDeck(...)`, `motionDeck` in the autosave
-  snapshot and its dependency list, and the `Motion` block in the settings
-  drawer.
+  snapshot and its dependency list, and the Animation hotkeys block in the
+  settings drawer.
 
 `grep -rn "motion-deck\|motionDeck" src` finds every one of them. A leftover
 `motionDeck:` key in someone's `config.yaml` is ignored by

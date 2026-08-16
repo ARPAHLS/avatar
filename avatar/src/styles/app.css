@@ -976,7 +976,7 @@
 }
 
 .environment-panel--custom-open {
-  max-height: 250px;
+  max-height: 280px;
 }
 
 .environment-panel__scroll {
@@ -1060,21 +1060,43 @@
 
 .environment-custom__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, …) so long unbroken labels cannot widen a column. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
   margin-top: 10px;
   padding: 2px 0 4px;
+  align-items: stretch;
 }
 
 .environment-custom__grid .background-thumb {
-  width: auto;
+  width: 100%;
+  /* Portrait tile in a 3-up grid — same size for every card. */
   height: auto;
-  min-height: 58px;
+  aspect-ratio: 3 / 4;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .environment-custom__grid .background-thumb img,
 .environment-custom__grid .background-thumb__pending {
-  height: 40px;
+  /* Fill the space above the label; do not shrink the label away. */
+  flex: 1 1 0;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  object-fit: cover;
+}
+
+.environment-custom__grid .background-thumb__label {
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+  padding: 4px 5px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .environment-footer {
