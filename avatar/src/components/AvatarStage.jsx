@@ -41,6 +41,7 @@ import {
 import { loadUserSettings, resetUserSettings, saveUserSettings } from '../lib/userSettingsStore';
 import { revokeThumbnailUrls } from '../lib/thumbnails';
 import { revokeEnvironmentThumbnailUrls } from '../lib/environmentThumbnails';
+import { resolveLiveDotMode } from '../lib/liveDot';
 import { VrmAvatar } from './avatar/VrmAvatar';
 import { AvatarStageShell } from './avatar/AvatarStageShell';
 import { CameraController } from './ui/CameraController';
@@ -117,13 +118,18 @@ export function AvatarStage() {
 
   const desktopApi = getDesktopApi();
 
-  const { level, speaking, status: audioStatus, error: audioError, restart } = useAudioSource(
+  const { level, levelRef, speaking, status: audioStatus, error: audioError, restart } = useAudioSource(
     audioSourceId,
     audioFile,
     { windowSourceId },
   );
 
   const lipSyncEnabled = audioSourceId !== 'none' && audioStatus === 'active';
+  const liveDotMode = resolveLiveDotMode({
+    audioSourceId,
+    audioStatus,
+    audioError,
+  });
 
   const applySettings = useCallback((settings) => {
     setSelectedAvatarId(settings.avatarId);
@@ -934,7 +940,8 @@ export function AvatarStage() {
           overlayMode={overlayMode}
           onOverlayModeToggle={handleOverlayModeToggle}
           onCloseWindow={handleCloseWindow}
-          lipSyncLive={lipSyncEnabled}
+          liveDotMode={liveDotMode}
+          liveDotLevelRef={levelRef}
         >
           <Canvas
             camera={{ position: camera.position, fov: camera.fov }}

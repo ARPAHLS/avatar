@@ -11,6 +11,7 @@ import {
 import { getDesktopApi, isDesktopMode } from '../../lib/desktopMode';
 import { BarCommandMenu } from '../ui/BarCommandMenu';
 import { WindowScaleMenu } from '../ui/WindowScaleMenu';
+import { LiveDot } from './LiveDot';
 
 export function AvatarStageShell({
   environmentSelection,
@@ -30,7 +31,8 @@ export function AvatarStageShell({
   overlayMode,
   onOverlayModeToggle,
   onCloseWindow,
-  lipSyncLive,
+  liveDotMode,
+  liveDotLevelRef,
   children,
 }) {
   const { barHeight, canvasOverflowTop, canvasOverflowSide } = STAGE;
@@ -143,9 +145,7 @@ export function AvatarStageShell({
               onSelectScale={onWindowScaleChange}
               menuRef={scaleMenuRef}
             />
-            {lipSyncLive && (
-              <span className="avatar-glass-bar__live-dot" title="Lip sync active" aria-label="Lip sync active" />
-            )}
+            <LiveDot mode={liveDotMode} levelRef={liveDotLevelRef} />
             <button
               type="button"
               className={`avatar-glass-bar__gear ${commandMenuOpen ? 'avatar-glass-bar__gear--open' : ''}`}

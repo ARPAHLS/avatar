@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Reactive glass-bar live dot** — when an audio source is selected, the 8px indicator shows waiting (amber), live quiet→loud (mint→green from analyser level), or error (coral), instead of a binary always-green pulse. Amplitude updates via a level ref on the dot node so the bar does not take an extra React state path for loudness. (#42)
+
 ### Changed
 
 - Settings section **Motion** is now **Animation hotkeys** (same `motionDeck` settings). The Add-animation picker and the deck list keep the mouse wheel until they hit the end of their own scroll, then the Settings drawer scrolls again.

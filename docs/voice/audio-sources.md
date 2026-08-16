@@ -55,7 +55,7 @@ System-wide **device output** loopback is an Electron feature — use the [Windo
 
 ## Live indicator
 
-When the source is not Off and status is **Capturing (local)** (internal `active`), a **green pulsing dot** appears on the glass bar (title: *Lip sync active*).
+When the source is not **Off**, a status-aware **live dot** sits on the glass bar (waiting amber → mint/green while capturing → coral on error). Green intensity tracks loudness; see [Lip sync → Live UI](lip-sync.md#live-ui).
 
 <p align="center">
   <img src="../screenshots/11-bar-live-dot.png" alt="Live lip-sync dot" height="120" />
