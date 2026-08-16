@@ -15,7 +15,7 @@ This is the full reference for every lip-sync input. Mouth shapes themselves are
 | Option | id | Description |
 | :--- | :--- | :--- |
 | **Device output (auto)** | `system` | **Default.** Captures what your speakers play (loopback). Best for music, videos, local LLMs talking through the OS mixer. |
-| **Pick app window** | `window` | Choose a specific window/screen from the **Window or screen** list, then wait until status is `active`. |
+| **Pick app window** | `window` | Choose a specific window/screen from the **Window or screen** list, then wait until status reads **Capturing (local)**. |
 | **Microphone** | `microphone` | Your default input device. |
 | **Audio file** | `file` | Pick a local audio file; it plays into the analyser. |
 | **Off** | `none` | Lip sync disabled; green live dot hidden. |
@@ -28,9 +28,15 @@ This is the full reference for every lip-sync input. Mouth shapes themselves are
 
 ### Permissions / troubleshooting
 
-- First capture may prompt for screen/audio permission depending on the OS.  
-- If status sticks on `error` or `starting`, click **Restart audio capture**.  
-- `awaiting-window` / `awaiting-file` means finish picking a target.
+- First capture may prompt for **microphone** or **screen/audio** permission depending on the OS and source. That is expected for Device output, Pick app window, Microphone, and browser Tab capture.
+- Status in Gear → **Voice** is written in plain language (`Starting capture…`, `Capturing (local)`, `Pick a window…`, …). Older builds showed raw tokens such as `starting` / `error`.
+- If capture is denied, the panel explains that **permission was refused**, suggests **Restart audio capture**, and on desktop can open **system privacy settings** (Windows: Settings → Privacy & security → Microphone; also check Screen and voice recording if your OS lists it).
+- If status sticks on an error after you allow access, click **Restart audio capture**, or switch source Off and back.
+- `Pick a window…` / `Pick an audio file…` means finish choosing a target — not a failure.
+
+### Privacy (what stays local)
+
+AVATAR uses capture only to **measure audio levels on this device** for lip sync (amplitude → mouth shapes). Streams are not recorded to disk as part of Voice, and **nothing is uploaded** to ARPA or any third-party avatar service. Device output / window capture may use the OS screen-audio APIs; that still stays in the local process. See also the short privacy line in the [README](../../README.md#privacy).
 
 ---
 
@@ -49,7 +55,7 @@ System-wide **device output** loopback is an Electron feature — use the [Windo
 
 ## Live indicator
 
-When the source is not Off and status is **`active`**, a **green pulsing dot** appears on the glass bar (title: *Lip sync active*).
+When the source is not Off and status is **Capturing (local)** (internal `active`), a **green pulsing dot** appears on the glass bar (title: *Lip sync active*).
 
 <p align="center">
   <img src="../screenshots/11-bar-live-dot.png" alt="Live lip-sync dot" height="120" />

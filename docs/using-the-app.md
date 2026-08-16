@@ -71,7 +71,7 @@ Scale is remembered in `config.yaml`.
 
 ### Live lip-sync dot
 
-A **green pulsing dot** appears when lip sync is actively capturing (`Audio source` not Off, status `active`). Hover title: *Lip sync active*.
+A **green pulsing dot** appears when lip sync is actively capturing (`Audio source` not Off, status **Capturing (local)**). Hover title: *Lip sync active*.
 
 ### Gear menu
 
@@ -190,9 +190,10 @@ Gear → **Voice**.
 
 ### Tips
 
-- Status line shows `idle` / `starting` / `active` / `error` / …
-- Use **Restart audio capture** if OS permissions or devices change.
-- Mouth shapes are **amplitude-based** (not phoneme ASR). See [Lip sync](voice/lip-sync.md) and [Audio sources](voice/audio-sources.md).
+- Status shows a short plain-language line (for example **Capturing (local)** or **Pick a window…**), not raw codes.
+- A privacy note in the panel states that lip sync analyses levels **locally** — nothing is uploaded.
+- Use **Restart audio capture** if OS permissions or devices change; on permission denial, desktop builds can open system privacy settings.
+- Mouth shapes are **amplitude-based** (not phoneme ASR). See [Lip sync](voice/lip-sync.md) and [Audio sources](voice/audio-sources.md) (permissions + privacy).
 
 <p align="center">
   <img src="screenshots/50-voice-panel.png" alt="Voice panel" height="200" />

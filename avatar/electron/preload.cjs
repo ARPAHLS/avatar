@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('voxDesktop', {
   setWindowScale: (factor) => ipcRenderer.invoke('window:set-scale', factor),
   getDesktopSources: (types) => ipcRenderer.invoke('desktop:get-sources', types),
   sampleDesktopLuma: () => ipcRenderer.invoke('desktop:sample-luma'),
+  openPrivacySettings: () => ipcRenderer.invoke('shell:open-privacy-settings'),
   onPositionSettled: (callback) => {
     const listener = () => callback();
     ipcRenderer.on('window:position-settled', listener);

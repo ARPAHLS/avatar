@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { formatAudioCaptureError } from '../lib/audioCaptureCopy';
 import { captureDesktopSource, captureSystemLoopback } from '../lib/electronAudio';
 import { useAudioAnalyser } from './useAudioAnalyser';
 
@@ -136,9 +137,7 @@ export function useAudioSource(sourceId, audioFile = null, options = {}) {
 
       setStatus('active');
     } catch (cause) {
-      const message =
-        cause instanceof Error ? cause.message : 'Could not start the selected audio source.';
-      setError(message);
+      setError(formatAudioCaptureError(cause));
       setStatus('error');
       await cleanup();
     }

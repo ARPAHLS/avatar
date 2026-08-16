@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import { getAudioSourceOptions } from '../../config/audioSources';
+import {
+  AUDIO_PRIVACY_NOTE,
+  labelAudioCaptureStatus,
+} from '../../lib/audioCaptureCopy';
 import { getDesktopApi } from '../../lib/desktopMode';
 import { PanelSelect } from '../ui/PanelPrimitives';
 
@@ -16,6 +20,11 @@ export function VoicePanel({
   const [windowSources, setWindowSources] = useState([]);
   const audioSourceOptions = getAudioSourceOptions();
   const desktopApi = getDesktopApi();
+  const statusLabel = labelAudioCaptureStatus(audioStatus);
+  const showPermissionHint =
+    audioStatus === 'error' &&
+    typeof audioError === 'string' &&
+    /permission denied/i.test(audioError);
 
   useEffect(() => {
     if (audioSourceId !== 'window' || !desktopApi?.getDesktopSources) return;
@@ -39,6 +48,7 @@ export function VoicePanel({
           ? 'Device output captures all PC audio automatically. Pick a window when you only want one app (Chrome, Discord, etc.).'
           : 'Choose an audio source to drive real-time lip sync. Tab capture works best for AI assistants or media in the browser.'}
       </p>
+      <p className="panel-note panel-note--compact">{AUDIO_PRIVACY_NOTE}</p>
 
       <label className="field-label" htmlFor="audio-source-select">
         Audio source
@@ -79,8 +89,22 @@ export function VoicePanel({
       )}
 
       <div className="voice-status-row">
-        <span className={`voice-status voice-status--${audioStatus}`}>{audioStatus}</span>
+        <span
+          className={`voice-status voice-status--${audioStatus}`}
+          title={typeof audioStatus === 'string' ? audioStatus : undefined}
+        >
+          {statusLabel}
+        </span>
         {audioError && <span className="voice-error">{audioError}</span>}
+        {showPermissionHint && desktopApi?.openPrivacySettings && (
+          <button
+            type="button"
+            className="panel-button"
+            onClick={() => void desktopApi.openPrivacySettings()}
+          >
+            Open system privacy settings
+          </button>
+        )}
       </div>
 
       <button type="button" className="panel-button" onClick={onRestartAudio}>
