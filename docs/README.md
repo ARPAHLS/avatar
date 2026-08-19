@@ -24,6 +24,7 @@ Electron desktop companion first; browser localhost for development.
 | [Audio sources](voice/audio-sources.md) | Desktop loopback, window, mic, file — full Voice panel reference |
 | [Lip sync](voice/lip-sync.md) | Amplitude visemes, status-aware live dot, troubleshooting |
 | [VRoid Hub connection](vroid-hub.md) | Opt-in OAuth (Settings), pick characters in Appearance, session-only Hub VRMs |
+| [Local agent bus](agents/local-bus.md) | Opt-in loopback API so scripts and agents can play animations and swap avatars |
 
 ## Project
 

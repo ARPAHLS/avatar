@@ -63,6 +63,17 @@ export const STAGE_COMMANDS = Object.freeze([
 ]);
 
 /**
+ * A one-shot has to end by itself for the selection to come back, so only a
+ * single VRMA clip qualifies — the Default sequence loops for as long as it is
+ * selected. Exported because `/v1/state` advertises the same flag (Refs #6).
+ *
+ * @param {AnimationEntry} entry
+ */
+export function isPlayableOnce(entry) {
+  return entry?.source === 'vrma' && Boolean(entry.vrmaUrl);
+}
+
+/**
  * @param {StageErrorCode} code
  * @param {string} error
  * @returns {StageCommandResult}
@@ -127,9 +138,7 @@ export function resolveStageCommand(command, payload, context) {
       const entry = findAnimation(animationCatalog, query);
       if (!entry) return fail('unknown-animation', `No animation matches "${query}".`);
 
-      // A one-shot has to end by itself for the selection to come back, and the
-      // Default sequence loops for as long as it is selected.
-      if (mode === 'once' && !(entry.source === 'vrma' && entry.vrmaUrl)) {
+      if (mode === 'once' && !isPlayableOnce(entry)) {
         return fail('not-playable-once', `"${entry.label}" is not a single clip; play it with mode "select".`);
       }
 

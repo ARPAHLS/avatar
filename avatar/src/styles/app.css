@@ -723,6 +723,11 @@
   color: rgba(63, 52, 88, 0.45);
 }
 
+.glass-drawer .agent-bus-panel__token {
+  background: rgba(255, 255, 255, 0.62);
+  border-color: rgba(161, 138, 214, 0.45);
+}
+
 .glass-drawer .panel-note--mono {
   user-select: text;
   -webkit-user-select: text;
@@ -968,6 +973,39 @@
   display: flex;
   gap: 8px;
   margin-top: 8px;
+}
+
+/* Equal columns, so a two-word label cannot end up half the width of its
+   neighbour. `--wide` is the row that holds one button. */
+.agent-bus-panel .panel-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.agent-bus-panel .panel-actions--wide {
+  grid-template-columns: 1fr;
+}
+
+.agent-bus-panel .panel-button {
+  padding: 6px 10px;
+}
+
+/* .panel-button--danger is sized for a row of its own (VRoid Hub's Disconnect);
+   in a row with a sibling its width and top margin are what tilt it. */
+.agent-bus-panel .panel-actions .panel-button--danger {
+  width: auto;
+  margin-top: 0;
+}
+
+/* The token is a value to be read and copied, so it gets the Port field's box
+   rather than the dimmed caption treatment the mono class carries. */
+.agent-bus-panel__token {
+  margin: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface);
+  opacity: 0.85;
 }
 
 .avatar-picker {

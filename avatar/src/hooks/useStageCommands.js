@@ -6,13 +6,21 @@ import { resolveStageCommand } from '../lib/stageCommands';
  * The only place a stage action is applied, so the multi-setter sequences below
  * exist once however the request arrived (Refs #6).
  *
+ * `runCommand` resolves and applies; `applyAction` applies something already
+ * resolved, which is what the local bus needs — the main process validated the
+ * request against the catalog this window reported, and only the action comes
+ * back over IPC.
+ *
  * @param {Object} args
  * @param {import('../lib/stageCommands').StageCommandContext} args.context
  * @param {{ selectedAvatarId: string, hubActive: boolean }} args.current What
  * is on stage now — needed to tell a real change from a no-op.
  * @param {Object} args.setters The stage's own `useState` setters.
- * @returns {(command: string, payload?: unknown) =>
- *   import('../lib/stageCommands').StageCommandResult}
+ * @returns {{
+ *   runCommand: (command: string, payload?: unknown) =>
+ *     import('../lib/stageCommands').StageCommandResult,
+ *   applyAction: (action: import('../lib/stageCommands').StageAction) => void,
+ * }}
  */
 export function useStageCommands({ context, current, setters }) {
   const { selectedAvatarId, hubActive } = current;
@@ -28,14 +36,9 @@ export function useStageCommands({ context, current, setters }) {
     setAudioSourceId,
   } = setters;
 
-  return useCallback(
-    (command, payload) => {
-      const result = resolveStageCommand(command, payload, context);
-      if (!result.ok) return result;
-
-      const { action } = result;
-
-      switch (action.kind) {
+  const applyAction = useCallback(
+    (action) => {
+      switch (action?.kind) {
         case 'animation.play':
           if (action.mode === 'once') {
             // Not `setAnimationId`: a one-shot leaves the menu selection, and
@@ -86,11 +89,8 @@ export function useStageCommands({ context, current, setters }) {
         default:
           break;
       }
-
-      return result;
     },
     [
-      context,
       selectedAvatarId,
       hubActive,
       setAnimationId,
@@ -104,4 +104,15 @@ export function useStageCommands({ context, current, setters }) {
       setAudioSourceId,
     ],
   );
+
+  const runCommand = useCallback(
+    (command, payload) => {
+      const result = resolveStageCommand(command, payload, context);
+      if (result.ok) applyAction(result.action);
+      return result;
+    },
+    [context, applyAction],
+  );
+
+  return { runCommand, applyAction };
 }

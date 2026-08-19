@@ -4,8 +4,8 @@ const yaml = require('js-yaml');
 
 const SETTINGS_FILE = 'config.yaml';
 // Fallback only when the renderer omits version. Prefer the schema version
-// from normalizeUserSettings / snapshotUserSettings (currently 2).
-const SETTINGS_VERSION = 2;
+// from normalizeUserSettings / snapshotUserSettings (currently 3).
+const SETTINGS_VERSION = 3;
 
 /**
  * @param {import('electron').App} app
