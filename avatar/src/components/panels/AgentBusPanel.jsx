@@ -7,8 +7,8 @@ import { normalizeAgentBusPort } from '../../config/agentBus';
  * @param {{
  *   settings: import('../../config/agentBus').AgentBusSettings,
  *   status: {
- *     running: boolean, port: number, requireToken: boolean,
- *     token: string | null, tokenPersisted: boolean, error: string | null,
+ *     running: boolean, token: string | null,
+ *     tokenPersisted: boolean, error: string | null,
  *   } | null,
  *   onChange: (next: import('../../config/agentBus').AgentBusSettings) => void,
  *   onRotateToken: () => Promise<unknown>,
@@ -104,7 +104,11 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
 
       {settings.requireToken ? (
         <>
-          <p className="panel-note--mono">{token ?? 'Generated when you enable the bus.'}</p>
+          {token ? (
+            <p className="panel-note--mono agent-bus-panel__token">{token}</p>
+          ) : (
+            <p className="panel-note panel-note--compact">Generated when you enable the bus.</p>
+          )}
           {status && !status.tokenPersisted && (
             <p className="panel-note panel-note--compact">
               No OS keychain available, so this token is kept in memory and changes every launch.
@@ -134,7 +138,7 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
         </p>
       )}
 
-      <div className="panel-actions">
+      <div className="panel-actions panel-actions--wide">
         <button type="button" className="panel-button" onClick={() => void copy('curl', example)}>
           {copied === 'curl' ? 'Copied' : 'Copy example curl'}
         </button>
@@ -153,5 +157,7 @@ function describe(settings, status) {
   // names a port, and moving would make it point at the wrong one.
   if (status?.error) return status.error;
   if (!status?.running) return 'Starting…';
-  return `Listening on 127.0.0.1:${settings.port} — POST /v1/command, GET /v1/state, ws /v1/socket.`;
+  // Just the address: the routes would wrap to three lines in a column this
+  // narrow, and Copy example curl hands over a working one anyway.
+  return `Listening on 127.0.0.1:${settings.port}.`;
 }
