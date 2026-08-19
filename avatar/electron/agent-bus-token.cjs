@@ -63,19 +63,9 @@ function rotateAgentBusToken({ tokenFilePath, encrypt }) {
   return token;
 }
 
-function clearAgentBusToken({ tokenFilePath }) {
-  try {
-    fs.unlinkSync(tokenFilePath);
-  } catch {
-    // Already gone is the state we wanted.
-  }
-}
-
 module.exports = {
-  clearAgentBusToken,
   ensureAgentBusToken,
   generateAgentBusToken,
   readAgentBusToken,
   rotateAgentBusToken,
-  writeAgentBusToken,
 };

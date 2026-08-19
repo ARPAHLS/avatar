@@ -6,7 +6,6 @@ const os = require("node:os");
 const path = require("node:path");
 const test = require("node:test");
 const {
-  clearAgentBusToken,
   ensureAgentBusToken,
   readAgentBusToken,
   rotateAgentBusToken,
@@ -59,15 +58,4 @@ test("a missing, empty or corrupt file reads as no token rather than throwing", 
 
   // …and the next enable simply mints a fresh one over the top.
   assert.match(ensureAgentBusToken(options), /^[\w-]{20,}$/);
-});
-
-test("clearing leaves nothing behind, twice over", (t) => {
-  const options = store(t);
-  ensureAgentBusToken(options);
-
-  clearAgentBusToken(options);
-  clearAgentBusToken(options);
-
-  assert.equal(fs.existsSync(options.tokenFilePath), false);
-  assert.equal(readAgentBusToken(options), null);
 });

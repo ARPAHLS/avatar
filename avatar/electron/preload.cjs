@@ -46,7 +46,6 @@ contextBridge.exposeInMainWorld('voxDesktop', {
 // is on stage, so it reports the catalog up and applies whatever comes back.
 contextBridge.exposeInMainWorld('voxAgentBus', {
   configure: (settings) => ipcRenderer.invoke('agent-bus:configure', settings),
-  getStatus: () => ipcRenderer.invoke('agent-bus:status'),
   rotateToken: () => ipcRenderer.invoke('agent-bus:rotate-token'),
   report: (snapshot) => ipcRenderer.send('agent-bus:report', snapshot),
   onAction: (listener) => {

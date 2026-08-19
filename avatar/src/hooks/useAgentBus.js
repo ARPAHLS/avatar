@@ -74,12 +74,5 @@ export function useAgentBus({ settings, snapshot, applyAction, ready }) {
     return next;
   }, [api]);
 
-  const refreshStatus = useCallback(async () => {
-    if (!api?.getStatus) return null;
-    const next = await api.getStatus();
-    setStatus(next);
-    return next;
-  }, [api]);
-
-  return { status, rotateToken, refreshStatus };
+  return { status, rotateToken };
 }

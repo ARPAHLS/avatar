@@ -324,12 +324,10 @@ function rotateAgentBusTokenNow() {
   return agentBusToken;
 }
 
+/** What Settings shows. Returned by every agent bus handler below. */
 function agentBusStatus() {
   return {
     running: agentBusServer != null,
-    enabled: agentBusSettings.enabled,
-    port: agentBusSettings.port,
-    requireToken: agentBusSettings.requireToken,
     token: agentBusSettings.requireToken ? currentAgentBusToken() : null,
     // False on a machine with no OS keychain: the token is regenerated every
     // launch there, and a copied one stops working when the app restarts.
@@ -410,6 +408,9 @@ async function startAgentBus() {
   return agentBusStatus();
 }
 
+/** Mirrors normalizeAgentBusPort in src/config/agentBus.js; an IPC payload is
+ * checked here rather than trusted, and a bad port must not reach `listen`,
+ * which would read NaN as "any free port" and move the bus silently. */
 function normalizeAgentBusPort(value) {
   const port = Number(value);
   if (!Number.isInteger(port) || port < MIN_AGENT_BUS_PORT || port > MAX_AGENT_BUS_PORT) {
@@ -786,11 +787,6 @@ ipcMain.handle('settings:info', () => getSettingsInfo(app));
 ipcMain.handle('agent-bus:configure', (event, settings) => {
   assertTrustedAgentBusSender(event);
   return configureAgentBus(settings);
-});
-
-ipcMain.handle('agent-bus:status', (event) => {
-  assertTrustedAgentBusSender(event);
-  return agentBusStatus();
 });
 
 ipcMain.handle('agent-bus:rotate-token', async (event) => {

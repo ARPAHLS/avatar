@@ -99,10 +99,10 @@ socket.send(JSON.stringify({ id: '1', command: 'animation.play', payload: { id: 
 // { "id": "1", "ok": true, "action": { … } }
 ```
 
-Every frame you send needs an `id`, and it comes back on the reply. **The server never sends a
-frame without one.** Nothing is pushed today — if state events are added in a future version they
-will arrive as id-less frames carrying a `type`, so a client written now can ignore them and keep
-working.
+Every frame you send needs an `id`, and it comes back on the reply — `null` only when the frame you
+sent had none to echo. **Every reply carries the field.** Nothing is pushed today; if state events
+are added in a future version they will carry no `id` at all and a `type` instead, so a client
+written now can ignore them and keep working.
 
 ## Errors
 
@@ -120,6 +120,7 @@ The body is the same shape the app uses internally:
 | `404` | `unknown-animation`, `unknown-avatar`, `unknown-environment`, `unknown-audio-source`, `not-found` | The id — or the route — does not exist |
 | `405` / `413` / `415` | | Wrong method, body over 16 KB, or not `application/json` |
 | `409` | `not-playable-once` | That clip cannot be a one-shot; play it with `"select"` |
+| `500` | `internal-error` | The window could not be reached — it was closing as the request arrived |
 | `503` | `not-ready` | The window is still starting up, or reloading |
 
 ## Security

@@ -60,8 +60,8 @@ function hostAllowed(hostHeader, port) {
     const url = new URL(`http://${hostHeader}`);
     if (url.username !== "" || url.password !== "" || url.pathname !== "/") return false;
     if (!LOOPBACK_HOSTS.has(url.hostname.toLowerCase())) return false;
-    // A Host naming our own port is the only one a real local client sends;
-    // rejecting the rest closes off DNS rebinding through a proxied port.
+    // A local client names the port it connected to. Anything else was
+    // rewritten on the way in, which is not a path this bus supports.
     return url.port === "" || Number(url.port) === port;
   } catch {
     return false;
@@ -198,7 +198,7 @@ function createAgentBusServer({
    * request may proceed.
    * @param {import('node:http').IncomingMessage} request
    */
-  function reject(request) {
+  function refuse(request) {
     if (!hostAllowed(request.headers.host, boundPort)) {
       return { status: 403, body: failure("forbidden-host", "This bus only answers on loopback.") };
     }
@@ -229,8 +229,8 @@ function createAgentBusServer({
     return null;
   }
 
-  const server = http.createServer(async (request, response) => {
-    const rejection = reject(request);
+  async function handleRequest(request, response) {
+    const rejection = refuse(request);
     if (rejection) {
       sendJson(response, rejection.status, rejection.body);
       return;
@@ -315,6 +315,19 @@ function createAgentBusServer({
 
     const result = dispatch(frame.command, frame.payload);
     sendJson(response, result.ok ? 200 : (STATUS_BY_CODE[result.code] ?? 400), result);
+  }
+
+  const server = http.createServer((request, response) => {
+    // Nothing above is meant to throw, but `applyAction` reaches a window that
+    // can be torn down mid-request. Unhandled, that would leave the caller
+    // holding a socket which is never answered.
+    handleRequest(request, response).catch(() => {
+      if (response.headersSent) {
+        response.destroy();
+        return;
+      }
+      sendJson(response, 500, failure("internal-error", "The avatar window could not be reached."));
+    });
   });
 
   // Malformed HTTP never reaches the handler above, and the default behaviour
@@ -335,7 +348,7 @@ function createAgentBusServer({
 
     // Same three checks as HTTP, before the handshake completes: an upgrade
     // that succeeds and is then closed still tells a web page the bus is here.
-    const rejection = reject(request);
+    const rejection = refuse(request);
     if (rejection) {
       socket.end(`HTTP/1.1 ${rejection.status} ${rejection.status === 401 ? "Unauthorized" : "Forbidden"}\r\n\r\n`);
       return;
@@ -363,10 +376,10 @@ function createAgentBusServer({
         return;
       }
 
-      // The id is what a reply is matched to, and it is also the v1 contract:
-      // this server never sends a frame without one. If outbound state events
-      // arrive in a later version they will be id-less frames carrying a
-      // `type`, so a client written today can ignore them and keep working.
+      // Every reply carries an `id`: the one that was sent, or null when the
+      // frame had none to echo. That is the v1 contract — if outbound state
+      // events arrive in a later version they will carry no `id` at all and a
+      // `type` instead, so a client written today can ignore them.
       const id = typeof frame.id === "string" || typeof frame.id === "number" ? frame.id : null;
       if (id === null) {
         ws.send(
@@ -375,29 +388,35 @@ function createAgentBusServer({
         return;
       }
 
-      ws.send(JSON.stringify({ id, ...dispatch(frame.command, frame.payload) }));
+      let reply;
+      try {
+        reply = dispatch(frame.command, frame.payload);
+      } catch {
+        reply = failure("internal-error", "The avatar window could not be reached.");
+      }
+      ws.send(JSON.stringify({ id, ...reply }));
     });
   });
 
   return {
     /** @returns {Promise<import('node:net').AddressInfo | string | null>} */
     listen: () =>
-      new Promise((resolve, rejectListen) => {
-        server.once("error", rejectListen);
+      new Promise((resolve, reject) => {
+        server.once("error", reject);
         server.listen(port, host, () => {
-          server.off("error", rejectListen);
+          server.off("error", reject);
           const address = server.address();
           if (address && typeof address === "object") boundPort = address.port;
           resolve(address);
         });
       }),
     close: () =>
-      new Promise((resolve, rejectClose) => {
+      new Promise((resolve, reject) => {
         // Open sockets would otherwise hold the port past the user turning the
         // bus off in Settings.
         for (const client of sockets.clients) client.terminate();
         sockets.close(() => {
-          server.close((error) => (error ? rejectClose(error) : resolve()));
+          server.close((error) => (error ? reject(error) : resolve()));
         });
       }),
   };
@@ -406,10 +425,8 @@ function createAgentBusServer({
 module.exports = {
   COMMAND_PATH,
   DEFAULT_AGENT_BUS_PORT,
-  MAX_BODY_BYTES,
   SOCKET_PATH,
   STATE_PATH,
-  STATUS_BY_CODE,
   createAgentBusServer,
   hostAllowed,
 };

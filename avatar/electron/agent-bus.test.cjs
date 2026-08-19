@@ -53,8 +53,8 @@ async function startServer(context, { stageContext = CONTEXT, state = STATE, tok
 
 /**
  * @param {number} port
- * @param {{ method?: string, path?: string, body?: string, headers?: Record<string, string>,
- *   omitHost?: boolean }} [options]
+ * @param {{ method?: string, path?: string, body?: string,
+ *   headers?: Record<string, string> }} [options]
  */
 function request(port, { method = "POST", path = COMMAND_PATH, body, headers = {} } = {}) {
   return new Promise((resolve, reject) => {
@@ -288,6 +288,28 @@ test("rejects an oversized body with a reason rather than a reset", async (t) =>
 
   assert.equal(status, 413);
   assert.equal(body.code, "payload-too-large");
+});
+
+test("answers 500 rather than hanging when applying an action throws", async (t) => {
+  const { resolveStageCommand } = await resolverReady;
+  const server = createAgentBusServer({
+    port: 0,
+    resolveCommand: resolveStageCommand,
+    getContext: () => CONTEXT,
+    getState: () => STATE,
+    // What a window torn down mid-request looks like from here.
+    applyAction: () => {
+      throw new Error("window is gone");
+    },
+    getToken: () => null,
+  });
+  const address = await server.listen();
+  t.after(() => server.close());
+
+  const { status, body } = await command(address.port, { command: "animation.default" });
+
+  assert.equal(status, 500);
+  assert.equal(body.code, "internal-error");
 });
 
 /**
