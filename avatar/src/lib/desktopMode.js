@@ -17,6 +17,11 @@ export function getVroidHubApi() {
   return window.voxVroidHub ?? null;
 }
 
+/** Electron local agent bus bridge (Refs #6); null in the browser build. */
+export function getAgentBusApi() {
+  return window.voxAgentBus ?? null;
+}
+
 /** Electron user-library helpers (folder pick / scan / read). */
 export function getLibraryApi() {
   const desktop = getDesktopApi();

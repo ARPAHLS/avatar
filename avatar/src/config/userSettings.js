@@ -1,3 +1,4 @@
+import { createDefaultAgentBus, normalizeAgentBus } from './agentBus';
 import { defaultAnimationId } from './animations';
 import { getDefaultAudioSourceId } from './audioSources';
 import { defaultAvatarId, defaultSkinId } from './avatars';
@@ -10,7 +11,9 @@ import { createEmptyDeck, normalizeMotionDeck } from '../motion-deck/motionDeck'
 // seeded it from a default that had the VRM 0.0 180° facing flip baked in, so
 // a v1 value carries that flip and must have it removed on read — otherwise
 // it now compounds with the per-model flip and every avatar faces backwards.
-export const SETTINGS_VERSION = 2;
+// 3: adds the agentBus section. Nothing to migrate — an older file simply has
+// no section, and an absent one means the bus is off.
+export const SETTINGS_VERSION = 3;
 export const LOCAL_SETTINGS_KEY = 'avatar.config.yaml';
 
 /** @returns {{ mode: 'default' | 'custom', path: string | null }} */
@@ -55,6 +58,7 @@ export function createDefaultUserSettings() {
     windowScale: defaultWindowScale,
     directories: createDefaultDirectories(),
     motionDeck: createEmptyDeck(),
+    agentBus: createDefaultAgentBus(),
   };
 }
 
@@ -201,6 +205,7 @@ export function normalizeUserSettings(raw) {
     // Shape only: cards are deliberately not checked against the animation
     // catalog. See src/motion-deck/motionDeck.js.
     motionDeck: normalizeMotionDeck(data.motionDeck),
+    agentBus: normalizeAgentBus(data.agentBus),
   };
 }
 
@@ -227,5 +232,6 @@ export function snapshotUserSettings(state) {
     windowScale: state.windowScale,
     directories: state.directories,
     motionDeck: state.motionDeck,
+    agentBus: state.agentBus,
   });
 }

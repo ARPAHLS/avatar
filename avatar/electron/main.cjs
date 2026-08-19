@@ -11,6 +11,7 @@ const {
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { pathToFileURL } = require('node:url');
 const {
   loadSettings,
   saveSettings,
@@ -29,6 +30,13 @@ const {
   DEFAULT_VROID_OAUTH_PORT,
   OAUTH_CALLBACK_PATH,
 } = require('./vroid-oauth-server.cjs');
+const { createAgentBusServer, DEFAULT_AGENT_BUS_PORT } = require('./agent-bus.cjs');
+const {
+  ensureAgentBusToken,
+  generateAgentBusToken,
+  readAgentBusToken,
+  rotateAgentBusToken,
+} = require('./agent-bus-token.cjs');
 const {
   pathExists,
   readLibraryFileAsync,
@@ -186,8 +194,9 @@ function configureVroidHub(clientId, clientSecret) {
 // keyring (KWallet/GNOME Secret Service), Electron silently falls back to
 // "basic_text" — a hardcoded plaintext password, not real OS encryption —
 // while still reporting encryption as "available". Treat that fallback the
-// same as no secure storage at all.
-function hasSecureVroidStorage() {
+// same as no secure storage at all. Both the VRoid Hub credentials and the
+// agent bus token are gated on it.
+function hasSecureStorage() {
   if (!safeStorage.isEncryptionAvailable()) return false;
   if (process.platform === 'linux' && safeStorage.getSelectedStorageBackend() === 'basic_text') {
     return false;
@@ -250,6 +259,190 @@ function assertTrustedDesktopSender(event) {
   if (!mainWindow || mainWindow.isDestroyed() || event.senderFrame !== mainWindow.webContents.mainFrame) {
     throw new Error('Rejected desktop IPC call from an untrusted sender.');
   }
+}
+
+function assertTrustedAgentBusSender(event) {
+  if (!mainWindow || mainWindow.isDestroyed() || event.senderFrame !== mainWindow.webContents.mainFrame) {
+    throw new Error('Rejected agent bus IPC call from an untrusted sender.');
+  }
+}
+
+const AGENT_BUS_TOKEN_FILE = 'agent-bus.json';
+const MIN_AGENT_BUS_PORT = 1024;
+const MAX_AGENT_BUS_PORT = 65535;
+
+let agentBusServer = null;
+let agentBusSettings = { enabled: false, port: DEFAULT_AGENT_BUS_PORT, requireToken: true };
+let agentBusToken = null;
+let agentBusError = null;
+// What the window last reported: { context, state }, or null until it has
+// reported anything. Every bus request answers 503 until then, which is also
+// what a reload leaves behind (Refs #6).
+let stageSnapshot = null;
+let resolveStageCommand = null;
+
+function agentBusTokenPath() {
+  return path.join(app.getPath('userData'), AGENT_BUS_TOKEN_FILE);
+}
+
+function agentBusCipher() {
+  return {
+    tokenFilePath: agentBusTokenPath(),
+    encrypt: (buffer) => safeStorage.encryptString(buffer.toString('utf8')),
+    decrypt: (buffer) => Buffer.from(safeStorage.decryptString(buffer), 'utf8'),
+  };
+}
+
+/**
+ * The stored token, without creating one. Null means either "never enabled"
+ * or, on a machine with no OS keychain, "not minted yet this run".
+ */
+function currentAgentBusToken() {
+  if (agentBusToken) return agentBusToken;
+  if (!hasSecureStorage()) return null;
+  agentBusToken = readAgentBusToken(agentBusCipher());
+  return agentBusToken;
+}
+
+/**
+ * Minted on first enable and reused thereafter, so nobody has to invent one
+ * and no stored script breaks on the next launch. Without OS-backed
+ * encryption there is nowhere safe to keep it, so it lives for this run only
+ * and Settings says so.
+ */
+function mintAgentBusToken() {
+  agentBusToken = hasSecureStorage()
+    ? ensureAgentBusToken(agentBusCipher())
+    : generateAgentBusToken();
+  return agentBusToken;
+}
+
+function rotateAgentBusTokenNow() {
+  agentBusToken = hasSecureStorage()
+    ? rotateAgentBusToken(agentBusCipher())
+    : generateAgentBusToken();
+  return agentBusToken;
+}
+
+function agentBusStatus() {
+  return {
+    running: agentBusServer != null,
+    enabled: agentBusSettings.enabled,
+    port: agentBusSettings.port,
+    requireToken: agentBusSettings.requireToken,
+    token: agentBusSettings.requireToken ? currentAgentBusToken() : null,
+    // False on a machine with no OS keychain: the token is regenerated every
+    // launch there, and a copied one stops working when the app restarts.
+    tokenPersisted: hasSecureStorage(),
+    error: agentBusError,
+  };
+}
+
+/**
+ * The renderer's own command resolver, loaded from source rather than
+ * reimplemented here: panels, hotkeys and the bus share one set of command
+ * names and one set of error codes. It is ESM and this file is CommonJS,
+ * hence the dynamic import — and why src/lib/stageCommands.js and the two
+ * config modules it pulls in are listed in package.json's build.files.
+ */
+async function stageResolver() {
+  if (!resolveStageCommand) {
+    const source = pathToFileURL(path.join(__dirname, '../src/lib/stageCommands.js')).href;
+    ({ resolveStageCommand } = await import(source));
+  }
+  return resolveStageCommand;
+}
+
+async function stopAgentBus() {
+  if (!agentBusServer) return;
+  const server = agentBusServer;
+  agentBusServer = null;
+  try {
+    await server.close();
+  } catch {
+    // Nothing left to do about a socket that will not shut down.
+  }
+}
+
+async function startAgentBus() {
+  await stopAgentBus();
+
+  if (agentBusSettings.requireToken) mintAgentBusToken();
+
+  try {
+    const server = createAgentBusServer({
+      port: agentBusSettings.port,
+      resolveCommand: await stageResolver(),
+      getContext: () => stageSnapshot?.context ?? null,
+      // The window reports the catalogs; the version and the runtime are
+      // main's to add, and a caller checking either has nowhere else to look.
+      getState: () =>
+        stageSnapshot?.state
+          ? { runtime: { version: app.getVersion(), mode: 'desktop' }, ...stageSnapshot.state }
+          : null,
+      // One way on purpose: acceptance was decided here, application happens
+      // in the window, and a 200 has never claimed the model finished loading.
+      applyAction: (action) => {
+        if (mainWindow && !mainWindow.isDestroyed()) {
+          mainWindow.webContents.send('agent-bus:action', action);
+        }
+      },
+      // Minting again rather than returning null matters: null means "no token
+      // required", so a token that somehow went missing would open the bus up
+      // instead of closing it.
+      getToken: () =>
+        agentBusSettings.requireToken ? (currentAgentBusToken() ?? mintAgentBusToken()) : null,
+    });
+    await server.listen();
+    agentBusServer = server;
+    agentBusError = null;
+  } catch (error) {
+    // Fixed port, no silent fallback: moving would make the copied curl
+    // example in Settings lie about where the bus is.
+    agentBusError =
+      error && error.code === 'EADDRINUSE'
+        ? `Port ${agentBusSettings.port} is already in use.`
+        : error instanceof Error
+          ? error.message
+          : String(error);
+  }
+
+  return agentBusStatus();
+}
+
+function normalizeAgentBusPort(value) {
+  const port = Number(value);
+  if (!Number.isInteger(port) || port < MIN_AGENT_BUS_PORT || port > MAX_AGENT_BUS_PORT) {
+    return DEFAULT_AGENT_BUS_PORT;
+  }
+  return port;
+}
+
+/**
+ * Driven by the window, which owns config.yaml: this runs on hydrate and
+ * again whenever the user changes the Agents panel.
+ */
+async function configureAgentBus(settings) {
+  const requested = {
+    enabled: settings?.enabled === true,
+    port: normalizeAgentBusPort(settings?.port),
+    requireToken: settings?.requireToken !== false,
+  };
+  const previous = agentBusSettings;
+  agentBusSettings = requested;
+
+  if (!requested.enabled) {
+    await stopAgentBus();
+    agentBusError = null;
+    return agentBusStatus();
+  }
+
+  const rebind =
+    !agentBusServer ||
+    previous.port !== requested.port ||
+    previous.requireToken !== requested.requireToken;
+
+  return rebind ? startAgentBus() : agentBusStatus();
 }
 
 function getLogoPath() {
@@ -331,6 +524,16 @@ function createWindow() {
       if (typeof message === 'string') console.log(message);
     });
   }
+
+  // A reload throws away the catalog the bus was validating against, and the
+  // new one has not been reported yet.
+  mainWindow.webContents.on('did-start-loading', () => {
+    stageSnapshot = null;
+  });
+
+  mainWindow.on('closed', () => {
+    stageSnapshot = null;
+  });
 
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow?.webContents.setZoomFactor(windowScale);
@@ -578,6 +781,35 @@ ipcMain.handle('settings:reset', () => resetSettings(app));
 
 ipcMain.handle('settings:info', () => getSettingsInfo(app));
 
+// The window owns config.yaml, so it tells main what the bus should be doing
+// — on hydrate and again on every change in the Agents panel.
+ipcMain.handle('agent-bus:configure', (event, settings) => {
+  assertTrustedAgentBusSender(event);
+  return configureAgentBus(settings);
+});
+
+ipcMain.handle('agent-bus:status', (event) => {
+  assertTrustedAgentBusSender(event);
+  return agentBusStatus();
+});
+
+ipcMain.handle('agent-bus:rotate-token', async (event) => {
+  assertTrustedAgentBusSender(event);
+  rotateAgentBusTokenNow();
+  // The running server reads the token per request, so nothing needs
+  // restarting — the old one simply stops working.
+  return agentBusStatus();
+});
+
+// Fire and forget: the catalog and the current selection, whenever either
+// changes. Anything the bus is asked before the first report answers 503.
+ipcMain.on('agent-bus:report', (event, snapshot) => {
+  if (!mainWindow || mainWindow.isDestroyed() || event.senderFrame !== mainWindow.webContents.mainFrame) {
+    return;
+  }
+  stageSnapshot = snapshot && typeof snapshot === 'object' ? snapshot : null;
+});
+
 ipcMain.handle('library:pick-folder', async (event) => {
   assertTrustedLibrarySender(event);
   if (!mainWindow || mainWindow.isDestroyed()) return null;
@@ -685,7 +917,7 @@ ipcMain.handle('vroid:get-status', (event) => {
 
 ipcMain.handle('vroid:get-credentials', (event) => {
   assertTrustedVroidSender(event);
-  if (!hasSecureVroidStorage()) {
+  if (!hasSecureStorage()) {
     return { clientId: null, hasClientSecret: false };
   }
   const credentials = readVroidHubCredentials({
@@ -700,7 +932,7 @@ ipcMain.handle('vroid:get-credentials', (event) => {
 
 ipcMain.handle('vroid:set-credentials', (event, clientId, clientSecret) => {
   assertTrustedVroidSender(event);
-  if (!hasSecureVroidStorage()) {
+  if (!hasSecureStorage()) {
     throw new Error(
       'This OS has no secure credential storage available (on Linux, install a keyring such as ' +
         'GNOME Keyring or KWallet), so VRoid Hub credentials cannot be saved.',
@@ -804,7 +1036,7 @@ app.whenReady().then(async () => {
     safeStorage.setUsePlainTextEncryption(true);
   }
   vroidCredentialsFilePath = path.join(app.getPath('userData'), 'vroid-hub-credentials.json');
-  if (hasSecureVroidStorage()) {
+  if (hasSecureStorage()) {
     const vroidCredentials = readVroidHubCredentials({
       credentialsFilePath: vroidCredentialsFilePath,
       decrypt: (buffer) => Buffer.from(safeStorage.decryptString(buffer), 'utf8'),
@@ -833,6 +1065,10 @@ app.whenReady().then(async () => {
     // VRoid Hub Settings panel will simply show Connect failing.
     vroidOauthServer = null;
   }
+});
+
+app.on('before-quit', () => {
+  void stopAgentBus();
 });
 
 app.on('window-all-closed', () => {

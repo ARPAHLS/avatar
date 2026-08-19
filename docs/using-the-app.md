@@ -91,7 +91,7 @@ Loudness drives the green intensity while capturing; silence eases back to mint.
 | **Camera & Lighting** | Camera, lights, avatar transform |
 | **Animations** | Submenu of clips (no drawer) |
 | **Pinned / Windowed** | Toggle overlay vs opaque window (desktop) |
-| **Settings** | Overlay mode, Snap to screen, **Directories**, **VRoid Hub**, **System** (reset / config path) |
+| **Settings** | Overlay mode, Snap to screen, **Directories**, **Animation hotkeys**, **Agents**, **VRoid Hub**, **System** (reset / config path) |
 | **Close** | Quit the companion window (desktop) |
 
 <p align="center">
@@ -298,7 +298,7 @@ Catalog: [VRMA](animations/vrma.md).
 
 ## 7. Settings
 
-Gear → **Settings**. Section titles share one style: **Overlay mode**, **Snap to screen**, **Directories**, **VRoid Hub**, **System**.
+Gear → **Settings**. Section titles share one style: **Overlay mode**, **Snap to screen**, **Directories**, **Animation hotkeys**, **Agents**, **VRoid Hub**, **System**.
 
 ### Overlay mode (desktop)
 
@@ -354,6 +354,18 @@ A shortlist of clips you can fire without changing what Gear → **Animations** 
 </p>
 
 Rows are yours, not a view of the folder: switching **Directories → Animations** does not delete them. A row whose clip is not in the current folder reads *unavailable* and keeps its keys reserved until that folder comes back; **Clear unavailable** is the only sweep. Past five rows the deck gets a filter box for reaching one without scrolling. Details and the `config.yaml` shape: [User settings](user-settings.md#motion-deck-motiondeck).
+
+### Agents (desktop)
+
+Off by default. **Enable local bus** starts a small server on `127.0.0.1:47903` so scripts and
+agent frameworks can play an animation, swap the avatar, set the environment or switch the
+lip-sync source — the same commands the menus and hotkeys use. Nothing outside this machine can
+reach it, and anything arriving from a web page is refused.
+
+**Require token** (on) generates a token the first time you enable the bus and reuses it after
+that; **Copy token** and **Regenerate** are beside it, and **Copy example curl** gives you a
+working one-liner with your port and token already in it. Details, the full command list and
+`GET /v1/state`: [Local agent bus](agents/local-bus.md).
 
 ### VRoid Hub (desktop)
 

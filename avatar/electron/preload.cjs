@@ -42,6 +42,20 @@ contextBridge.exposeInMainWorld('voxDesktop', {
     ipcRenderer.invoke('thumbnail:dev-write', kind, fileName, png),
 });
 
+// The local agent bus (Refs #6). The window is the only thing that knows what
+// is on stage, so it reports the catalog up and applies whatever comes back.
+contextBridge.exposeInMainWorld('voxAgentBus', {
+  configure: (settings) => ipcRenderer.invoke('agent-bus:configure', settings),
+  getStatus: () => ipcRenderer.invoke('agent-bus:status'),
+  rotateToken: () => ipcRenderer.invoke('agent-bus:rotate-token'),
+  report: (snapshot) => ipcRenderer.send('agent-bus:report', snapshot),
+  onAction: (listener) => {
+    const handler = (_event, action) => listener(action);
+    ipcRenderer.on('agent-bus:action', handler);
+    return () => ipcRenderer.removeListener('agent-bus:action', handler);
+  },
+});
+
 contextBridge.exposeInMainWorld('voxVroidHub', {
   getStatus: () => ipcRenderer.invoke('vroid:get-status'),
   getCredentials: () => ipcRenderer.invoke('vroid:get-credentials'),

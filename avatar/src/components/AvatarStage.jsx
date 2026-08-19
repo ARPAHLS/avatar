@@ -18,6 +18,7 @@ import {
   defaultSkinId,
   resolveAvatarPath,
 } from '../config/avatars';
+import { createDefaultAgentBus } from '../config/agentBus';
 import { defaultAvatar, defaultCamera, defaultLight, STAGE } from '../config/defaults';
 import { defaultWindowScale, normalizeWindowScale } from '../config/windowScale';
 import {
@@ -27,8 +28,10 @@ import {
   snapshotUserSettings,
 } from '../config/userSettings';
 import { useAudioSource } from '../hooks/useAudioSource';
+import { useAgentBus } from '../hooks/useAgentBus';
 import { useStageCommands } from '../hooks/useStageCommands';
 import { getDesktopApi, getLibraryApi, isDesktopMode } from '../lib/desktopMode';
+import { isPlayableOnce } from '../lib/stageCommands';
 import {
   loadEnvironmentSource,
   loadLibraryAnimations,
@@ -51,6 +54,7 @@ import { PalettePanel } from './panels/PalettePanel';
 import { VoicePanel } from './panels/VoicePanel';
 import { CameraPanel } from './panels/CameraPanel';
 import { DesktopPanel } from './panels/DesktopPanel';
+import { AgentBusPanel } from './panels/AgentBusPanel';
 import { DirectoriesPanel } from './panels/DirectoriesPanel';
 import { VroidHubPanel } from './panels/VroidHubPanel';
 // Motion Deck (#24). Held here only because it is persisted with the rest of
@@ -99,6 +103,7 @@ export function AvatarStage() {
     notice: null,
   });
   const [directories, setDirectories] = useState(createDefaultDirectories);
+  const [agentBus, setAgentBus] = useState(createDefaultAgentBus);
   const [motionDeck, setMotionDeck] = useState(createEmptyDeck);
   const [libraryAvatars, setLibraryAvatars] = useState([]);
   const [libraryAnimations, setLibraryAnimations] = useState([]);
@@ -156,6 +161,7 @@ export function AvatarStage() {
     document.documentElement.classList.toggle('vox-desktop-windowed', !settings.overlayMode);
     setWindowScale(normalizeWindowScale(settings.windowScale));
     setDirectories(settings.directories ?? createDefaultDirectories());
+    setAgentBus(settings.agentBus ?? createDefaultAgentBus());
     setMotionDeck(settings.motionDeck ?? createEmptyDeck());
   }, []);
 
@@ -240,6 +246,7 @@ export function AvatarStage() {
         windowScale,
         directories,
         motionDeck,
+        agentBus,
       });
       void saveUserSettings(snapshot);
     }, SAVE_DEBOUNCE_MS);
@@ -260,6 +267,7 @@ export function AvatarStage() {
     windowScale,
     directories,
     motionDeck,
+    agentBus,
   ]);
 
   useEffect(() => {
@@ -338,7 +346,7 @@ export function AvatarStage() {
 
   // Single trigger surface: the panels below and, later, hotkeys and the local
   // bus all reach the stage through this (Refs #6).
-  const runCommand = useStageCommands({
+  const { runCommand, applyAction } = useStageCommands({
     context: commandContext,
     current: { selectedAvatarId, hubActive },
     setters: {
@@ -352,6 +360,57 @@ export function AvatarStage() {
       setSelectedBg,
       setAudioSourceId,
     },
+  });
+
+  // What `GET /v1/state` answers with. Labels are the point: a custom folder
+  // hashes its animation ids from file paths, so nothing here is guessable
+  // from outside. Avatars stay id-only, exactly as `avatar.set` accepts them.
+  const busSnapshot = useMemo(
+    () => ({
+      context: commandContext,
+      state: {
+        animations: animationCatalog.map((entry) => ({
+          id: entry.id,
+          label: entry.label,
+          playableOnce: isPlayableOnce(entry),
+        })),
+        avatars: avatarIds.map((id) => ({ id })),
+        environments: [
+          ...environments.map((entry) => ({ id: entry.id, label: entry.label })),
+          ...appearanceCustomEnvironments.map((entry) => ({ id: entry.id, label: entry.label })),
+        ],
+        audioSources: getAudioSourceOptions().map((option) => ({
+          id: option.id,
+          label: option.label,
+        })),
+        // So an agent can toggle rather than only set.
+        current: {
+          animationId,
+          overlay: motionOverlay ? { animationId: motionOverlay.animationId } : null,
+          avatarId: selectedAvatarId,
+          environment: selectedBg,
+          audioSourceId,
+        },
+      },
+    }),
+    [
+      commandContext,
+      animationCatalog,
+      avatarIds,
+      appearanceCustomEnvironments,
+      animationId,
+      motionOverlay,
+      selectedAvatarId,
+      selectedBg,
+      audioSourceId,
+    ],
+  );
+
+  const { status: agentBusStatus, rotateToken: rotateAgentBusToken } = useAgentBus({
+    settings: agentBus,
+    snapshot: busSnapshot,
+    applyAction,
+    ready: settingsReady,
   });
 
   const handleAnimationChange = useCallback(
@@ -1055,6 +1114,18 @@ export function AvatarStage() {
               <Divider />
               <p className="settings-section-title">Animation hotkeys</p>
               <MotionDeckPanel {...motionDeckState} animationCatalog={animationCatalog} />
+              {desktopMode && (
+                <>
+                  <Divider />
+                  <p className="settings-section-title">Agents</p>
+                  <AgentBusPanel
+                    settings={agentBus}
+                    status={agentBusStatus}
+                    onChange={setAgentBus}
+                    onRotateToken={rotateAgentBusToken}
+                  />
+                </>
+              )}
               <Divider />
               <p className="settings-section-title">VRoid Hub</p>
               <VroidHubPanel
