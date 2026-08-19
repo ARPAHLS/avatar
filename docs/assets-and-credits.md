@@ -2,6 +2,8 @@
 
 This document covers third-party character, animation, and environment assets shipped with AVATAR. **AVATAR** (this software) is MIT-licensed; **bundled media retain their original rights holders’ terms**.
 
+**Machine-readable inventory:** [`assets-manifest.yml`](assets-manifest.yml) — every bundled VRM, VRMA, environment GIF, derived thumbnail, installer branding asset, and documentation screenshot, with paths, licenses, credit lines, and audit status. Validated in CI via `npm test` in `avatar/`.
+
 ## Contact for rights / takedown
 
 If you are a rights holder and believe any bundled asset should be removed or attributed differently, contact:
@@ -99,7 +101,7 @@ Path: `avatar/src/assets/environments/`. Sourced from [GIPHY](https://giphy.com/
 | :--- | :--- | :--- |
 | `stars.gif` | Stars | [Stars Background](https://giphy.com/gifs/stars-U3qYN8S0j3bpK) — watermark **Lemat Works**; treated as copyright-free on GIPHY |
 | `code.gif` | Code | [Background Code](https://giphy.com/gifs/justin-hSLDN6zfh2Yy4ekMWi) by **Justin** (@justin) |
-| `bloom.gif` | Bloom | From GIPHY (copyright-free); original page link not recovered |
+| `bloom.gif` | Bloom | From GIPHY; **original page link not recovered** — see manifest `env-bloom-gif` (`audit_status: needs_review`) before commercial fork |
 
 Custom environment folders (Settings → Directories or `custom/`) are the user’s responsibility — see [Environments](environments.md).
 

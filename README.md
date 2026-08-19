@@ -154,7 +154,7 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 | **VRoid Hub** | [VRoid Hub connection](docs/vroid-hub.md) |
 | **Settings** | [config.yaml & resets](docs/user-settings.md) |
 | **Architecture** | [Overview](docs/architecture/overview.md) · [Layout](docs/development/project-layout.md) |
-| **Assets** | [Assets & credits](docs/assets-and-credits.md) |
+| **Assets** | [Assets & credits](docs/assets-and-credits.md) · [Manifest](docs/assets-manifest.yml) |
 
 ## Repository layout
 
@@ -188,7 +188,7 @@ Bundled motions are the **7 free VRMA files** from the **VRoid Project** on [BOO
 
 Built-in environment GIFs (Stars / Code / Bloom) are from [GIPHY](https://giphy.com/) — credits in [Assets & credits](docs/assets-and-credits.md#built-in-environment-gifs).
 
-Full terms: **[docs/assets-and-credits.md](docs/assets-and-credits.md)** · Rights holders: **input@arpacorp.net**
+Full terms: **[docs/assets-and-credits.md](docs/assets-and-credits.md)** · Machine-readable inventory: **[docs/assets-manifest.yml](docs/assets-manifest.yml)** · Rights holders: **input@arpacorp.net**
 
 Beyond the bundled samples, you can bring your own characters and backdrops: **Settings → Directories** (local `.vrm` / image folders) and **VRoid Hub** (linked characters, session-only). See [Avatars](docs/avatars.md) · [Environments](docs/environments.md) · [VRoid Hub](docs/vroid-hub.md) · [Using the app](docs/using-the-app.md).
 

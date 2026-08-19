@@ -1,0 +1,583 @@
+# Machine-readable inventory of third-party and bundled media in the AVATAR repo.
+# Human-readable companion: docs/assets-and-credits.md
+#
+# Update this file whenever bundled VRM / VRMA / environment media, derived
+# thumbnails, installer branding, or documentation screenshots change.
+# Run: cd avatar && npm test  (includes manifest path validation)
+
+schema_version: 1
+last_audited: "2026-08-19"
+
+# --- Scope legend (field: scope) ---
+# ships_in_app     — bundled into production Vite/Electron builds (NSIS installer)
+# derived          — committed PNG generated from a ships_in_app parent (npm run thumbs)
+# branding         — installer / splash / icon art (not third-party BOOTH media)
+# documentation    — docs/screenshots and README GIFs; not shipped inside the app binary
+# license_reference — upstream terms text copied beside assets (not played in-app)
+# runtime_dependency — npm packages (see package.json); listed for redistributor audits
+#
+# audit_status: verified | needs_review | arpa_owned
+# commercial_use: yes | yes_with_credit | no | user_responsibility | not_applicable
+
+exclusions:
+  - id: vroid-hub-session
+    note: >
+      VRoid Hub hearted / licensed models downloaded at runtime stay in memory for
+      the session only. Never commit Hub bytes; conditions-of-use gate is in-app.
+  - id: user-directories
+    note: >
+      Settings → Directories folders (local .vrm / .vrma / env media) and Electron
+      userData caches are user-supplied — not inventoried here.
+  - id: environments-custom-dev
+    note: >
+      avatar/src/assets/environments/custom/ is for dev trial media (.gitkeep only
+      in repo). Production builds omit custom/ trial GIFs; see docs/environments.md.
+  - id: desktop-setup-exe
+    note: Gitignored desktop-setup/*.exe release artifacts — not source assets.
+  - id: generated-runtime-thumbs
+    note: >
+      Electron userData/thumbnails/ (custom-folder portraits/posters) are generated
+      at runtime from user files — not in this manifest.
+
+assets:
+  # --- VRM characters (ships_in_app) ---
+  - id: avatar1-vrm
+    path: avatar/src/assets/avatars/avatar1.vrm
+    scope: ships_in_app
+    type: vrm
+    label: Avatar 1
+    rights_holder: ARPA sample (VRoid Studio export)
+    license: VRoid Studio / VRoid Hub terms (free assets only policy)
+    source_url: https://vroid.com/en/studio
+    commercial_use: user_responsibility
+    redistribution: conditional
+    credit_required: false
+    credit_line_en: null
+    audit_status: verified
+    notes: >
+      Sample character for testing. Replacements must be free-only per project
+      policy; check each creator's BOOTH / Hub page before commit.
+
+  - id: avatar2-vrm
+    path: avatar/src/assets/avatars/avatar2.vrm
+    scope: ships_in_app
+    type: vrm
+    label: Avatar 2
+    rights_holder: ARPA sample (VRoid Studio export)
+    license: VRoid Studio / VRoid Hub terms (free assets only policy)
+    source_url: https://vroid.com/en/studio
+    commercial_use: user_responsibility
+    redistribution: conditional
+    credit_required: false
+    credit_line_en: null
+    audit_status: verified
+    notes: Same policy as avatar1-vrm.
+
+  - id: avatar3-vrm
+    path: avatar/src/assets/avatars/avatar3.vrm
+    scope: ships_in_app
+    type: vrm
+    label: Avatar 3
+    rights_holder: ARPA sample (VRoid Studio export)
+    license: VRoid Studio / VRoid Hub terms (free assets only policy)
+    source_url: https://vroid.com/en/studio
+    commercial_use: user_responsibility
+    redistribution: conditional
+    credit_required: false
+    credit_line_en: null
+    audit_status: verified
+    notes: Same policy as avatar1-vrm.
+
+  # --- VRMA motion pack (ships_in_app) ---
+  - id: vrma-pack-readme-en
+    path: avatar/src/assets/avatars/VRMA/Readme_VRMA_MotionPack_EN.txt
+    scope: license_reference
+    type: text
+    rights_holder: pixiv Inc. / VRoid Project
+    license: VRoid Project VRMA Motion Pack terms (full text in file)
+    source_url: https://vroid.com/en/news/6HozzBIV0KkcKf9dc1fZGW
+    commercial_use: yes_with_credit
+    redistribution: no
+    credit_required: true
+    credit_line_en: "Animation credits to pixiv Inc.'s VRoid Project"
+    credit_line_ja: "キャラクターアニメーション: ピクシブ株式会社 VRoidプロジェクト"
+    audit_status: verified
+
+  - id: vrma-01
+    path: avatar/src/assets/avatars/VRMA/VRMA_01.vrma
+    scope: ships_in_app
+    type: vrma
+    label: Show full body
+    catalog_id: vrma-01
+    rights_holder: pixiv Inc.
+    license: VRoid Project VRMA Motion Pack (see vrma-pack-readme-en)
+    source_url: https://booth.pm/
+    commercial_use: yes_with_credit
+    redistribution: no
+    credit_required: true
+    credit_line_en: "Animation credits to pixiv Inc.'s VRoid Project"
+    credit_line_ja: "キャラクターアニメーション: ピクシブ株式会社 VRoidプロジェクト"
+    audit_status: verified
+
+  - id: vrma-02
+    path: avatar/src/assets/avatars/VRMA/VRMA_02.vrma
+    scope: ships_in_app
+    type: vrma
+    label: Greeting
+    catalog_id: vrma-02
+    rights_holder: pixiv Inc.
+    license: VRoid Project VRMA Motion Pack
+    source_url: https://booth.pm/
+    commercial_use: yes_with_credit
+    redistribution: no
+    credit_required: true
+    credit_line_en: "Animation credits to pixiv Inc.'s VRoid Project"
+    audit_status: verified
+
+  - id: vrma-03
+    path: avatar/src/assets/avatars/VRMA/VRMA_03.vrma
+    scope: ships_in_app
+    type: vrma
+    label: Peace sign
+    catalog_id: vrma-03
+    rights_holder: pixiv Inc.
+    license: VRoid Project VRMA Motion Pack
+    commercial_use: yes_with_credit
+    redistribution: no
+    credit_required: true
+    credit_line_en: "Animation credits to pixiv Inc.'s VRoid Project"
+    audit_status: verified
+
+  - id: vrma-04
+    path: avatar/src/assets/avatars/VRMA/VRMA_04.vrma
+    scope: ships_in_app
+    type: vrma
+    label: Shoot
+    catalog_id: vrma-04
+    rights_holder: pixiv Inc.
+    license: VRoid Project VRMA Motion Pack
+    commercial_use: yes_with_credit
+    redistribution: no
+    credit_required: true
+    credit_line_en: "Animation credits to pixiv Inc.'s VRoid Project"
+    audit_status: verified
+
+  - id: vrma-05
+    path: avatar/src/assets/avatars/VRMA/VRMA_05.vrma
+    scope: ships_in_app
+    type: vrma
+    label: Spin
+    catalog_id: vrma-05
+    rights_holder: pixiv Inc.
+    license: VRoid Project VRMA Motion Pack
+    commercial_use: yes_with_credit
+    redistribution: no
+    credit_required: true
+    credit_line_en: "Animation credits to pixiv Inc.'s VRoid Project"
+    audit_status: verified
+
+  - id: vrma-06
+    path: avatar/src/assets/avatars/VRMA/VRMA_06.vrma
+    scope: ships_in_app
+    type: vrma
+    label: Model pose
+    catalog_id: vrma-06
+    rights_holder: pixiv Inc.
+    license: VRoid Project VRMA Motion Pack
+    commercial_use: yes_with_credit
+    redistribution: no
+    credit_required: true
+    credit_line_en: "Animation credits to pixiv Inc.'s VRoid Project"
+    audit_status: verified
+
+  - id: vrma-07
+    path: avatar/src/assets/avatars/VRMA/VRMA_07.vrma
+    scope: ships_in_app
+    type: vrma
+    label: Squat
+    catalog_id: vrma-07
+    rights_holder: pixiv Inc.
+    license: VRoid Project VRMA Motion Pack
+    commercial_use: yes_with_credit
+    redistribution: no
+    credit_required: true
+    credit_line_en: "Animation credits to pixiv Inc.'s VRoid Project"
+    audit_status: verified
+
+  # --- Environment GIFs (ships_in_app) ---
+  - id: env-stars-gif
+    path: avatar/src/assets/environments/stars.gif
+    scope: ships_in_app
+    type: gif
+    label: Stars
+    catalog_id: stars
+    rights_holder: Lemat Works (per GIPHY listing)
+    license: GIPHY upload — verify before commercial redistribution
+    source_url: https://giphy.com/gifs/stars-U3qYN8S0j3bpK
+    commercial_use: needs_review
+    redistribution: conditional
+    credit_required: false
+    audit_status: verified
+    notes: GIPHY page lists watermark Lemat Works; treated as copyright-free on GIPHY at time of audit.
+
+  - id: env-code-gif
+    path: avatar/src/assets/environments/code.gif
+    scope: ships_in_app
+    type: gif
+    label: Code
+    catalog_id: code
+    rights_holder: Justin (@justin on GIPHY)
+    license: GIPHY upload — verify before commercial redistribution
+    source_url: https://giphy.com/gifs/justin-hSLDN6zfh2Yy4ekMWi
+    commercial_use: needs_review
+    redistribution: conditional
+    credit_required: false
+    audit_status: verified
+
+  - id: env-bloom-gif
+    path: avatar/src/assets/environments/bloom.gif
+    scope: ships_in_app
+    type: gif
+    label: Bloom
+    catalog_id: bloom
+    rights_holder: unknown
+    license: GIPHY (assumed) — source page not recovered
+    source_url: null
+    commercial_use: needs_review
+    redistribution: conditional
+    credit_required: false
+    audit_status: needs_review
+    notes: >
+      Original GIPHY URL lost. Re-verify or replace before major redistribution /
+      commercial fork. Do not invent a source_url until confirmed.
+
+  # --- Derived picker thumbnails (derived) ---
+  - id: thumb-avatar1
+    path: avatar/src/assets/avatars/thumbs/avatar1.png
+    scope: derived
+    type: png
+    parent_id: avatar1-vrm
+    generated_by: npm run thumbs
+    license: inherits parent
+    audit_status: verified
+
+  - id: thumb-avatar2
+    path: avatar/src/assets/avatars/thumbs/avatar2.png
+    scope: derived
+    type: png
+    parent_id: avatar2-vrm
+    generated_by: npm run thumbs
+    license: inherits parent
+    audit_status: verified
+
+  - id: thumb-avatar3
+    path: avatar/src/assets/avatars/thumbs/avatar3.png
+    scope: derived
+    type: png
+    parent_id: avatar3-vrm
+    generated_by: npm run thumbs
+    license: inherits parent
+    audit_status: verified
+
+  - id: thumb-env-stars
+    path: avatar/src/assets/environments/thumbs/stars.png
+    scope: derived
+    type: png
+    parent_id: env-stars-gif
+    generated_by: npm run thumbs
+    license: inherits parent
+    audit_status: verified
+
+  - id: thumb-env-code
+    path: avatar/src/assets/environments/thumbs/code.png
+    scope: derived
+    type: png
+    parent_id: env-code-gif
+    generated_by: npm run thumbs
+    license: inherits parent
+    audit_status: verified
+
+  - id: thumb-env-bloom
+    path: avatar/src/assets/environments/thumbs/bloom.png
+    scope: derived
+    type: png
+    parent_id: env-bloom-gif
+    generated_by: npm run thumbs
+    license: inherits parent
+    audit_status: verified
+
+  # --- Installer / splash branding (branding) ---
+  - id: brand-logo-150
+    path: avatar/public/AVATAR_LOGO_150.png
+    scope: branding
+    type: png
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    commercial_use: not_applicable
+    redistribution: no
+    audit_status: arpa_owned
+
+  - id: brand-splash
+    path: avatar/public/AVATAR_SPLASH.png
+    scope: branding
+    type: png
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    redistribution: no
+    audit_status: arpa_owned
+
+  - id: brand-installer-top-public
+    path: avatar/public/installer_top.png
+    scope: branding
+    type: png
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    notes: Copied to avatar/build/ for NSIS; keep sizes per installer.nsh.
+    audit_status: arpa_owned
+
+  - id: brand-installer-side-public
+    path: avatar/public/installer_side.png
+    scope: branding
+    type: png
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    audit_status: arpa_owned
+
+  - id: brand-installer-top-build
+    path: avatar/build/installer_top.png
+    scope: branding
+    type: png
+    parent_id: brand-installer-top-public
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    notes: NSIS copy of public/installer_top.png
+    audit_status: arpa_owned
+
+  - id: brand-installer-side-build
+    path: avatar/build/installer_side.png
+    scope: branding
+    type: png
+    parent_id: brand-installer-side-public
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    notes: NSIS copy of public/installer_side.png
+    audit_status: arpa_owned
+
+  - id: brand-icon-png
+    path: avatar/build/icon.png
+    scope: branding
+    type: png
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    audit_status: arpa_owned
+
+  - id: brand-icon-ico
+    path: avatar/build/icon.ico
+    scope: branding
+    type: ico
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    audit_status: arpa_owned
+
+  - id: brand-icon-512
+    path: avatar/build/icon-512.png
+    scope: branding
+    type: png
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    audit_status: arpa_owned
+
+  - id: brand-installer-top-bmp
+    path: avatar/build/installer_top.bmp
+    scope: branding
+    type: bmp
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    notes: NSIS-generated dimensions; regenerate from installer_top.png when art changes.
+    audit_status: arpa_owned
+
+  - id: brand-installer-side-bmp
+    path: avatar/build/installer_side.bmp
+    scope: branding
+    type: bmp
+    rights_holder: ARPA Hellenic Logical Systems
+    license: ARPA project branding — not MIT
+    audit_status: arpa_owned
+
+  - id: brand-installer-license
+    path: avatar/build/installer-license.txt
+    scope: branding
+    type: text
+    rights_holder: ARPA Hellenic Logical Systems
+    license: Installer EULA (ASCII-only for NSIS)
+    notes: Software license text — distinct from bundled BOOTH/GIPHY media terms.
+    audit_status: arpa_owned
+
+  # --- Documentation screenshots & GIFs (documentation) ---
+  # Captures of the AVATAR app UI and bundled samples. Not embedded in the app binary.
+  # May depict VRoid Hub UI (pixiv) — screenshot only, not redistribution of VRM bytes.
+  - id: docs-screenshot-30-appearance-avatars
+    path: docs/screenshots/30-appearance-avatars.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+    notes: UI capture; bundled avatars visible.
+
+  - id: docs-screenshot-31-appearance-avatars-custom-dir
+    path: docs/screenshots/31-appearance-avatars-custom-dir.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-34-appearance-env-custom-dir
+    path: docs/screenshots/34-appearance-env-custom-dir.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-70-vroid-settings-setup
+    path: docs/screenshots/70-vroid-settings-setup.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+    notes: VRoid Hub setup UI (third-party service screenshot).
+
+  - id: docs-screenshot-71-vroid-settings-connect
+    path: docs/screenshots/71-vroid-settings-connect.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-72-vroid-browser-authorize
+    path: docs/screenshots/72-vroid-browser-authorize.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-73-vroid-settings-connected
+    path: docs/screenshots/73-vroid-settings-connected.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-74-vroid-appearance-avatars-hub
+    path: docs/screenshots/74-vroid-appearance-avatars-hub.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-75-vroid-appearance-loading
+    path: docs/screenshots/75-vroid-appearance-loading.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-76-vroid-license-gate
+    path: docs/screenshots/76-vroid-license-gate.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-76-vroid-license-gate-link
+    path: docs/screenshots/76-vroid-license-gate-link.gif
+    scope: documentation
+    type: gif
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-77-vroid-hub-on-stage
+    path: docs/screenshots/77-vroid-hub-on-stage.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-80-settings-panel
+    path: docs/screenshots/80-settings-panel.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-82-settings-directories
+    path: docs/screenshots/82-settings-directories.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-83-settings-motion
+    path: docs/screenshots/83-settings-motion.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-84-settings-motion-add-filter
+    path: docs/screenshots/84-settings-motion-add-filter.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-screenshot-91-multi-avatar-strip
+    path: docs/screenshots/91-multi-avatar-strip.png
+    scope: documentation
+    type: png
+    audit_status: arpa_owned
+
+  - id: docs-gif-m5-animations-select-greeting
+    path: docs/screenshots/AVATAR_M5_Animations_Select_Greeting.gif
+    scope: documentation
+    type: gif
+    audit_status: arpa_owned
+    notes: Records bundled VRMA (pixiv pack) in use — credit rules apply to the motion, not the GIF file itself.
+
+  - id: docs-gif-m5-browsing-custom-environments
+    path: docs/screenshots/AVATAR_M5_browsing_custom_environments.gif
+    scope: documentation
+    type: gif
+    audit_status: arpa_owned
+
+  - id: docs-gif-m5-camera-lighting
+    path: docs/screenshots/AVATAR_M5_camera_lighting.gif
+    scope: documentation
+    type: gif
+    audit_status: arpa_owned
+
+  - id: docs-gif-m5-loop
+    path: docs/screenshots/AVATAR_M5_loop.gif
+    scope: documentation
+    type: gif
+    audit_status: arpa_owned
+
+  - id: docs-gif-m5-settings-scroll
+    path: docs/screenshots/AVATAR_M5_Settings_Scroll.gif
+    scope: documentation
+    type: gif
+    audit_status: arpa_owned
+
+  - id: docs-gif-m5-victory
+    path: docs/screenshots/AVATAR_M5_victory.gif
+    scope: documentation
+    type: gif
+    audit_status: arpa_owned
+
+  - id: docs-gif-speak
+    path: docs/screenshots/AVATAR_31_speak.gif
+    scope: documentation
+    type: gif
+    audit_status: arpa_owned
+
+  # --- Runtime libraries (runtime_dependency) ---
+  - id: dep-three-vrm
+    path: null
+    scope: runtime_dependency
+    type: npm
+    package: "@pixiv/three-vrm"
+    license: MIT (see node_modules / GitHub)
+    source_url: https://github.com/pixiv/three-vrm
+    audit_status: verified
+
+  - id: dep-three-vrm-animation
+    path: null
+    scope: runtime_dependency
+    type: npm
+    package: "@pixiv/three-vrm-animation"
+    license: MIT (see node_modules / GitHub)
+    source_url: https://github.com/pixiv/three-vrm
+    audit_status: verified

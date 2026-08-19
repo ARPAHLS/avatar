@@ -155,8 +155,9 @@ Treat the repo as a **product + docs** unit, not a single-folder code patch:
 
 - **Do not** commit VRM/VRMA (or other media) you do not have rights to redistribute.
 - Bundled samples and the free VRMA pack have specific terms — read [Assets & credits](docs/assets-and-credits.md) before adding or replacing media.
+- **Update [`docs/assets-manifest.yml`](docs/assets-manifest.yml)** whenever you add, remove, or replace bundled VRM / VRMA / environment media, derived thumbnails (`npm run thumbs`), installer branding under `avatar/public/` or `avatar/build/`, or documentation screenshots under `docs/screenshots/`. Set `last_audited` and run `npm test` in `avatar/` (manifest path validation is included).
 - Built-in environments belong next to `stars.gif` / `code.gif` / `bloom.gif` and in `config/environments.js`. Trial GIFs stay in `custom/` (gitignored media; folder kept with `.gitkeep`).
-- Installer art / EULA live under `avatar/build/` and `public/` — keep NSIS sizes and ASCII license constraints in mind if you touch packaging.
+- Installer art / EULA live under `avatar/build/` and `public/` — keep NSIS sizes and ASCII license constraints in mind if you touch packaging. Branding is **ARPA-owned**, not MIT — see manifest `scope: branding`.
 
 ---
 
@@ -167,6 +168,7 @@ Before you open a PR:
 - [ ] `npm run lint`, `npm test`, and `npm run build` pass in `avatar/`
 - [ ] Smoke-tested the path you changed (`dev:desktop` and/or `dev` as appropriate)
 - [ ] Catalogs / config updated if you added assets or options
+- [ ] [`docs/assets-manifest.yml`](docs/assets-manifest.yml) updated if bundled media, derived thumbnails, branding, or docs screenshots changed
 - [ ] Electron preload ↔ main IPC still aligned (if you touched desktop APIs)
 - [ ] `CHANGELOG.md` `[Unreleased]` updated for user- or contributor-visible changes (with issue/PR numbers when known)
 - [ ] Relevant docs (and screenshots if needed) updated; roadmap touched if a listed item shipped

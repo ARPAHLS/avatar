@@ -63,7 +63,8 @@ Signing: the installer is currently **unsigned**. Note SmartScreen (“More info
 
 ## 5. Credits and citation
 
-- [ ] If bundled VRM / VRMA / env media changed: update [Assets & credits](../assets-and-credits.md).
+- [ ] If bundled VRM / VRMA / env media changed: update [Assets & credits](../assets-and-credits.md) **and** [`assets-manifest.yml`](../assets-manifest.yml) (`last_audited`, new/changed rows). Run `npm test` in `avatar/` — manifest paths are validated automatically.
+- [ ] Review manifest entries with `audit_status: needs_review` before major redistribution (currently `env-bloom-gif`).
 - [ ] If authors or preferred citation changed: update `CITATION.cff` (already version-bumped in §1).
 - [ ] Zenodo concept DOI badge on the README stays unless the DOI itself changes.
 
