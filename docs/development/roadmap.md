@@ -35,7 +35,7 @@ Near-term product work on the desktop companion.
 - [ ] Editorial pass — consistency, install path, dead ends (#14)
 - [ ] Label usage guide for triage (#29)
 - [ ] SECURITY.md vulnerability reporting (#26)
-- [ ] Asset license audit + machine-readable manifest (#11)
+- [x] Asset license audit + machine-readable manifest (#11)
 - [ ] Harden VRoid Hub VRM download for restrictive networks / CDN paths
 
 ### Distribution

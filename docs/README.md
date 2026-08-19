@@ -34,4 +34,4 @@ Electron desktop companion first; browser localhost for development.
 | [Project layout](development/project-layout.md) | Folders and scripts |
 | [Release checklist](development/release-checklist.md) | Maintainer bump / tag / installer publish |
 | [Roadmap](development/roadmap.md) | Milestones |
-| [Assets & credits](assets-and-credits.md) | VRoid / BOOTH / Pixiv terms |
+| [Assets & credits](assets-and-credits.md) | VRoid / BOOTH / Pixiv terms · [manifest](assets-manifest.yml) |
