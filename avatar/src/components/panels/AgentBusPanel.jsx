@@ -40,15 +40,11 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
     `  -d '{"command":"animation.play","payload":{"id":"Peace Sign","mode":"once"}}'`,
   ].join('\n');
 
-  // The whole registration line, not just the endpoint: only the app knows the
-  // port it actually bound and the token, and an MCP client config is where
-  // both have to end up (Refs #61).
-  const mcpSetup = [
-    `claude mcp add --transport http avatar http://127.0.0.1:${settings.port}/mcp`,
-    ...(settings.requireToken
-      ? [` --header "Authorization: Bearer ${token ?? '<token>'}"`]
-      : []),
-  ].join('');
+  // The endpoint, not a registration command for one particular client: every
+  // MCP client spells that differently, and the two values they all need — this
+  // URL and, when it is on, the token above — are the two this panel owns
+  // (Refs #61).
+  const mcpUrl = `http://127.0.0.1:${settings.port}/mcp`;
 
   async function copy(what, text) {
     try {
@@ -115,7 +111,7 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
       {settings.requireToken ? (
         <>
           {token ? (
-            <p className="panel-note--mono agent-bus-panel__token">{token}</p>
+            <p className="panel-note--mono agent-bus-panel__value">{token}</p>
           ) : (
             <p className="panel-note panel-note--compact">Generated when you enable the bus.</p>
           )}
@@ -154,16 +150,22 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
         </button>
       </div>
 
-      <div className="panel-actions panel-actions--wide">
-        <button type="button" className="panel-button" onClick={() => void copy('mcp', mcpSetup)}>
-          {copied === 'mcp' ? 'Copied' : 'Copy MCP setup'}
-        </button>
-      </div>
+      <span className="settings-section-title">MCP server</span>
 
       <p className="panel-note panel-note--compact">
-        The bus is also an MCP server at <code>/mcp</code>, so an agent can drive the avatar from
-        your editor. Register it once; it answers only while AVATAR is running.
+        The bus is also an MCP server, so an agent can drive the avatar from your editor. Register
+        this URL with your client
+        {settings.requireToken ? ' and give it the token above as a Bearer header' : ''}. It answers
+        only while AVATAR is running.
       </p>
+
+      <p className="panel-note--mono agent-bus-panel__value">{mcpUrl}</p>
+
+      <div className="panel-actions panel-actions--wide">
+        <button type="button" className="panel-button" onClick={() => void copy('mcp', mcpUrl)}>
+          {copied === 'mcp' ? 'Copied' : 'Copy MCP URL'}
+        </button>
+      </div>
     </div>
   );
 }

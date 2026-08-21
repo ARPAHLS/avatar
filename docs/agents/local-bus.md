@@ -22,7 +22,7 @@ Settings → **Agents** → *Enable local bus*.
 | **Require token** | On by default. A token is generated the first time you enable the bus and reused after that |
 | **Copy token** / **Regenerate** | Regenerating invalidates the old one at once |
 | **Copy example curl** | The command below, with your port and token filled in |
-| **Copy MCP setup** | The MCP registration line, same two values filled in — see [MCP](#mcp) |
+| **MCP server** / **Copy MCP URL** | The MCP endpoint for this install — see [MCP](#mcp) |
 
 The token is **not** in `config.yaml` — it is encrypted with the OS keychain beside the VRoid Hub
 credentials. On a machine with no keychain available the panel says so, and the token is kept in
@@ -130,11 +130,15 @@ The body is the same shape the app uses internally:
 can drive the avatar without anyone hand-rolling HTTP calls. A peer of the routes above, not a
 wrapper around them: same dispatch, same catalog, same refusals.
 
-Register it once, with the port and token this install actually uses — **Settings → Agents →
-Copy MCP setup** fills both in:
+Register the endpoint with your client. Every client spells that differently, so the panel hands
+over the two values they all need rather than one client's command line: **Settings → Agents →
+Copy MCP URL**, and **Copy token** above it while **Require token** is on. The token travels in an
+`Authorization: Bearer` header, the same as everywhere else here.
 
 ```bash
-claude mcp add --transport http avatar http://127.0.0.1:47903/mcp   --header "Authorization: Bearer <token>"
+# Claude Code, for example
+claude mcp add --transport http avatar http://127.0.0.1:47903/mcp \
+  --header "Authorization: Bearer <token>"
 ```
 
 The endpoint exists exactly while the bus is running. There is no separate MCP switch: **Enable
@@ -167,8 +171,8 @@ are answered `405`: clients written against protocol revisions before `2026-07-2
 
 ### What breaks a registration
 
-- **Changing the port**, or **Regenerate**: the line you registered still names the old one. Copy
-  it again and re-register.
+- **Changing the port**, or **Regenerate**: what you registered still names the old value. Copy it
+  again and re-register.
 - **No OS keychain**: the token changes every launch, so a registration made with one will not
   survive a restart.
 - **Clients that send an `Origin` header** are refused, like every other route here — see
