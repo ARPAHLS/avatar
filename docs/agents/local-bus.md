@@ -22,7 +22,7 @@ Settings → **Agents** → *Enable local bus*.
 | **Require token** | On by default. A token is generated the first time you enable the bus and reused after that |
 | **Copy token** / **Regenerate** | Regenerating invalidates the old one at once |
 | **Copy example curl** | The command below, with your port and token filled in |
-| **MCP server** / **Copy MCP URL** | The MCP endpoint for this install — see [MCP](#mcp) |
+| **Copy MCP URL** | The MCP endpoint for this install — see [MCP](#mcp) |
 
 The token is **not** in `config.yaml` — it is encrypted with the OS keychain beside the VRoid Hub
 credentials. On a machine with no keychain available the panel says so, and the token is kept in
@@ -131,9 +131,9 @@ can drive the avatar without anyone hand-rolling HTTP calls. A peer of the route
 wrapper around them: same dispatch, same catalog, same refusals.
 
 Register the endpoint with your client. Every client spells that differently, so the panel hands
-over the two values they all need rather than one client's command line: **Settings → Agents →
-Copy MCP URL**, and **Copy token** above it while **Require token** is on. The token travels in an
-`Authorization: Bearer` header, the same as everywhere else here.
+over the two values they all need rather than one client's command line: **Copy MCP URL** and
+**Copy token**, in the one block, because they are one server — same switch, same token, same
+port. The token travels in an `Authorization: Bearer` header, as it does everywhere else here.
 
 ```bash
 # Claude Code, for example

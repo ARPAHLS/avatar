@@ -144,26 +144,23 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
         </p>
       )}
 
-      <div className="panel-actions panel-actions--wide">
-        <button type="button" className="panel-button" onClick={() => void copy('curl', example)}>
-          {copied === 'curl' ? 'Copied' : 'Copy example curl'}
-        </button>
-      </div>
-
-      <span className="settings-section-title">MCP server</span>
-
       <p className="panel-note panel-note--compact">
-        The bus is also an MCP server, so an agent can drive the avatar from your editor. Register
-        this URL with your client
-        {settings.requireToken ? ' and give it the token above as a Bearer header' : ''}. It answers
-        only while AVATAR is running.
+        The MCP endpoint, for an agent in your editor. Same server as the curl below
+        {settings.requireToken ? ', behind the same token' : ''} — it answers only while AVATAR is
+        running.
       </p>
 
       <p className="panel-note--mono agent-bus-panel__value">{mcpUrl}</p>
 
+      {/* Stacked rather than side by side: "Copy example curl" wraps inside a
+          half-width button in a drawer this narrow, and the label is worth more
+          than the row. */}
       <div className="panel-actions panel-actions--wide">
         <button type="button" className="panel-button" onClick={() => void copy('mcp', mcpUrl)}>
           {copied === 'mcp' ? 'Copied' : 'Copy MCP URL'}
+        </button>
+        <button type="button" className="panel-button" onClick={() => void copy('curl', example)}>
+          {copied === 'curl' ? 'Copied' : 'Copy example curl'}
         </button>
       </div>
     </div>
