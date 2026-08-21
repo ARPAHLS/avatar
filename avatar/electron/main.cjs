@@ -370,6 +370,7 @@ async function startAgentBus() {
   try {
     const server = createAgentBusServer({
       port: agentBusSettings.port,
+      version: app.getVersion(),
       resolveCommand: await stageResolver(),
       getContext: () => stageSnapshot?.context ?? null,
       // The window reports the catalogs; the version and the runtime are

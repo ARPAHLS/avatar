@@ -40,6 +40,16 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
     `  -d '{"command":"animation.play","payload":{"id":"Peace Sign","mode":"once"}}'`,
   ].join('\n');
 
+  // The whole registration line, not just the endpoint: only the app knows the
+  // port it actually bound and the token, and an MCP client config is where
+  // both have to end up (Refs #61).
+  const mcpSetup = [
+    `claude mcp add --transport http avatar http://127.0.0.1:${settings.port}/mcp`,
+    ...(settings.requireToken
+      ? [` --header "Authorization: Bearer ${token ?? '<token>'}"`]
+      : []),
+  ].join('');
+
   async function copy(what, text) {
     try {
       await navigator.clipboard.writeText(text);
@@ -143,6 +153,17 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
           {copied === 'curl' ? 'Copied' : 'Copy example curl'}
         </button>
       </div>
+
+      <div className="panel-actions panel-actions--wide">
+        <button type="button" className="panel-button" onClick={() => void copy('mcp', mcpSetup)}>
+          {copied === 'mcp' ? 'Copied' : 'Copy MCP setup'}
+        </button>
+      </div>
+
+      <p className="panel-note panel-note--compact">
+        The bus is also an MCP server at <code>/mcp</code>, so an agent can drive the avatar from
+        your editor. Register it once; it answers only while AVATAR is running.
+      </p>
     </div>
   );
 }

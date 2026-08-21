@@ -22,6 +22,7 @@ Settings → **Agents** → *Enable local bus*.
 | **Require token** | On by default. A token is generated the first time you enable the bus and reused after that |
 | **Copy token** / **Regenerate** | Regenerating invalidates the old one at once |
 | **Copy example curl** | The command below, with your port and token filled in |
+| **Copy MCP setup** | The MCP registration line, same two values filled in — see [MCP](#mcp) |
 
 The token is **not** in `config.yaml` — it is encrypted with the OS keychain beside the VRoid Hub
 credentials. On a machine with no keychain available the panel says so, and the token is kept in
@@ -118,10 +119,61 @@ The body is the same shape the app uses internally:
 | `401` | `unauthorized` | Missing or wrong token |
 | `403` | `forbidden-host`, `forbidden-origin` | Not loopback, or sent by a web page |
 | `404` | `unknown-animation`, `unknown-avatar`, `unknown-environment`, `unknown-audio-source`, `not-found` | The id — or the route — does not exist |
-| `405` / `413` / `415` | | Wrong method, body over 16 KB, or not `application/json` |
+| `405` / `413` / `415` | | Wrong method, body over 16 KB (256 KB on `/mcp`, whose frames carry client metadata), or not `application/json` |
 | `409` | `not-playable-once` | That clip cannot be a one-shot; play it with `"select"` |
 | `500` | `internal-error` | The window could not be reached — it was closing as the request arrived |
 | `503` | `not-ready` | The window is still starting up, or reloading |
+
+## MCP
+
+`POST http://127.0.0.1:47903/mcp` — a Streamable HTTP **MCP server**, so an agent in your editor
+can drive the avatar without anyone hand-rolling HTTP calls. A peer of the routes above, not a
+wrapper around them: same dispatch, same catalog, same refusals.
+
+Register it once, with the port and token this install actually uses — **Settings → Agents →
+Copy MCP setup** fills both in:
+
+```bash
+claude mcp add --transport http avatar http://127.0.0.1:47903/mcp   --header "Authorization: Bearer <token>"
+```
+
+The endpoint exists exactly while the bus is running. There is no separate MCP switch: **Enable
+local bus** and **Require token** govern this route and the ones above together.
+
+| Tool | Input | |
+| :--- | :--- | :--- |
+| `list_stage` | — | Everything `/v1/state` returns. Read-only |
+| `get_status` | — | Ready or not, and what is on stage. Answers while the window is still starting |
+| `play_animation` | `animation`, `persist?` | `animation` takes an id **or a label** |
+| `stop_animation` | — | Ends a one-shot early |
+| `set_avatar` | `avatar` | Ids only |
+| `set_environment` | `type`, `id?`, `color?` | The three shapes `environment.set` takes |
+
+> **`persist` is the `mode` question, asked the other way round.** This surface is read by a
+> model, so its default is the one an agent almost always wants: `play_animation` plays **once**
+> and leaves the selection alone. `persist: true` is the deliberate opt-in that changes the
+> selection and writes it to `config.yaml`.
+
+`audio.source` is not exposed. It is the user's lip-sync setting, and one fewer tool is one fewer
+thing for a model to reach for by mistake.
+
+A refused command comes back as a **tool error carrying the way out** — an unknown id says to call
+`list_stage`, a looping sequence says to use `persist` — rather than as a protocol error, because
+the model is the one who has to fix it.
+
+**Stateless.** One server per request, no sessions, nothing pushed. `GET` and `DELETE` on `/mcp`
+are answered `405`: clients written against protocol revisions before `2026-07-28` try both, and a
+`405` tells them to stop rather than to retry.
+
+### What breaks a registration
+
+- **Changing the port**, or **Regenerate**: the line you registered still names the old one. Copy
+  it again and re-register.
+- **No OS keychain**: the token changes every launch, so a registration made with one will not
+  survive a restart.
+- **Clients that send an `Origin` header** are refused, like every other route here — see
+  Security. Command-line clients do not send one; a webview-based desktop client may, and is not
+  supported in this version.
 
 ## Security
 
@@ -137,8 +189,6 @@ The body is the same shape the app uses internally:
 
 ## Notes
 
-- **MCP** is not part of this. An MCP server can sit on top of these HTTP commands; the bus stays
-  the one control path underneath.
 - Window control (move, scale, close) and loading a VRoid Hub character are not commands and are
   not planned to be.
 

@@ -3,6 +3,7 @@
 const crypto = require("node:crypto");
 const http = require("node:http");
 const { WebSocketServer } = require("ws");
+const { MAX_MCP_BODY_BYTES, MCP_PATH, createMcpHandler } = require("./mcp-server.cjs");
 
 /**
  * The local agent bus (Refs #6): a loopback-only command intake so agents and
@@ -90,13 +91,13 @@ function bearerToken(request) {
   return match ? match[1] : null;
 }
 
-function readBody(request) {
+function readBody(request, limit = MAX_BODY_BYTES) {
   return new Promise((resolve, reject) => {
     let size = 0;
     const chunks = [];
     request.on("data", (chunk) => {
       size += chunk.length;
-      if (size > MAX_BODY_BYTES) {
+      if (size > limit) {
         // Stop reading but leave the socket alone: destroying it here would
         // race the 413 and the caller would see a reset instead of a reason.
         request.pause();
@@ -116,12 +117,12 @@ function readBody(request) {
  * did, and a 413 nobody can read is just a connection reset.
  * @param {import('node:http').IncomingMessage} request
  */
-function drainAndDiscard(request) {
+function drainAndDiscard(request, limit = MAX_BODY_BYTES) {
   let seen = 0;
   request.on("data", (chunk) => {
     seen += chunk.length;
     // A caller determined to keep talking is hung up on eventually.
-    if (seen > MAX_BODY_BYTES * 8) request.destroy();
+    if (seen > limit * 8) request.destroy();
   });
   request.resume();
 }
@@ -143,6 +144,26 @@ function failure(code, error) {
 }
 
 /**
+ * The bus's `{ ok: false, code, error }` means nothing to an MCP client, so
+ * everything refused on `/mcp` — including the shared transport checks — is
+ * answered in the shape that transport speaks.
+ * @param {import('node:http').ServerResponse} response
+ * @param {number} status
+ * @param {number} code JSON-RPC error code.
+ * @param {string} message
+ */
+function sendJsonRpcError(response, status, code, message) {
+  // No `id`: these are refused before anything is parsed, so there is no
+  // request id to echo. The spec allows an error response without one.
+  sendJson(response, status, { jsonrpc: "2.0", error: { code, message } });
+}
+
+/** JSON-RPC codes used for the transport-level refusals above. */
+const JSON_RPC_INVALID_REQUEST = -32600;
+const JSON_RPC_PARSE_ERROR = -32700;
+const JSON_RPC_SERVER_ERROR = -32000;
+
+/**
  * @param {Object} options
  * @param {string} [options.host]
  * @param {number} [options.port]
@@ -158,6 +179,8 @@ function failure(code, error) {
  *   the model has finished loading.
  * @param {() => string | null} options.getToken Null when the user has turned
  *   `requireToken` off.
+ * @param {string} [options.version] Reported to MCP clients as the server
+ *   version; the app's own.
  */
 function createAgentBusServer({
   host = "127.0.0.1",
@@ -167,6 +190,7 @@ function createAgentBusServer({
   getState,
   applyAction,
   getToken,
+  version = "0.0.0",
 }) {
   if (typeof resolveCommand !== "function") {
     throw new Error("createAgentBusServer requires a resolveCommand function.");
@@ -192,6 +216,8 @@ function createAgentBusServer({
     if (result?.ok) applyAction(result.action);
     return result;
   }
+
+  const mcp = createMcpHandler({ dispatch, getState, version });
 
   /**
    * Transport-level checks, before anything is parsed. Returns null when the
@@ -229,14 +255,75 @@ function createAgentBusServer({
     return null;
   }
 
-  async function handleRequest(request, response) {
-    const rejection = refuse(request);
-    if (rejection) {
-      sendJson(response, rejection.status, rejection.body);
+  /**
+   * `POST /mcp`. The MCP surface is a peer of the two routes below, sharing
+   * their transport checks and their `dispatch` — see mcp-server.cjs.
+   * @param {import('node:http').IncomingMessage} request
+   * @param {import('node:http').ServerResponse} response
+   */
+  async function handleMcp(request, response) {
+    if (request.method !== "POST") {
+      // Protocol revision 2026-07-28 dropped the GET stream and DELETE
+      // teardown, and this server is stateless besides. Clients written against
+      // an older revision still try both, and a 405 is what tells them to stop
+      // rather than to retry.
+      response.setHeader("allow", "POST");
+      sendJsonRpcError(
+        response,
+        405,
+        JSON_RPC_INVALID_REQUEST,
+        "This MCP endpoint is stateless: use POST.",
+      );
       return;
     }
 
+    const declared = Number(request.headers["content-length"]);
+    if (Number.isFinite(declared) && declared > MAX_MCP_BODY_BYTES) {
+      sendJsonRpcError(response, 413, JSON_RPC_INVALID_REQUEST, "Request body is too large.");
+      drainAndDiscard(request, MAX_MCP_BODY_BYTES);
+      return;
+    }
+
+    let raw;
+    try {
+      raw = await readBody(request, MAX_MCP_BODY_BYTES);
+    } catch (error) {
+      if (error && error.tooLarge) {
+        sendJsonRpcError(response, 413, JSON_RPC_INVALID_REQUEST, "Request body is too large.");
+        drainAndDiscard(request, MAX_MCP_BODY_BYTES);
+      }
+      return;
+    }
+
+    let frame;
+    try {
+      frame = JSON.parse(raw);
+    } catch {
+      sendJsonRpcError(response, 400, JSON_RPC_PARSE_ERROR, "Request body must be JSON.");
+      return;
+    }
+
+    await mcp(request, response, frame);
+  }
+
+  async function handleRequest(request, response) {
     const url = new URL(request.url ?? "/", "http://localhost");
+    const isMcp = url.pathname === MCP_PATH;
+
+    const rejection = refuse(request);
+    if (rejection) {
+      if (isMcp) {
+        sendJsonRpcError(response, rejection.status, JSON_RPC_INVALID_REQUEST, rejection.body.error);
+      } else {
+        sendJson(response, rejection.status, rejection.body);
+      }
+      return;
+    }
+
+    if (isMcp) {
+      await handleMcp(request, response);
+      return;
+    }
 
     if (url.pathname === STATE_PATH) {
       if (request.method !== "GET") {
@@ -326,7 +413,12 @@ function createAgentBusServer({
         response.destroy();
         return;
       }
-      sendJson(response, 500, failure("internal-error", "The avatar window could not be reached."));
+      const message = "The avatar window could not be reached.";
+      if ((request.url ?? "").startsWith(MCP_PATH)) {
+        sendJsonRpcError(response, 500, JSON_RPC_SERVER_ERROR, message);
+        return;
+      }
+      sendJson(response, 500, failure("internal-error", message));
     });
   });
 
@@ -425,6 +517,7 @@ function createAgentBusServer({
 module.exports = {
   COMMAND_PATH,
   DEFAULT_AGENT_BUS_PORT,
+  MCP_PATH,
   SOCKET_PATH,
   STATE_PATH,
   createAgentBusServer,
