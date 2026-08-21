@@ -164,6 +164,19 @@ const JSON_RPC_PARSE_ERROR = -32700;
 const JSON_RPC_SERVER_ERROR = -32000;
 
 /**
+ * The one place that decides a request is MCP's, so the error shape a failure
+ * comes back in cannot disagree with the route that handled it.
+ * @param {import('node:http').IncomingMessage} request
+ */
+function isMcpRequest(request) {
+  try {
+    return new URL(request.url ?? "/", "http://localhost").pathname === MCP_PATH;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * @param {Object} options
  * @param {string} [options.host]
  * @param {number} [options.port]
@@ -308,7 +321,7 @@ function createAgentBusServer({
 
   async function handleRequest(request, response) {
     const url = new URL(request.url ?? "/", "http://localhost");
-    const isMcp = url.pathname === MCP_PATH;
+    const isMcp = isMcpRequest(request);
 
     const rejection = refuse(request);
     if (rejection) {
@@ -414,7 +427,7 @@ function createAgentBusServer({
         return;
       }
       const message = "The avatar window could not be reached.";
-      if ((request.url ?? "").startsWith(MCP_PATH)) {
+      if (isMcpRequest(request)) {
         sendJsonRpcError(response, 500, JSON_RPC_SERVER_ERROR, message);
         return;
       }
