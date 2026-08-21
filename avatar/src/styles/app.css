@@ -723,7 +723,7 @@
   color: rgba(63, 52, 88, 0.45);
 }
 
-.glass-drawer .agent-bus-panel__token {
+.glass-drawer .agent-bus-panel__value {
   background: rgba(255, 255, 255, 0.62);
   border-color: rgba(161, 138, 214, 0.45);
 }
@@ -999,7 +999,7 @@
 
 /* The token is a value to be read and copied, so it gets the Port field's box
    rather than the dimmed caption treatment the mono class carries. */
-.agent-bus-panel__token {
+.agent-bus-panel__value {
   margin: 0;
   padding: 6px 8px;
   border: 1px solid var(--accent);

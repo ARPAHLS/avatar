@@ -60,6 +60,7 @@ It renders `.vrm` models, plays `.vrma` motion, and drives mouth shapes from liv
 - **Environments** — built-ins, Custom folder from Settings → Directories, color fade, or none ([environments](docs/environments.md))
 - **Persistent settings** — `config.yaml` across launches ([user settings](docs/user-settings.md))
 - **VRMA animations** — Default greeting + loop, bundled clips, or your own `.vrma` folder from Settings → Directories; **Motion Deck** one-shot hotkeys ([VRMA](docs/animations/vrma.md) · [user settings](docs/user-settings.md#motion-deck-motiondeck))
+- **Local agent bus & MCP** — opt-in loopback server on `127.0.0.1` so scripts and editor agents can play animations, swap avatars and set the environment; the same endpoint is a Streamable HTTP MCP server ([local agent bus](docs/agents/local-bus.md))
 - **Browser / localhost** — for contributors ([install](docs/getting-started/installation.md))
 
 <p align="center">

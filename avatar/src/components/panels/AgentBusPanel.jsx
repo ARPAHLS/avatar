@@ -40,6 +40,12 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
     `  -d '{"command":"animation.play","payload":{"id":"Peace Sign","mode":"once"}}'`,
   ].join('\n');
 
+  // The endpoint, not a registration command for one particular client: every
+  // MCP client spells that differently, and the two values they all need — this
+  // URL and, when it is on, the token above — are the two this panel owns
+  // (Refs #61).
+  const mcpUrl = `http://127.0.0.1:${settings.port}/mcp`;
+
   async function copy(what, text) {
     try {
       await navigator.clipboard.writeText(text);
@@ -105,7 +111,7 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
       {settings.requireToken ? (
         <>
           {token ? (
-            <p className="panel-note--mono agent-bus-panel__token">{token}</p>
+            <p className="panel-note--mono agent-bus-panel__value">{token}</p>
           ) : (
             <p className="panel-note panel-note--compact">Generated when you enable the bus.</p>
           )}
@@ -138,7 +144,21 @@ export function AgentBusPanel({ settings, status, onChange, onRotateToken }) {
         </p>
       )}
 
+      <p className="panel-note panel-note--compact">
+        The MCP endpoint, for an agent in your editor. Same server as the curl below
+        {settings.requireToken ? ', behind the same token' : ''} — it answers only while AVATAR is
+        running.
+      </p>
+
+      <p className="panel-note--mono agent-bus-panel__value">{mcpUrl}</p>
+
+      {/* Stacked rather than side by side: "Copy example curl" wraps inside a
+          half-width button in a drawer this narrow, and the label is worth more
+          than the row. */}
       <div className="panel-actions panel-actions--wide">
+        <button type="button" className="panel-button" onClick={() => void copy('mcp', mcpUrl)}>
+          {copied === 'mcp' ? 'Copied' : 'Copy MCP URL'}
+        </button>
         <button type="button" className="panel-button" onClick={() => void copy('curl', example)}>
           {copied === 'curl' ? 'Copied' : 'Copy example curl'}
         </button>
