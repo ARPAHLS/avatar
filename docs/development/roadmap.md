@@ -34,7 +34,7 @@ Near-term product work on the desktop companion.
 - [ ] Docs visual overhaul (reshoot screenshots / GIFs, layout rules) (#33)
 - [ ] Editorial pass — consistency, install path, dead ends (#14)
 - [ ] Label usage guide for triage (#29)
-- [ ] SECURITY.md vulnerability reporting (#26)
+- [x] SECURITY.md vulnerability reporting (#26)
 - [x] Asset license audit + machine-readable manifest (#11)
 - [ ] Harden VRoid Hub VRM download for restrictive networks / CDN paths
 

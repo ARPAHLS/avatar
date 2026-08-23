@@ -181,7 +181,8 @@ Before you open a PR:
 
 - Bugs / features / docs / installer / voice / VRM / desktop window → use the matching [template](https://github.com/ARPAHLS/avatar/issues/new/choose).
 - Questions → **Question / support** template, or **input@arpacorp.net**.
-- Security / privacy concerns around capture → label `security-privacy` or email maintainers; do not file exploit detail in public issues if unsure.
+- **Security vulnerabilities** → **[SECURITY.md](SECURITY.md)** (private report). Do not file exploit details in public issues.
+- Privacy / capture permission questions (not always security bugs) → label `security-privacy` or email maintainers after reading [SECURITY.md](SECURITY.md).
 
 ### Reporting issues
 
