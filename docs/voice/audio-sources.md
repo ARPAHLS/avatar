@@ -55,7 +55,7 @@ AVATAR uses capture only to **measure audio levels on this device** for lip sync
 | **Tab or window audio** | `tab` | Browser display-media / tab capture |
 | **Audio file** | `file` | Same as desktop |
 
-System-wide **device output** loopback is an Electron feature — use the [Windows installer](https://github.com/ARPAHLS/avatar/releases/download/v0.7.0/AVATAR-Setup-0.7.0.exe) or `npm run desktop` / `npm run dev:desktop`.
+System-wide **device output** loopback is an Electron feature — use the [Windows installer](https://github.com/ARPAHLS/avatar/releases/download/v0.8.0/AVATAR-Setup-0.8.0.exe) or `npm run desktop` / `npm run dev:desktop`.
 
 ---
 

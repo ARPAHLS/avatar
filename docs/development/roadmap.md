@@ -10,7 +10,7 @@ Near-term product work on the desktop companion.
 
 ### Motion & triggers
 
-- [ ] Local agent/event bus so external tools can drive the avatar (#6)
+- [x] Local agent/event bus so external tools can drive the avatar (#6, #55)
 - [ ] Keyword → animation mapping table (#7) — thin consumer of the bus; intent detection stays pluggable
 - [ ] Additive Animations menu — keep bundled clips, append custom, scroll + search (#46)
 - [ ] Optional idle VRMA loop (#8)
@@ -18,8 +18,8 @@ Near-term product work on the desktop companion.
 
 ### Voice & presence
 
-- [ ] Reactive glass-bar live dot (amplitude + capture status) (#42)
-- [ ] Improve lip-sync beyond amplitude cycling (#9)
+- [x] Reactive glass-bar live dot (amplitude + capture status) (#42, #54)
+- [ ] Improve lip-sync beyond amplitude cycling (#9) — phase-1 Voice Sensitivity / Mouth limit shipped in v0.8.0 (#67)
 - [x] Clearer capture-permission and privacy copy (#12)
 
 ### Appearance & performance
@@ -77,9 +77,20 @@ Longer arc — plug-and-play adapters, not hard-coded models. See also [Your AI 
 
 ---
 
-## Landed on main since v0.7.0
+## Landed on main since v0.8.0
 
+_(none yet)_
+
+## v0.8.0 — Shipped
+
+- [x] Local agent/event bus (#6, #55)
+- [x] MCP server on the local bus (#61, #63)
+- [x] Adjustable Voice lip-sync Sensitivity / Mouth limit (#67; #9 phase 1)
+- [x] Reactive glass-bar live dot (#42, #54)
+- [x] SECURITY.md vulnerability reporting (#26, #64)
+- [x] Asset license audit + machine-readable manifest (#11, #62)
 - [x] Clearer Voice capture-permission and privacy copy (#12)
+- [x] README speak GIF refresh; Animation hotkeys rename; custom env tile sizing
 
 ## v0.7.0 — Shipped
 

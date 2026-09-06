@@ -67,7 +67,7 @@ when the response arrives. The last command wins, exactly as a hotkey does.
 ```json
 {
   "ok": true,
-  "runtime": { "version": "0.7.0", "mode": "desktop" },
+  "runtime": { "version": "0.8.0", "mode": "desktop" },
   "animations": [{ "id": "vrma-03", "label": "Peace Sign", "playableOnce": true }],
   "avatars": [{ "id": "avatar1" }, { "id": "avatar2" }],
   "environments": [{ "id": "stars", "label": "Stars" }],

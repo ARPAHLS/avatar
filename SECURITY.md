@@ -12,7 +12,7 @@ Security fixes are applied to:
 | `main` on [ARPAHLS/avatar](https://github.com/ARPAHLS/avatar) | ✅ |
 | Older releases | ❌ (please upgrade) |
 
-Check your build: **Settings → System** shows the config path; the installer version matches the release tag (currently **0.7.0**).
+Check your build: **Settings → System** shows the config path; the installer version matches the release tag (currently **0.8.0**).
 
 ## Reporting a vulnerability
 

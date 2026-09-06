@@ -4,6 +4,7 @@ Public release notes for AVATAR. Full change history lives in the root [Changelo
 
 | Version | Notes | Download |
 | :--- | :--- | :--- |
+| [v0.8.0](v0.8.0.md) | Agent bus, MCP, lip-sync controls, live dot | [AVATAR-Setup-0.8.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.8.0/AVATAR-Setup-0.8.0.exe) |
 | [v0.7.0](v0.7.0.md) | Motion Deck, stage commands, custom VRMA | [AVATAR-Setup-0.7.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.7.0/AVATAR-Setup-0.7.0.exe) |
 | [v0.6.0](v0.6.0.md) | CI, ESLint, docs GIFs, package rename | [AVATAR-Setup-0.6.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.6.0/AVATAR-Setup-0.6.0.exe) |
 | [v0.5.0](v0.5.0.md) | Thumbnails + Hub source link | [AVATAR-Setup-0.5.0.exe](https://github.com/ARPAHLS/avatar/releases/download/v0.5.0/AVATAR-Setup-0.5.0.exe) |
