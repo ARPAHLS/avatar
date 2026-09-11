@@ -94,6 +94,8 @@ Loudness drives the green intensity while capturing; silence eases back to mint.
 | **Settings** | Overlay mode, Snap to screen, **Directories**, **Animation hotkeys**, **Agents**, **VRoid Hub**, **System** (reset / config path) |
 | **Close** | Quit the companion window (desktop) |
 
+**Appearance**, **Voice**, **Camera & Lighting**, and **Settings** open as rounded panels centred over the full avatar stage. Their content scrolls inside the panel when it is taller than the available space.
+
 <p align="center">
   <img src="screenshots/20-gear-main.png" alt="Main gear menu" height="240" />
   <img src="screenshots/21-gear-animations.png" alt="Animations submenu" height="240" />

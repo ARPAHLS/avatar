@@ -35,7 +35,7 @@ export function GlassDrawer({ open, panelId, onClose, drawerRef, children }) {
   return (
     <aside
       ref={drawerRef}
-      className={`glass-drawer ${open ? 'glass-drawer--open' : ''}`}
+      className={`glass-drawer glass-drawer--stage ${open ? 'glass-drawer--open' : ''}`}
       aria-hidden={!open}
     >
       <div className="glass-drawer__header">

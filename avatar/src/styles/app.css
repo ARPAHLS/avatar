@@ -599,6 +599,22 @@
   transform: translateX(0);
 }
 
+/* Every command panel covers the stage from the centre and keeps the soft
+   floating-panel shape, without depending on space beyond the desktop window. */
+.glass-drawer--stage {
+  right: 50%;
+  bottom: 0;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  border-radius: 18px;
+  box-shadow: 0 10px 32px rgba(100, 80, 150, 0.18);
+  overflow: hidden;
+}
+
+.glass-drawer--stage.glass-drawer--open {
+  transform: translateX(50%);
+}
+
 .glass-drawer__header {
   display: flex;
   align-items: center;

@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Gear drawers (**Appearance**, **Voice**, **Camera & Lighting**, and **Settings**) now open as rounded, centred, full-stage panels instead of narrow right-edge strips, giving each surface the same visual weight as the avatar stage.
 - README Animations sample uses compressed `AVATAR_31_speak.gif` (lip-sync / speak loop) instead of the older default-loop clip.
 - Settings section **Motion** is now **Animation hotkeys** (same `motionDeck` settings). The Add-animation picker and the deck list keep the mouse wheel until they hit the end of their own scroll, then the Settings drawer scrolls again.
 - **Voice panel and docs spell out capture status and privacy.** Gear → **Voice** shows plain-language status (`Starting capture…`, `Capturing (local)`, …) instead of raw tokens, keeps a local-only privacy note next to the source picker, and turns permission failures into actionable copy (with a desktop button into system privacy settings on Windows/macOS). [Audio sources](docs/voice/audio-sources.md) expands permissions troubleshooting and a short “what stays local” section; the README privacy line matches. (#12)
