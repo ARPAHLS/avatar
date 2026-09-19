@@ -11,6 +11,8 @@ Near-term product work on the desktop companion.
 ### Motion & triggers
 
 - [x] Local agent/event bus so external tools can drive the avatar (#6, #55)
+- [ ] Agent bus outbound WebSocket state events (#59)
+- [ ] Agent bus window/file audio source via API (#56)
 - [ ] Keyword → animation mapping table (#7) — thin consumer of the bus; intent detection stays pluggable
 - [ ] Additive Animations menu — keep bundled clips, append custom, scroll + search (#46)
 - [ ] Optional idle VRMA loop (#8)

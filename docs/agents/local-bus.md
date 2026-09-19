@@ -204,3 +204,4 @@ agentBus:
   port: 47903
   requireToken: true
 ```
+See [User settings — Agents](../user-settings.md#agents-agentbus) for what each field means and how the token is stored.
