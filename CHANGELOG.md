@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- **Docs:** Post-agent-bus housekeeping — roadmap updated to point at #56 (audio source via API) and #59 (WebSocket state events); `docs/user-settings.md` gained an Agents subsection with token handling and cross-link to [Local agent bus](docs/agents/local-bus.md); `docs/agents/local-bus.md` now links back to user-settings for field-by-field detail; README top nav includes Agents and Documentation table lists Integrations. (#57)
+
 ## [0.8.0] — 2026-09-06
 
 ### Added

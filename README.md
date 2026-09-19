@@ -42,6 +42,7 @@
   <a href="docs/vroid-hub.md">VRoid Hub</a> ·
   <a href="docs/animations/vrma.md">Animations</a> ·
   <a href="docs/user-settings.md">Settings</a> ·
+  <a href="docs/agents/local-bus.md">Agents</a> ·
   <a href="docs/assets-and-credits.md">Assets & Credits</a> ·
   <a href="CHANGELOG.md">Changelog</a>
 </p>
@@ -154,6 +155,7 @@ Gear → **Animations** → **Default** (greeting, then motion loop). Catalog: [
 | **Motion & voice** | [VRMA](docs/animations/vrma.md) · [Audio sources](docs/voice/audio-sources.md) · [Lip sync](docs/voice/lip-sync.md) |
 | **VRoid Hub** | [VRoid Hub connection](docs/vroid-hub.md) |
 | **Settings** | [config.yaml & resets](docs/user-settings.md) |
+| **Integrations** | [Local agent bus & MCP](docs/agents/local-bus.md) |
 | **Architecture** | [Overview](docs/architecture/overview.md) · [Layout](docs/development/project-layout.md) |
 | **Assets** | [Assets & credits](docs/assets-and-credits.md) · [Manifest](docs/assets-manifest.yml) |
 

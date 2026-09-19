@@ -73,6 +73,31 @@ Animation hotkeys → **Clear unavailable** is the only thing that removes them,
 Keys are only active while the AVATAR window has focus, and are ignored while
 you are typing in a field.
 
+### Agents (`agentBus`)
+
+Settings → **Agents**. When enabled, AVATAR runs a local loopback bus so external tools (scripts, MCP clients, agents) can drive the stage over HTTP and WebSocket at `127.0.0.1:47903`. Off by default; only listens on the loopback interface.
+
+<p align="center">
+  <img src="screenshots/AGENTS_PANEL_PLACEHOLDER.png" alt="Settings → Agents panel (screenshot pending, see #33)" height="260" />
+</p>
+
+```yaml
+agentBus:
+  enabled: false
+  port: 47903
+  requireToken: true
+```
+
+| Field | |
+| :--- | :--- |
+| `enabled` | turns the local bus on or off. Off by default |
+| `port` | loopback port (default `47903`). Change only if another local process is using it |
+| `requireToken` | when on, requests must carry the token from Settings → Agents. Recommended for shared machines |
+
+The token itself is not stored in `config.yaml`. It lives encrypted in `agent-bus.json` next to your other user data. Use **Copy** in Settings → Agents to grab it for your client, and **Regenerate** to rotate it (all existing clients will need the new value).
+
+See [Agents / local bus](agents/local-bus.md) for the full command reference, `curl` examples, and MCP client setup.
+
 ### Not saved
 
 - Uploaded **audio files** (re-pick after restart)
